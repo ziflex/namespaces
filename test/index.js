@@ -1,4 +1,4 @@
-import Container from '../src/container';
+import Container from '../src/index';
 import chai from 'chai';
 import spies from 'chai-spies';
 

@@ -2,8 +2,8 @@
 
 Angular-flavored dependency injection container. 
 
-[![npm version](https://badge.fury.io/js/namespaces.svg)](https://www.npmjs.com/package/namespaces)
-[![Bower version](https://badge.fury.io/bo/namespaces.svg)](http://badge.fury.io/bo/namespaces)
+[![npm version](https://badge.fury.io/js/namespaces.svg)](https://www.npmjs.com/package/namespaces-js)
+[![Bower version](https://badge.fury.io/bo/namespaces.svg)](http://badge.fury.io/bo/namespaces-js)
 [![Build Status](https://secure.travis-ci.org/ziflex/namespaces.svg?branch=master)](http://travis-ci.org/ziflex/namespaces)
 [![Dependency Status](https://david-dm.org/ziflex/namespaces.svg)](https://david-dm.org/ziflex/namespaces)
 
@@ -13,14 +13,14 @@ via npm
 
 ```sh
 
-    $ npm install --save namespaces
+    $ npm install --save namespaces-js
 
 ```
 via bower
 
 ```sh
 
-    $ bower install --save namespaces
+    $ bower install --save namespaces-js
 
 ```
 
@@ -34,7 +34,7 @@ via bower
 
 ```javascript
 
-    var DI = require('namespaces');
+    var DI = require('namespaces-js');
     
     var container = new DI();
     container.register().value('name', 'foobar');
@@ -55,7 +55,7 @@ via bower
 
 ```javascript
 
-    var DI = require('namespaces');
+    var DI = require('namespaces-js');
     
     var container = new DI();
     container.register('models').value('user', require('./models/user');
