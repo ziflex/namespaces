@@ -1,11 +1,11 @@
 {
   "name": "namespaces",
-  "version": "1.0.0",
-  "homepage": "https://github.com/ziflex/piperline",
+  "version": "0.1.0",
+  "homepage": "https://github.com/ziflex/namespaces",
   "authors": [
-    "ziflex <ziflex@gmail.com>"
+    "Tim Voronov <ziflex@gmail.com>"
   ],
-  "description": "Angular flavored DI container.",
+  "description": "Angular-flavored DI container.",
   "main": "dist/namespaces.js",
   "moduleType": [
     "amd",
@@ -18,7 +18,8 @@
     "injection",
     "injector",
     "resolver",
-    "modules"
+    "modules",
+    "angular"
   ],
   "license": "MIT",
   "ignore": [

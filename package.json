@@ -1,7 +1,7 @@
 {
   "name": "namespaces",
   "version": "0.1.0",
-  "description": "Angular flavored DI container.",
+  "description": "Angular-flavored DI container.",
   "main": "lib/index.js",
   "directories": {
     "test": "test"
