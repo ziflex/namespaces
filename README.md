@@ -24,10 +24,6 @@ via bower
 
 ```
 
-## Features
-* multiple strategies
-* extensible
-
 ## Usage
 
 ### Basic
@@ -63,8 +59,8 @@ via bower
 
     ...
     
-    var bar = container.resolve('bar-service');
-    var foo = container.resolve('foo-service');
+    var userService = container.resolve('services/user');
+    var userInstance = container.resolve('models/user');
   
 ```
 
