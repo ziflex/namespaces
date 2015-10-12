@@ -1,6 +1,6 @@
 {
   "name": "namespaces-js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Angular-flavored DI container.",
   "main": "lib/index.js",
   "directories": {
@@ -14,7 +14,7 @@
     "Tim Voronov <ziflex@gmail.com>"
   ],
   "scripts": {
-    "build": "npm run build:bower & npm run build:npm",
+    "build": "npm run lint && npm run build:bower & npm run build:npm",
     "build:npm": "babel src --out-dir lib",
     "build:bower": "browserify --entry src/index.js --outfile dist/namespaces.js --standalone Namespaces",
     "clean:npm": "rimraf lib",
@@ -23,7 +23,7 @@
     "package:bower": "npm run clean:bower && npm run lint && mkdir -p dist && npm run build:browser",
     "prepublish": "npm run package:npm",
     "lint": "eslint src test/unit --config ./.eslintrc",
-    "test": "mochify --transform babelify  --reporter spec"
+    "test": "mochify --recursive ./test --transform babelify  --reporter spec"
   },
   "license": "MIT",
   "keywords": [

@@ -8,38 +8,34 @@ import helper from './helper';
 export default class Resolver {
     /**
      * @constructor
-     * @param container - Parent container.
-     * @param module - Target module.
+     * @param storage - Module's storage.
      */
-    constructor(container, module) {
-        this._container = container;
-        this._module = module;
-        this._result = null;
+    constructor(storage) {
+        this._storage = storage;
     }
 
     /**
      * Resolves particular module.
      * @returns {any} Module's value.
      */
-    resolve() {
-        if (this._result) {
-            return this._result();
-        }
+    resolve(path) {
+        const resolveModule = (targetPath) => {
+            const module = this._storage.getItem(targetPath);
 
-        let dependencies = [];
-
-        if (helper.isArray(this._module.dependencies)) {
-            dependencies = this._module.dependencies.map(this._container.resolve.bind(this._container));
-        }
-
-        this._result = function getResult(val) {
-            if (helper.isFunction(val)) {
-                return val();
+            if (module.getIsInitialized()) {
+                return module.instance();
             }
 
-            return val;
-        }.bind(this, this._module.create(dependencies));
+            const deps = module.getDependencies();
+            let resolvedDeps = [];
+            if (helper.isArray(deps)) {
+                resolvedDeps = deps.map(resolveModule);
+            }
 
-        return this._result();
+            module.initialize(resolvedDeps);
+            return module.instance();
+        };
+
+        return resolveModule(path);
     }
 }

@@ -37,13 +37,15 @@ export default {
 
         return { name, dependencies, definition };
     },
-    parsePath(path, separator = '/') {
+    splitPath(path, separator = '/') {
         const parts = path.split(separator);
         const len = parts.length;
-
         return {
             namespace: len > 1 ? parts.slice(0, len - 1).join(separator) : separator,
             name: parts[len - 1]
         };
+    },
+    buildPath(separator = '/', ...parts) {
+        return parts.join(separator);
     }
 };

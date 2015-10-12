@@ -373,5 +373,32 @@ describe('.Container', () => {
                 });
             });
         });
+        describe('circular dependency', () => {
+            it('should throw during resolving', () => {
+                const self = () => {
+                    container.register().value('value1', ['value1'], 1);
+                    container.resolve('value1');
+                };
+                const shallow = () => {
+                    container.register().value('value1', ['value2'], 1);
+                    container.register().value('value2', ['value1'], 2);
+                    container.resolve('value1');
+                    container.resolve('value2');
+                };
+                const deep = () => {
+                    container.register().value('a', ['b', 'd'], 'a');
+                    container.register().value('b', ['c', 'e'], 'b');
+                    container.register().value('c', ['e', 'd'], 'c');
+                    container.register().value('d', ['b'], 'd');
+                    container.register().value('e', 'e');
+
+                    container.resolve('a');
+                };
+
+                expect(self).to.throw(Error);
+                expect(shallow).to.throw(Error);
+                expect(deep).to.throw(Error);
+            });
+        });
     });
 });

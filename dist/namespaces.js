@@ -43,16 +43,24 @@ exports['default'] = {
 
         return { name: name, dependencies: dependencies, definition: definition };
     },
-    parsePath: function parsePath(path) {
+    splitPath: function splitPath(path) {
         var separator = arguments.length <= 1 || arguments[1] === undefined ? '/' : arguments[1];
 
         var parts = path.split(separator);
         var len = parts.length;
-
         return {
             namespace: len > 1 ? parts.slice(0, len - 1).join(separator) : separator,
             name: parts[len - 1]
         };
+    },
+    buildPath: function buildPath() {
+        var separator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
+
+        for (var _len = arguments.length, parts = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            parts[_key - 1] = arguments[_key];
+        }
+
+        return parts.join(separator);
     }
 };
 module.exports = exports['default'];
@@ -73,6 +81,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var _module2 = require('./module');
 
 var _module3 = _interopRequireDefault(_module2);
+
+var _initializer = require('./initializer');
+
+var _initializer2 = _interopRequireDefault(_initializer);
+
+var _storage = require('./storage');
+
+var _storage2 = _interopRequireDefault(_storage);
 
 var _resolver = require('./resolver');
 
@@ -98,8 +114,9 @@ var Container = (function () {
 
         _classCallCheck(this, Container);
 
-        this._namespaces = {};
         this._separator = separator;
+        this._storage = new _storage2['default'](separator);
+        this._resolver = new _resolver2['default'](this._storage);
     }
 
     /**
@@ -113,24 +130,15 @@ var Container = (function () {
         value: function register(namespace) {
             var _this = this;
 
-            var targetNamespace = namespace || this._separator;
             var registered = false;
-            return new _module3['default'](function (name, value) {
+            return new _module3['default'](function (name, module) {
                 if (registered) {
-                    throw new Error('This module already registered');
+                    throw new Error('This module has been already registered');
                 }
 
-                var registry = _this._namespaces[targetNamespace];
-                if (!registry) {
-                    registry = {};
-                    _this._namespaces[targetNamespace] = registry;
-                }
-
-                if (registry[name]) {
-                    throw new Error(name + ' is already registered.');
-                }
-
-                registry[name] = new _resolver2['default'](_this, value);
+                var path = _helper2['default'].buildPath(_this._separator, namespace, name);
+                var activator = new _initializer2['default'](path, module.create, module.dependencies);
+                _this._storage.addItem(path, activator);
                 registered = true;
             });
         }
@@ -143,20 +151,7 @@ var Container = (function () {
     }, {
         key: 'resolve',
         value: function resolve(path) {
-            var parts = _helper2['default'].parsePath(path, this._separator);
-            var namespace = this._namespaces[parts.namespace];
-
-            if (!namespace) {
-                throw new Error('Namespace \'' + parts.namespace + '\' was not found.');
-            }
-
-            var module = namespace[parts.name];
-
-            if (!module) {
-                throw new Error('Module with path \'' + path + '\' was not found.');
-            }
-
-            return module.resolve();
+            return this._resolver.resolve(path);
         }
     }]);
 
@@ -166,7 +161,77 @@ var Container = (function () {
 exports['default'] = Container;
 module.exports = exports['default'];
 
-},{"./helper":1,"./module":3,"./resolver":4}],3:[function(require,module,exports){
+},{"./helper":1,"./initializer":3,"./module":4,"./resolver":5,"./storage":6}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _helper = require('./helper');
+
+var _helper2 = _interopRequireDefault(_helper);
+
+var Initializer = (function () {
+    function Initializer(path, initialization, dependencies) {
+        _classCallCheck(this, Initializer);
+
+        this._path = path;
+        this._initialization = initialization;
+        this._dependencies = dependencies;
+        this._isInitialized = false;
+        this._value = null;
+    }
+
+    _createClass(Initializer, [{
+        key: 'getPath',
+        value: function getPath() {
+            return this._path;
+        }
+    }, {
+        key: 'getDependencies',
+        value: function getDependencies() {
+            return this._dependencies;
+        }
+    }, {
+        key: 'getIsInitialized',
+        value: function getIsInitialized() {
+            return this._isInitialized;
+        }
+    }, {
+        key: 'initialize',
+        value: function initialize(dependencies) {
+            if (this.getIsInitialized()) {
+                throw new Error('Module ' + this._path + ' has been already initialized!');
+            }
+
+            this._value = this._initialization(dependencies);
+            this._isInitialized = true;
+        }
+    }, {
+        key: 'instance',
+        value: function instance() {
+            if (_helper2['default'].isFunction(this._value)) {
+                return this._value();
+            }
+
+            return this._value;
+        }
+    }]);
+
+    return Initializer;
+})();
+
+exports['default'] = Initializer;
+module.exports = exports['default'];
+
+},{"./helper":1}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -289,7 +354,7 @@ var Module = (function () {
 exports['default'] = Module;
 module.exports = exports['default'];
 
-},{"./helper":1}],4:[function(require,module,exports){
+},{"./helper":1}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -315,16 +380,13 @@ var _helper2 = _interopRequireDefault(_helper);
 var Resolver = (function () {
     /**
      * @constructor
-     * @param container - Parent container.
-     * @param module - Target module.
+     * @param storage - Module's storage.
      */
 
-    function Resolver(container, module) {
+    function Resolver(storage) {
         _classCallCheck(this, Resolver);
 
-        this._container = container;
-        this._module = module;
-        this._result = null;
+        this._storage = storage;
     }
 
     /**
@@ -334,26 +396,27 @@ var Resolver = (function () {
 
     _createClass(Resolver, [{
         key: 'resolve',
-        value: function resolve() {
-            if (this._result) {
-                return this._result();
-            }
+        value: function resolve(path) {
+            var _this = this;
 
-            var dependencies = [];
+            var resolveModule = function resolveModule(targetPath) {
+                var module = _this._storage.getItem(targetPath);
 
-            if (_helper2['default'].isArray(this._module.dependencies)) {
-                dependencies = this._module.dependencies.map(this._container.resolve.bind(this._container));
-            }
-
-            this._result = (function getResult(val) {
-                if (_helper2['default'].isFunction(val)) {
-                    return val();
+                if (module.getIsInitialized()) {
+                    return module.instance();
                 }
 
-                return val;
-            }).bind(this, this._module.create(dependencies));
+                var deps = module.getDependencies();
+                var resolvedDeps = null;
+                if (_helper2['default'].isArray(deps)) {
+                    resolvedDeps = deps.map(resolveModule);
+                }
 
-            return this._result();
+                module.initialize(resolvedDeps);
+                return module.instance();
+            };
+
+            return resolveModule(path);
         }
     }]);
 
@@ -361,6 +424,77 @@ var Resolver = (function () {
 })();
 
 exports['default'] = Resolver;
+module.exports = exports['default'];
+
+},{"./helper":1}],6:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var _helper = require('./helper');
+
+var _helper2 = _interopRequireDefault(_helper);
+
+var Storage = (function () {
+    function Storage() {
+        var pathSeparator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
+
+        _classCallCheck(this, Storage);
+
+        this._separator = pathSeparator;
+        this._namespaces = {};
+    }
+
+    _createClass(Storage, [{
+        key: 'addItem',
+        value: function addItem(path, module) {
+            var parts = _helper2['default'].splitPath(path, this._separator);
+            parts.namespace = parts.namespace || this._separator;
+
+            var registry = this._namespaces[parts.namespace];
+            if (!registry) {
+                registry = {};
+                this._namespaces[parts.namespace] = registry;
+            }
+
+            if (registry[parts.name]) {
+                throw new Error(parts.name + ' is already registered.');
+            }
+
+            registry[parts.name] = module;
+        }
+    }, {
+        key: 'getItem',
+        value: function getItem(path) {
+            var parts = _helper2['default'].splitPath(path, this._separator);
+            var namespace = this._namespaces[parts.namespace];
+
+            if (!namespace) {
+                throw new Error('Namespace \'' + parts.namespace + '\' was not found.');
+            }
+
+            var module = namespace[parts.name];
+
+            if (!module) {
+                throw new Error('Module with path \'' + path + '\' was not found.');
+            }
+
+            return module;
+        }
+    }]);
+
+    return Storage;
+})();
+
+exports['default'] = Storage;
 module.exports = exports['default'];
 
 },{"./helper":1}]},{},[2])(2)
