@@ -2,10 +2,9 @@
 
 Angular-flavored dependency injection container. 
 
-[![npm version](https://badge.fury.io/js/namespaces.svg)](https://www.npmjs.com/package/namespaces-js)
-[![Bower version](https://badge.fury.io/bo/namespaces.svg)](http://badge.fury.io/bo/namespaces-js)
+[![npm version](https://badge.fury.io/js/namespaces-js.svg)](https://www.npmjs.com/package/namespaces-js)
+[![Bower version](https://badge.fury.io/bo/namespaces-js.svg)](http://badge.fury.io/bo/namespaces-js)
 [![Build Status](https://secure.travis-ci.org/ziflex/namespaces.svg?branch=master)](http://travis-ci.org/ziflex/namespaces)
-[![Dependency Status](https://david-dm.org/ziflex/namespaces.svg)](https://david-dm.org/ziflex/namespaces)
 
 ## Install
 

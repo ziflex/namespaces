@@ -407,7 +407,7 @@ var Resolver = (function () {
                 }
 
                 var deps = module.getDependencies();
-                var resolvedDeps = null;
+                var resolvedDeps = [];
                 if (_helper2['default'].isArray(deps)) {
                     resolvedDeps = deps.map(resolveModule);
                 }
