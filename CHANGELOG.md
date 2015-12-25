@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0
+
+### Added
+* Multiple usage of module registrator
+
 ## 0.1.1
 
 ### Fixed

@@ -22,8 +22,8 @@ export default class Resolver {
         const resolveModule = (targetPath) => {
             const module = this._storage.getItem(targetPath);
 
-            if (module.getIsInitialized()) {
-                return module.instance();
+            if (module.isInitialized()) {
+                return module.getValue();
             }
 
             const deps = module.getDependencies();
@@ -33,7 +33,7 @@ export default class Resolver {
             }
 
             module.initialize(resolvedDeps);
-            return module.instance();
+            return module.getValue();
         };
 
         return resolveModule(path);

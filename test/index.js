@@ -1,10 +1,10 @@
+/* eslint-disable no-unused-expressions */
 import Container from '../src/index';
 import chai from 'chai';
 import spies from 'chai-spies';
 
 chai.use(spies);
 const expect = chai.expect;
-let exist;
 
 describe('.Container', () => {
     let container = null;
@@ -18,10 +18,10 @@ describe('.Container', () => {
             it('should successfully register modules', () => {
                 const register = () => {
                     container.register().value('value', {name: 'bar'});
-                    container.register().service('service', function() {
+                    container.register().service('service', function Service() {
                         this.name = 'bar';
                     });
-                    container.register().factory('factory', function() {
+                    container.register().factory('factory', function Service() {
                         return {value: new Date()};
                     });
                 };
@@ -41,13 +41,13 @@ describe('.Container', () => {
             });
         });
 
-        describe('register twice one module', () => {
+        describe('register twice using namespace instance', () => {
             context('same type of module', () => {
                 it('should throw error', () => {
                     const register = () => {
-                        const module = container.register();
-                        module.value('foo', 'foo');
-                        module.value('foo', 'bar');
+                        const namespace = container.register();
+                        namespace.value('foo', 'foo');
+                        namespace.value('foo', 'bar');
                     };
 
                     expect(register).to.throw();
@@ -57,10 +57,9 @@ describe('.Container', () => {
             context('different type of module', () => {
                 it('should throw error', () => {
                     const register = () => {
-                        const module = container.register();
-                        module.value('foo', 'foo');
-                        module.service('foo', function Service() {
-                        });
+                        const namespace = container.register();
+                        namespace.value('foo', 'foo');
+                        namespace.service('foo', function Service() {});
                     };
 
                     expect(register).to.throw();
@@ -68,15 +67,14 @@ describe('.Container', () => {
             });
 
             context('different type and name of module', () => {
-                it('should throw error', () => {
+                it('should not throw error', () => {
                     const register = () => {
-                        const module = container.register();
-                        module.value('foo', 'foo');
-                        module.service('bar', function Service() {
-                        });
+                        const namespace = container.register();
+                        namespace.value('foo', 'foo');
+                        namespace.service('bar', function Service() {});
                     };
 
-                    expect(register).to.throw();
+                    expect(register).to.not.throw();
                 });
             });
         });
@@ -171,11 +169,11 @@ describe('.Container', () => {
 
                         const found = container.resolve('value');
                         const found2 = container.resolve('value');
-                        exist = expect(found).to.exist;
-                        exist = expect(found2).to.exist;
-                        exist = expect(found).to.not.equal(found2);
-                        exist = expect(found.name).to.exist;
-                        exist = expect(found.surname).to.exist;
+                        expect(found).to.exist;
+                        expect(found2).to.exist;
+                        expect(found).to.not.equal(found2);
+                        expect(found.name).to.exist;
+                        expect(found.surname).to.exist;
                     });
                 });
                 context('with dependencies', () => {
@@ -192,9 +190,9 @@ describe('.Container', () => {
                         });
 
                         const found = container.resolve('user');
-                        exist = expect(found).to.exist;
-                        exist = expect(found.group).to.exist;
-                        exist = expect(found.group.accounts).to.exist;
+                        expect(found).to.exist;
+                        expect(found.group).to.exist;
+                        expect(found.group.accounts).to.exist;
                     });
                 });
             });
@@ -211,7 +209,7 @@ describe('.Container', () => {
                     const found = container.resolve('http');
                     const found2 = container.resolve('http');
 
-                    exist = expect(found).to.exist;
+                    expect(found).to.exist;
                     expect(found).to.equal(found2);
                 });
             });
@@ -231,10 +229,10 @@ describe('.Container', () => {
                     const found = container.resolve('http');
                     const found2 = container.resolve('http');
 
-                    exist = expect(found).to.exist;
+                    expect(found).to.exist;
                     expect(found).to.equal(found2);
-                    exist = expect(found.settings).to.exist;
-                    exist = expect(found.transport).to.exist;
+                    expect(found.settings).to.exist;
+                    expect(found.transport).to.exist;
                 });
             });
         });
@@ -252,7 +250,7 @@ describe('.Container', () => {
                     const found = container.resolve('http');
                     const found2 = container.resolve('http');
 
-                    exist = expect(found).to.exist;
+                    expect(found).to.exist;
                     expect(found).to.equal(found2);
                 });
             });
@@ -274,10 +272,10 @@ describe('.Container', () => {
                     const found = container.resolve('http');
                     const found2 = container.resolve('http');
 
-                    exist = expect(found).to.exist;
+                    expect(found).to.exist;
                     expect(found).to.equal(found2);
-                    exist = expect(found.settings).to.exist;
-                    exist = expect(found.transport).to.exist;
+                    expect(found.settings).to.exist;
+                    expect(found.transport).to.exist;
                 });
             });
         });
@@ -302,7 +300,7 @@ describe('.Container', () => {
                         });
 
                         const user = container.resolve('models/user');
-                        exist = expect(user).to.exist;
+                        expect(user).to.exist;
                         expect(user.value).to.equal(1);
                     });
                 });
@@ -319,8 +317,8 @@ describe('.Container', () => {
 
                         const serviceA = container.resolve('service');
                         const serviceB = container.resolve('services/service');
-                        exist = expect(serviceA).to.exist;
-                        exist = expect(serviceB).to.exist;
+                        expect(serviceA).to.exist;
+                        expect(serviceB).to.exist;
                         expect(serviceA).to.not.equal(serviceB);
                     });
                 });
@@ -335,8 +333,8 @@ describe('.Container', () => {
 
                         const serviceB = container.resolve('services/service');
                         const serviceA = container.resolve('services/api/service');
-                        exist = expect(serviceA).to.exist;
-                        exist = expect(serviceB).to.exist;
+                        expect(serviceA).to.exist;
+                        expect(serviceB).to.exist;
                         expect(serviceB.api).to.equal(serviceA);
                     });
                 });
@@ -351,8 +349,8 @@ describe('.Container', () => {
 
                         const serviceA = container.resolve('service');
                         const serviceB = container.resolve('services/service');
-                        exist = expect(serviceA).to.exist;
-                        exist = expect(serviceB).to.exist;
+                        expect(serviceA).to.exist;
+                        expect(serviceB).to.exist;
                         expect(serviceA).to.not.equal(serviceB);
                     });
                 });
@@ -366,14 +364,15 @@ describe('.Container', () => {
 
                         const serviceB = container.resolve('services/service');
                         const serviceA = container.resolve('services/api/service');
-                        exist = expect(serviceA).to.exist;
-                        exist = expect(serviceB).to.exist;
+                        expect(serviceA).to.exist;
+                        expect(serviceB).to.exist;
                         expect(serviceB.api).to.equal(serviceA);
                     });
                 });
             });
         });
-        //describe('circular dependency', () => {
+
+        // describe('circular dependency', () => {
         //    it('should throw during resolving', () => {
         //        const self = () => {
         //            container.register().value('value1', ['value1'], 1);
@@ -399,6 +398,7 @@ describe('.Container', () => {
         //        expect(shallow).to.throw(ReferenceError);
         //        expect(deep).to.throw(ReferenceError);
         //    });
-        //});
+        // });
     });
 });
+/* eslint-enable no-unused-expressions */

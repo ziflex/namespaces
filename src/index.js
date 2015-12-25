@@ -1,8 +1,6 @@
-import Module from './module';
-import Initializer from './initializer';
-import ContainerStorage from './storage';
+import Namespace from './namespace';
+import Storage from './storage';
 import Resolver from './resolver';
-import helper from './helper';
 
 /**
  * Creates a new Container.
@@ -15,27 +13,17 @@ export default class Container {
      */
     constructor(separator = '/') {
         this._separator = separator;
-        this._storage = new ContainerStorage(separator);
+        this._storage = new Storage(separator);
         this._resolver = new Resolver(this._storage);
     }
 
     /**
      * Register a module.
      * @param {string} namespace - Module namespace. Optional.
-     * @returns {Module} new Module.
+     * @returns {Namespace} Module namespace.
      */
     register(namespace) {
-        let registered = false;
-        return new Module((name, module) => {
-            if (registered) {
-                throw new Error('This module has been already registered');
-            }
-
-            const path = helper.buildPath(this._separator, namespace, name);
-            const activator = new Initializer(path, module.create, module.dependencies);
-            this._storage.addItem(path, activator);
-            registered = true;
-        });
+        return new Namespace(namespace || this._separator, this._storage);
     }
 
     /**

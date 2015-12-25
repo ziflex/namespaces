@@ -3,86 +3,52 @@ import helper from './helper';
 /**
  * Creates a new Module.
  * @class
- * @classdesc Represents a registered module.
+ * @classdesc Represents a module.
  */
 export default class Module {
-    /** @constructor
-     * @param {function} callback - Callback function for registering current module in container.
-     */
-    constructor(callback) {
-        this._callback = callback;
+    constructor(namespace, name, dependencies, initialize) {
+        this._namespace = namespace;
+        this._name = name;
+        this._initialize = initialize;
+        this._dependencies = dependencies;
+        this._isInitialized = false;
+        this._value = null;
     }
 
-    /**
-     * Register a value, such as a string, a number, an array, an object or a constructor.
-     * Note: If passed value is function type, it will be treated as constructor
-     * and every time when it's injected, new instance will be created.
-     * @param {string} name - Module name.
-     * @param {array} dependencies - Module dependencies. Optional.
-     * @param {string | number | object | array | function} definition - Module value.
-     * @returns {function} Value factory.
-     */
-    value(name, dependencies, definition) {
-        const args = helper.normalizeArguments(name, dependencies, definition);
-
-        this._callback(args.name, {
-            dependencies: args.dependencies,
-            create: (resolved) => {
-                // instances, simple types
-                if (!helper.isFunction(args.definition)) {
-                    return args.definition;
-                }
-
-                return function factory() {
-                    return helper.create(args.definition, resolved);
-                };
-            }
-        });
+    getNamespace() {
+        return this._namespace;
     }
 
-    /**
-     * Register a service constructor, which will be invoked with `new` to create the service instance.
-     * Any type which was registered as a service is singleton.
-     * @param {string} name - Module name.
-     * @param {array} dependencies - Module dependencies. Optional.
-     * @param {function} definition - Module constructor that will be instantiated.
-     * @returns {function} Value factory.
-     */
-    service(name, dependencies, definition) {
-        const args = helper.normalizeArguments(name, dependencies, definition);
+    getName() {
+        return this._name;
+    }
 
-        if (!helper.isFunction(args.definition)) {
-            throw new Error(`Service supports only constructors.`);
+    getDependencies() {
+        return this._dependencies;
+    }
+
+    getValue() {
+        if (!this.isInitialized()) {
+            throw new Error('Module is not initialized!');
         }
 
-        this._callback(args.name, {
-            dependencies: args.dependencies,
-            create: (resolved) => {
-                return helper.create(args.definition, resolved);
-            }
-        });
-    }
-
-    /**
-     * Register a service factory, which will be called to return the service instance.
-     * Any function's value will be registered as a singleton.
-     * @param {string} name - Module name.
-     * @param {array} dependencies - Module dependencies. Optional.
-     * @param {function} definition - Module factory.
-     * @returns {function} Value factory.
-     */
-    factory(name, dependencies, definition) {
-        const args = helper.normalizeArguments(name, dependencies, definition);
-
-        if (!helper.isFunction(args.definition)) {
-            throw new Error(`Factory supports only functions.`);
+        if (helper.isFunction(this._value)) {
+            return this._value();
         }
 
-        this._callback(args.name, {
-            dependencies: args.dependencies,
-            create: (resolved) => {
-                return args.definition(...resolved);
-            }
-        });
+        return this._value;
+    }
+
+    isInitialized() {
+        return this._isInitialized;
+    }
+
+    initialize(dependencies) {
+        if (this.isInitialized()) {
+            throw new Error(`Module ${this._path} has been already initialized!`);
+        }
+
+        this._value = this._initialize(dependencies);
+        this._isInitialized = true;
     }
 }

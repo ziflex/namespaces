@@ -1,4 +1,10 @@
+import Module from './module';
 import helper from './helper';
+
+const MISSED_MODULE_NAME = 'Missed module name!';
+const MISSED_MODULE = 'Missed module!';
+const INVALID_MODULE_TYPE = 'Invalid module type!';
+const INVALID_NAMESPACE_TYPE = 'Invalid namespace tyoe!';
 
 export default class Storage {
     constructor(pathSeparator = '/') {
@@ -6,21 +12,38 @@ export default class Storage {
         this._namespaces = {};
     }
 
-    addItem(path, module) {
-        const parts = helper.splitPath(path, this._separator);
-        parts.namespace = parts.namespace || this._separator;
+    addItem(module) {
+        if (!module) {
+            throw new Error(MISSED_MODULE);
+        }
 
-        let registry = this._namespaces[parts.namespace];
+        if (!(module instanceof Module)) {
+            throw new Error(INVALID_MODULE_TYPE);
+        }
+
+        if (!helper.isString(module.getNamespace())) {
+            throw new Error(INVALID_NAMESPACE_TYPE);
+        }
+
+        if (!module.getName()) {
+            throw new Error(MISSED_MODULE_NAME);
+        }
+
+        const namespace = module.getNamespace();
+        let registry = this._namespaces[namespace];
+
         if (!registry) {
             registry = {};
-            this._namespaces[parts.namespace] = registry;
+            this._namespaces[namespace] = registry;
         }
 
-        if (registry[parts.name]) {
-            throw new Error(`${parts.name} is already registered.`);
+        const name = module.getName();
+
+        if (registry[name]) {
+            throw new Error(`${name} is already registered.`);
         }
 
-        registry[parts.name] = module;
+        registry[name] = module;
     }
 
     getItem(path) {
