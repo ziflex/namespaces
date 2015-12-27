@@ -63,30 +63,60 @@ via bower
 
 ```
 
+### Modular namespaces
+
+```javascript
+
+    var DI = require('namespaces-js');
+
+    var container = new DI();
+    var models = container.register('models');
+
+    models.value('user', require('./models/user'));
+    models.value('account', require('./models/account'));
+
+```
+
+### Resolving all values
+
+````javascript
+
+    var DI = require('namespaces-js');
+    var container = new DI();
+    var services = container.register('services');
+    services.service('user', require('./services/user'));
+    services.service('account', require('./services/account'));
+
+    var allServices = container.resolveAll('services');
+
+````
+
 ## API
 
-### new Namespace([namespaceSeparator: string = '/'])
+### new Container([namespaceSeparator: string = '/'])
 
 Creates new container.
 Arguments: namespaces separator. Optional. Default '/'.
 
-### container.register([namespaceName: string]): Module
-Creates new module in root namespace.
-If `namespaceName` is passed, will be created in particular namespace.
+### container.register([namespaceName: string]): Namespace
+Returns or creates new namespace.    
 
 ### container.resolve(modulePath: string): any
-Returns registered module's value.
+Returns registered module's value.   
 
-### Module.value(name: string, [dependencies: string[]], value: number | string | array | object | function): void
-Registers a value, such as a string, a number, an array, an object or a constructor.
+### container.resolveAll(namespace: string): Map<string, any>
+Returns all values from registered modules in particular namespace.      
+
+### Namespace.value(name: string, [dependencies: string[]], value: number | string | array | object | function): void
+Registers a value, such as a string, a number, an array, an object or a constructor.    
 Note: If passed value is function type, it will be treated as constructor and every time when it's injected, new instance will be created.
 
-### Module.service(name: string, [dependencies: string[]], value: function): void
-Registers a service constructor, which will be invoked with `new` to create the service instance.
+### Namespace.service(name: string, [dependencies: string[]], value: function): void
+Registers a service constructor, which will be invoked with `new` to create the service instance.    
 Any type which was registered as a service is singleton.
 
-### Module.factory(name: string, [dependencies: string[]], value: function): void
-Register a service factory, which will be called to return the service instance.
+### Namespace.factory(name: string, [dependencies: string[]], value: function): void
+Register a service factory, which will be called to return the service instance.    
 Any function's value will be registered as a singleton.
 
 ### License
