@@ -1,4 +1,4 @@
-import helper from './helper';
+import { isFunction } from './utils';
 
 /**
  * Creates a new Module.
@@ -32,7 +32,7 @@ export default class Module {
             throw new Error('Module is not initialized!');
         }
 
-        if (helper.isFunction(this._value)) {
+        if (isFunction(this._value)) {
             return this._value();
         }
 
@@ -45,7 +45,7 @@ export default class Module {
 
     initialize(dependencies) {
         if (this.isInitialized()) {
-            throw new Error(`Module ${this._path} has been already initialized!`);
+            throw new Error(`Module has been already initialized!`);
         }
 
         this._value = this._initialize(dependencies);

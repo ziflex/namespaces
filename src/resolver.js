@@ -1,4 +1,4 @@
-import helper from './helper';
+import { isArray } from './utils';
 
 /**
  * Creates a new Resolver.
@@ -28,7 +28,7 @@ export default class Resolver {
 
             const deps = module.getDependencies();
             let resolvedDeps = [];
-            if (helper.isArray(deps)) {
+            if (isArray(deps)) {
                 resolvedDeps = deps.map(resolveModule);
             }
 

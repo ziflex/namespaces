@@ -1,4 +1,4 @@
-import helper from './helper';
+import {isFunction, create, parseArgs} from './utils';
 import Module from './module';
 
 /**
@@ -26,16 +26,16 @@ export default class Namespace {
      * @returns {function} Value factory.
      */
     value(name, dependencies, definition) {
-        const args = helper.normalizeArguments(name, dependencies, definition);
+        const args = parseArgs(name, dependencies, definition);
 
         this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {
             // instances, simple types
-            if (!helper.isFunction(args.definition)) {
+            if (!isFunction(args.definition)) {
                 return args.definition;
             }
 
             return function factory() {
-                return helper.create(args.definition, resolved);
+                return create(args.definition, resolved);
             };
         }));
     }
@@ -49,14 +49,14 @@ export default class Namespace {
      * @returns {function} Value factory.
      */
     service(name, dependencies, definition) {
-        const args = helper.normalizeArguments(name, dependencies, definition);
+        const args = parseArgs(name, dependencies, definition);
 
-        if (!helper.isFunction(args.definition)) {
+        if (!isFunction(args.definition)) {
             throw new Error(`Service supports only constructors.`);
         }
 
         this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {
-            return helper.create(args.definition, resolved);
+            return create(args.definition, resolved);
         }));
     }
 
@@ -69,9 +69,9 @@ export default class Namespace {
      * @returns {function} Value factory.
      */
     factory(name, dependencies, definition) {
-        const args = helper.normalizeArguments(name, dependencies, definition);
+        const args = parseArgs(name, dependencies, definition);
 
-        if (!helper.isFunction(args.definition)) {
+        if (!isFunction(args.definition)) {
             throw new Error(`Factory supports only functions.`);
         }
 

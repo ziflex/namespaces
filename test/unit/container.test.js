@@ -1,10 +1,6 @@
 /* eslint-disable no-unused-expressions */
-import Container from '../src/index';
-import chai from 'chai';
-import spies from 'chai-spies';
-
-chai.use(spies);
-const expect = chai.expect;
+import {expect} from 'chai';
+import Container from '../../src/index';
 
 describe('.Container', () => {
     let container = null;
@@ -13,7 +9,7 @@ describe('.Container', () => {
         container = new Container();
     });
 
-    describe('#register', () => {
+    describe('.register', () => {
         context('empty container', () => {
             it('should successfully register modules', () => {
                 const register = () => {
@@ -83,11 +79,8 @@ describe('.Container', () => {
             context('same name', () => {
                 it('should register in different namespaces', () => {
                     const register = () => {
-                        container.register('models').value('user', function User() {
-                        });
-
-                        container.register('services').service('user', function UserService() {
-                        });
+                        container.register('models').value('user', function User() {});
+                        container.register('services').service('user', function UserService() {});
                     };
 
                     expect(register).to.not.throw();
@@ -95,11 +88,9 @@ describe('.Container', () => {
 
                 it('should not register in same namespace', () => {
                     const register = () => {
-                        container.register('models').value('user', function User() {
-                        });
+                        container.register('models').value('user', function User() {});
 
-                        container.register('models').service('user', function UserService() {
-                        });
+                        container.register('models').service('user', function UserService() {});
                     };
 
                     expect(register).to.throw();

@@ -1,43 +1,60 @@
 import Module from './module';
-import helper from './helper';
+import { splitPath, isString } from './utils';
 
-const MISSED_MODULE_NAME = 'Missed module name!';
 const MISSED_MODULE = 'Missed module!';
-const INVALID_MODULE_TYPE = 'Invalid module type!';
-const INVALID_NAMESPACE_TYPE = 'Invalid namespace tyoe!';
+const MISSED_MODULE_NAME = 'Missed module name!';
+const INVALID_MODULE = 'Invalid module!';
+const INVALID_NAMESPACE = 'Invalid namespace!';
+const INVALID_MODULE_NAME = 'Invalid module name!';
+const INVALID_MODULE_PATH = 'Invalid module path!';
 
+/**
+ * Creates a new Storage.
+ * @class
+ * @classdesc Represents a modules storage.
+ */
 export default class Storage {
     constructor(pathSeparator = '/') {
         this._separator = pathSeparator;
         this._namespaces = {};
     }
 
+    /**
+     * Adds module to storage.
+     * @param {Module} module - Target module to add.
+     * @throws {Error} Throws an error if module with same path already exists.
+     */
     addItem(module) {
         if (!module) {
             throw new Error(MISSED_MODULE);
         }
 
         if (!(module instanceof Module)) {
-            throw new Error(INVALID_MODULE_TYPE);
-        }
-
-        if (!helper.isString(module.getNamespace())) {
-            throw new Error(INVALID_NAMESPACE_TYPE);
-        }
-
-        if (!module.getName()) {
-            throw new Error(MISSED_MODULE_NAME);
+            throw new Error(INVALID_MODULE);
         }
 
         const namespace = module.getNamespace();
+
+        if (!isString(namespace)) {
+            throw new Error(INVALID_NAMESPACE);
+        }
+
+        const name = module.getName();
+
+        if (!name) {
+            throw new Error(MISSED_MODULE_NAME);
+        }
+
+        if (!isString(name)) {
+            throw new Error(INVALID_MODULE_NAME);
+        }
+
         let registry = this._namespaces[namespace];
 
         if (!registry) {
             registry = {};
             this._namespaces[namespace] = registry;
         }
-
-        const name = module.getName();
 
         if (registry[name]) {
             throw new Error(`${name} is already registered.`);
@@ -46,8 +63,18 @@ export default class Storage {
         registry[name] = module;
     }
 
+    /**
+     * Tries to find a module with passed path.
+     * @param {string} path - Module's path.
+     * @return {Module} found module.
+     * @throws {Error} Throws error in module wasn't found.
+     */
     getItem(path) {
-        const parts = helper.splitPath(path, this._separator);
+        if (!isString(path)) {
+            throw new Error(INVALID_MODULE_PATH);
+        }
+
+        const parts = splitPath(path, this._separator);
         const namespace = this._namespaces[parts.namespace];
 
         if (!namespace) {
