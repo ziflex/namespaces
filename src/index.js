@@ -34,4 +34,13 @@ export default class Container {
     resolve(path) {
         return this._resolver.resolve(path);
     }
+
+    /**
+     * Resolves all modules from particular namespace.
+     * @param {string} namespace - Target namespace.
+     * @returns {Map<string, any>} Map of module values, where key is module name.
+     */
+    resolveAll(namespace) {
+        return this._resolver.resolveAll(namespace);
+    }
 }

@@ -1,12 +1,22 @@
 import Module from './module';
-import { splitPath, isString } from './utils';
+import {
+    splitPath,
+    buildPath,
+    isString,
+    isNullOrUndefined,
+    isFunction
+} from './utils';
 
 const MISSED_MODULE = 'Missed module!';
 const MISSED_MODULE_NAME = 'Missed module name!';
+const MISSED_NAMESPACE = 'Missed module namespace!';
+const MISSED_CALLBACK = 'Missed callback';
 const INVALID_MODULE = 'Invalid module!';
 const INVALID_NAMESPACE = 'Invalid namespace!';
 const INVALID_MODULE_NAME = 'Invalid module name!';
 const INVALID_MODULE_PATH = 'Invalid module path!';
+const NAMESPACE_NOT_FOUND = 'Namespace was not found';
+const MODULE_NOT_FOUND = 'Module with path was not found';
 
 /**
  * Creates a new Storage.
@@ -78,15 +88,37 @@ export default class Storage {
         const namespace = this._namespaces[parts.namespace];
 
         if (!namespace) {
-            throw new Error(`Namespace '${parts.namespace}' was not found.`);
+            throw new Error(`${NAMESPACE_NOT_FOUND}: ${parts.namespace}!`);
         }
 
         const module = namespace[parts.name];
 
         if (!module) {
-            throw new Error(`Module with path '${path}' was not found.`);
+            throw new Error(`${MODULE_NOT_FOUND}: ${parts.name}!`);
         }
 
         return module;
+    }
+
+    forEachIn(namespace, callback) {
+        if (isNullOrUndefined(namespace)) {
+            throw new Error(MISSED_NAMESPACE);
+        }
+
+        if (!isFunction(callback)) {
+            throw new Error(MISSED_CALLBACK);
+        }
+
+        const registry = this._namespaces[namespace];
+
+        if (!registry) {
+            throw new Error(`${NAMESPACE_NOT_FOUND}: ${namespace}!`);
+        }
+
+        for (const name in registry) {
+            if (registry.hasOwnProperty(name) && registry[name]) {
+                callback(registry[name], buildPath(this._separator, namespace, name));
+            }
+        }
     }
 }

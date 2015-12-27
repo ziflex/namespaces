@@ -38,4 +38,19 @@ export default class Resolver {
 
         return resolveModule(path);
     }
+
+    /**
+     * Resolves all modules from particular namespace.
+     * @param {string} namespace - Target namespace.
+     * @returns {Map<string, any>} Map of module values, where key is module name.
+     */
+    resolveAll(namespace) {
+        const result = {};
+
+        this._storage.forEachIn(namespace, (module, path) => {
+            result[module.getName()] = this.resolve(path);
+        });
+
+        return result;
+    }
 }

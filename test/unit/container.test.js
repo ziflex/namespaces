@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-expressions */
+/* eslint-disable no-unused-expressions, func-names */
 import {expect} from 'chai';
 import Container from '../../src/index';
 
@@ -99,7 +99,7 @@ describe('.Container', () => {
         });
     });
 
-    describe('#resolve', () => {
+    describe('.resolve', () => {
         context('empty container', () => {
             it('should throw error', () => {
                 const resolve = () => {
@@ -391,5 +391,42 @@ describe('.Container', () => {
         //    });
         // });
     });
+    describe('.resolveAll', () => {
+        context('empty container', () => {
+            it('should throw error', () => {
+                expect(() => {
+                    container.resolveAll('foo');
+                }).to.throw();
+            });
+        });
+
+        context('not empty container', () => {
+            it('should resolve all modules from particular namespace', () => {
+                const foo = container.register('foo');
+                foo.service('A', function() { this.name = 'A'; });
+                foo.service('B', ['foo/A'], function() { this.name = 'B'; });
+                foo.service('C', ['foo/B'], function() { this.name = 'C'; });
+                foo.service('D', ['foo/B', 'foo/C'], function() { this.name = 'D'; });
+
+                const bar = container.register('bar');
+                bar.service('E', ['foo/A'], function() { this.name = 'E'; });
+                bar.service('F', ['bar/E', 'foo/C'], function() { this.name = 'F'; });
+
+                const resolved = container.resolveAll('bar');
+                const arr = [];
+
+                for (const name in resolved) {
+                    if (resolved.hasOwnProperty(name)) {
+                        arr.push({
+                            name: name,
+                            value: resolved[name]
+                        });
+                    }
+                }
+
+                expect(arr.length).to.equal(2);
+            });
+        });
+    });
 });
-/* eslint-enable no-unused-expressions */
+/* eslint-enable no-unused-expressions, func-names */
