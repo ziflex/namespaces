@@ -49,15 +49,57 @@ export function parseArgs(...args) {
     return { name, dependencies, definition };
 }
 
-export function splitPath(path, separator = '/') {
-    const parts = path.split(separator);
-    const len = parts.length;
-    return {
-        namespace: len > 1 ? parts.slice(0, len - 1).join(separator) : separator,
-        name: parts[len - 1]
-    };
+export function isValidName(separator = '/', name) {
+    return name.indexOf(separator) === -1;
 }
 
-export function buildPath(separator = '/', ...parts) {
-    return parts.join(separator);
+export function joinPath(separator = '/', ...parts) {
+    const paths = [];
+    const len = parts.length;
+
+    for (let i = 0; i <= len; i += 1) {
+        let part = parts[i];
+
+        if (isString(part)) {
+            part = part.trim();
+
+            if (part && part !== separator) {
+                paths.push(part);
+            }
+        }
+    }
+
+    return `${paths.join(separator)}`;
+}
+
+export function splitPath(separator = '/', path) {
+    const result = { namespace: '', name: '' };
+
+    if (!isString(path)) {
+        return result;
+    }
+
+    const normalizedPath = path.trim();
+
+    if (normalizedPath === separator) {
+        result.namespace = '';
+        return result;
+    }
+
+    const parts = normalizedPath.split(separator);
+    const len = parts.length;
+
+    if (len > 1) {
+        result.namespace = joinPath(separator, ...parts.slice(0, len - 1));
+    } else {
+        result.namespace = '';
+    }
+
+    result.name = parts[len - 1] || '';
+
+    if (isString(result.name) && !result.name.trim()) {
+        result.name = '';
+    }
+
+    return result;
 }

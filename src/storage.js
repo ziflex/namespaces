@@ -1,10 +1,11 @@
 import Module from './module';
 import {
     splitPath,
-    buildPath,
+    joinPath,
     isString,
     isNullOrUndefined,
-    isFunction
+    isFunction,
+    isValidName
 } from './utils';
 
 const MISSED_MODULE = 'Missed module!';
@@ -59,6 +60,10 @@ export default class Storage {
             throw new Error(INVALID_MODULE_NAME);
         }
 
+        if (!isValidName(this._separator, name)) {
+            throw new Error(`${INVALID_MODULE_PATH} Module is now alllowed to contain namespace separators.`);
+        }
+
         let registry = this._namespaces[namespace];
 
         if (!registry) {
@@ -84,7 +89,7 @@ export default class Storage {
             throw new Error(INVALID_MODULE_PATH);
         }
 
-        const parts = splitPath(path, this._separator);
+        const parts = splitPath(this._separator, path);
         const namespace = this._namespaces[parts.namespace];
 
         if (!namespace) {
@@ -117,7 +122,7 @@ export default class Storage {
 
         for (const name in registry) {
             if (registry.hasOwnProperty(name) && registry[name]) {
-                callback(registry[name], buildPath(this._separator, namespace, name));
+                callback(registry[name], joinPath(this._separator, namespace, name));
             }
         }
     }

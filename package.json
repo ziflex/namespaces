@@ -1,6 +1,6 @@
 {
   "name": "namespaces-js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Angular-flavored DI container.",
   "main": "lib/index.js",
   "directories": {
@@ -19,9 +19,10 @@
     "build:bower": "browserify --entry src/index.js --outfile dist/namespaces.js --standalone Namespaces",
     "clean:npm": "rimraf lib",
     "clean:bower": "rimraf dist",
+    "package": "npm run package:npm && npm run package:bower",
     "package:npm": "npm run clean:npm && npm run lint && npm run build:npm",
     "package:bower": "npm run clean:bower && npm run lint && mkdir -p dist && npm run build:browser",
-    "prepublish": "npm run package:npm",
+    "prepublish": "npm run package",
     "lint": "eslint src test/unit --config ./.eslintrc",
     "cover": "mochify --recursive ./test/unit --transform babelify  --reporter spec --plugin [ mochify-istanbul --report html --report text --instrumenter babel-istanbul --exclude '**/test/**/*' --exclude '**/node_modules/**/*' ] ",
     "test": "mochify --recursive ./test/unit --transform babelify  --reporter spec"

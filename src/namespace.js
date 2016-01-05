@@ -1,4 +1,9 @@
-import {isFunction, create, parseArgs} from './utils';
+import {
+    isFunction,
+    create,
+    parseArgs,
+    joinPath
+} from './utils';
 import Module from './module';
 
 /**
@@ -8,12 +13,23 @@ import Module from './module';
  */
 export default class Namespace {
     /** @constructor
+     * @param {string} separator - Namespace separator.
      * @param {string} name - Namespace name.
      * @param {Storage} storage - Global modules storage.
      */
-    constructor(name = '', storage) {
+    constructor(separator = '/', name = '', storage) {
+        this._separator = separator;
         this._name = name;
         this._storage = storage;
+    }
+
+    /**
+     * Returns a module namespace.
+     * @param {string} name - Module namespace. Optional.
+     * @returns {Namespace} Module namespace.
+     */
+    namespace(name) {
+        return new Namespace(this._separator, joinPath(this._separator, this._name, name), this._storage);
     }
 
     /**
