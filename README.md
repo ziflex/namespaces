@@ -29,65 +29,74 @@ via bower
 
 ```javascript
 
-    var DI = require('namespaces-js');
+    var Container = require('namespaces-js');
 
-    var container = new DI();
-    container.register().value('name', 'foobar');
-    container.register().factory('foo-service', function() {
-        var FooService = require('./services/foo-service');
-        return new FooService();
+    container.value('settings', settings);
+    container.namespace('services/infrastructure').service('http', require('http'));
+    container.namespace('services/external/api').factory('users', ['settings', 'services/infrastructure/http'], (settings, http) => {
+        return new UsersApi(settings.api, http);
     });
-    container.register().service('bar-service', ['foo-service', 'name'], require('./services/bar-service'));
+    container.namespace('services/business').service('users', ['services/external/api/users'], UsersService);
 
-    ...
 
-    var bar = container.resolve('bar-service');
-    var foo = container.resolve('foo-service');
+    var usersServiceInstance = container.resolve('services/business/users');
 
 ```
 
-### Different namespaces
+### Namespaces
+
+#### Basic
 
 ```javascript
 
-    var DI = require('namespaces-js');
+    var Container = require('namespaces-js');
 
-    var container = new DI();
-    container.register('models').value('user', require('./models/user');
-    container.register('services').service('user', require('./services/user');
+    var container = new Container();    
+    container.namespace('models').value('user', require('./models/user');
+    container.namespace('services').service('user', require('./services/user');
+    container.namespace('core/infrastructure').service('logger', require('logger'));
 
     ...
 
     var userService = container.resolve('services/user');
     var userInstance = container.resolve('models/user');
+    var logger = container.resolve('core/infrastructure/logger');
 
 ```
 
-### Modular namespaces
+#### Modular
 
 ```javascript
 
-    var DI = require('namespaces-js');
+    var Container = require('namespaces-js');
 
-    var container = new DI();
-    var models = container.register('models');
+    var container = new Container();
+    var ui = container.namespace('ui');
+    var actions = ui.namespace('actions');
+    actions.service('user', require('./ui/flux/actions/user'));
+    actions.service('users', require('./ui/flux/actions/users'));
 
-    models.value('user', require('./models/user'));
-    models.value('account', require('./models/account'));
+    var stores = ui.namespace('stores');
+    stores.service('users', ['ui/actions/users', 'ui/actions/user'], require('./ui/flux/stores/users'));
 
 ```
 
-### Resolving all values
+### Custom resolving
 
 ````javascript
 
-    var DI = require('namespaces-js');
-    var container = new DI();
-    var services = container.register('services');
-    services.service('user', require('./services/user'));
-    services.service('account', require('./services/account'));
+    var Container = require('namespaces-js');
 
-    var allServices = container.resolveAll('services');
+    var container = new Container();
+    var services = container.namespace('services');
+    services.service('users', UsersService);
+    services.service('accounts', AccountsService);
+
+    var actions = container.namespace('ui/actions');
+    actions.service('user', ['services/users', 'services/accounts'], UserActions);
+    actions.service('users', ['services/users'], UsersActions);
+
+    var allActions = container.resolveAll('ui/actions');
 
 ````
 
@@ -98,7 +107,7 @@ via bower
 Creates new container.
 Arguments: namespaces separator. Optional. Default '/'.
 
-### container.register([namespaceName: string]): Namespace
+### container.namespace([namespaceName: string]): Namespace
 Returns or creates new namespace.    
 
 ### container.resolve(modulePath: string): any
