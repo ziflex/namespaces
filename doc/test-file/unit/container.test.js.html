@@ -172,6 +172,16 @@ describe(&apos;Container&apos;, () =&gt; {
                 });
             });
         });
+
+        describe(&apos;#map&apos;, () =&gt; {
+            it(&apos;should exist&apos;, () =&gt; {
+                expect(() =&gt; {
+                    return Container.map({
+                        core: &apos;core&apos;
+                    });
+                }).to.not.throw;
+            });
+        });
     });
 });
 /* eslint-enable no-unused-expressions, func-names */

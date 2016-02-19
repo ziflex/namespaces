@@ -19,6 +19,10 @@ var _resolver = require('./resolver');
 
 var _resolver2 = _interopRequireDefault(_resolver);
 
+var _mapPath = require('./map-path');
+
+var _mapPath2 = _interopRequireDefault(_mapPath);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -57,6 +61,10 @@ var Container = function (_Namespace) {
    * @returns {Module} new Module.
    */
 
+  /**
+   * Converts object/array to a function chain that's help to use namespaces.
+   */
+
 
   _createClass(Container, [{
     key: 'resolve',
@@ -80,9 +88,10 @@ var Container = function (_Namespace) {
   return Container;
 }(_namespace2.default);
 
+Container.map = _mapPath2.default;
 exports.default = Container;
 
-},{"./namespace":5,"./resolver":6,"./storage":7}],2:[function(require,module,exports){
+},{"./map-path":3,"./namespace":5,"./resolver":6,"./storage":7}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -231,10 +240,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _utils = require('./utils');
 
-var _mapPath = require('./map-path');
-
-var _mapPath2 = _interopRequireDefault(_mapPath);
-
 var _module = require('./module');
 
 var _module2 = _interopRequireDefault(_module);
@@ -274,11 +279,6 @@ var Namespace = function () {
     /**
      * Returns a namespace name.
      * @returns {string} Namespace name.
-     */
-
-
-    /**
-     * Converts object/array to a function chain that's help to use namespaces.
      */
 
 
@@ -396,10 +396,9 @@ var Namespace = function () {
     return Namespace;
 }();
 
-Namespace.map = _mapPath2.default;
 exports.default = Namespace;
 
-},{"./map-path":3,"./module":4,"./utils":8}],6:[function(require,module,exports){
+},{"./module":4,"./utils":8}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

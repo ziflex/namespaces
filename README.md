@@ -133,23 +133,26 @@ Returns registered module's value.
 ### container.resolveAll(namespace: string): Map<string, any>
 Returns all values from registered modules in particular namespace.      
 
-### Namespace.const(name: string, value: number | string | array | object | function): void
+### namespace.const(name: string, value: number | string | array | object | function): void
 Registers a value, such as a string, a number, an array, an object or a function.    
 
-### Namespace.value(name: string, [dependencies: string[]], value: number | string | array | object | function): void
+### namespace.value(name: string, [dependencies: string[]], value: number | string | array | object | function): void
 Registers a value, such as a string, a number, an array, an object or a constructor.    
 Note: If passed value is function type, it will be treated as constructor and every time when it's injected, new instance will be created.
 
-### Namespace.service(name: string, [dependencies: string[]], value: function): void
+### namespace.service(name: string, [dependencies: string[]], value: function): void
 Registers a service constructor, which will be invoked with `new` to create the service instance.    
 Any type which was registered as a service is singleton.
 
-### Namespace.factory(name: string, [dependencies: string[]], value: function): void
+### namespace.factory(name: string, [dependencies: string[]], value: function): void
 Register a service factory, which will be called to return the service instance.    
 Any function's value will be registered as a singleton.
 
-### Namespace.getName(): string      
-Returns name of current namespace.    
+### namespace.getName(): string      
+Returns name of current namespace.   
+
+### Container.map     
+Helper function that converts object / array to chain of functions.      
 
 ### License
 

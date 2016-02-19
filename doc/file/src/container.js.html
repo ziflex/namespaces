@@ -59,6 +59,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Namespace from &apos;./namespace&apos;;
 import Storage from &apos;./storage&apos;;
 import Resolver from &apos;./resolver&apos;;
+import mapPath from &apos;./map-path&apos;;
 
 /**
  * Creates a new Container.
@@ -66,6 +67,11 @@ import Resolver from &apos;./resolver&apos;;
  * @classdesc Represents a container for registered modules.
  */
 export default class Container extends Namespace {
+    /**
+     * Converts object/array to a function chain that&apos;s help to use namespaces.
+     */
+    static map = mapPath;
+
     /** @constructs
      * @param {string} separator - Namespace separator. Optional. Default &apos;/&apos;.
      */

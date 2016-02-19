@@ -457,6 +457,18 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/unit/container.test.js.html#lineNumber118",
+    "Container registration #map",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/container.test.js.html#lineNumber119",
+    "Container registration #map should exist",
+    "test"
+  ],
+  [
+    "",
     "test-file/unit/container.test.js.html#lineNumber85",
     "Container registration .namespace",
     "test"

@@ -1,6 +1,7 @@
 import Namespace from './namespace';
 import Storage from './storage';
 import Resolver from './resolver';
+import mapPath from './map-path';
 
 /**
  * Creates a new Container.
@@ -8,6 +9,11 @@ import Resolver from './resolver';
  * @classdesc Represents a container for registered modules.
  */
 export default class Container extends Namespace {
+    /**
+     * Converts object/array to a function chain that's help to use namespaces.
+     */
+    static map = mapPath;
+
     /** @constructs
      * @param {string} separator - Namespace separator. Optional. Default '/'.
      */

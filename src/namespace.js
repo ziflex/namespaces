@@ -4,7 +4,6 @@ import {
     parseArgs,
     joinPath
 } from './utils';
-import mapPath from './map-path';
 import Module from './module';
 
 /**
@@ -13,11 +12,6 @@ import Module from './module';
  * @classdesc Represents a module namespace.
  */
 export default class Namespace {
-
-    /**
-     * Converts object/array to a function chain that's help to use namespaces.
-     */
-    static map = mapPath;
 
     /** @constructor
      * @param {string} separator - Namespace separator.

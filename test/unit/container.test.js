@@ -114,6 +114,16 @@ describe('Container', () => {
                 });
             });
         });
+
+        describe('#map', () => {
+            it('should exist', () => {
+                expect(() => {
+                    return Container.map({
+                        core: 'core'
+                    });
+                }).to.not.throw;
+            });
+        });
     });
 });
 /* eslint-enable no-unused-expressions, func-names */
