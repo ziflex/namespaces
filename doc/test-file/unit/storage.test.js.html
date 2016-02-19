@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">unit/storage.test.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/ziflex/namespaces.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/container.js~Container.html">Container</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/module.js~Module.html">Module</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/namespace.js~Namespace.html">Namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFunction">isFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNullOrUndefined">isNullOrUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObject">isObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isValidName">isValidName</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-joinPath">joinPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">unit/storage.test.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* eslint-disable no-unused-expressions, func-names  */
+
+import {expect} from &apos;chai&apos;;
+import { isNull, isUndefined } from &apos;../../src/utils&apos;;
+import Storage from &apos;../../src/storage&apos;;
+import Module from &apos;../../src/module&apos;;
+
+describe(&apos;Storage&apos;, function() {
+    let storage = null;
+
+    beforeEach(() =&gt; {
+        storage = new Storage(&apos;/&apos;);
+    });
+
+    describe(&apos;.addItem&apos;, () =&gt; {
+        context(&apos;invalid parameters&apos;, () =&gt; {
+            it(&apos;should throw error when module is not passed&apos;, () =&gt; {
+                expect(() =&gt; {
+                    storage.addItem();
+                }).to.throw();
+            });
+
+            it(&apos;should throw error when module is not instance of Module class&apos;, () =&gt; {
+                const values = [
+                    new Date(),
+                    {},
+                    [],
+                    1,
+                    &apos;foo&apos;
+                ];
+
+                values.forEach((value) =&gt; {
+                    expect(() =&gt; {
+                        storage.addItem(value);
+                    }).to.throw();
+                });
+            });
+
+            it(&apos;should throw error when namespace name is not string&apos;, () =&gt; {
+                const values = [
+                    new Date(),
+                    {},
+                    [],
+                    1,
+                    null,
+                    undefined
+                ];
+
+                values.forEach((value) =&gt; {
+                    expect(() =&gt; {
+                        storage.addItem(new Module(value));
+                    }).to.throw();
+                });
+            });
+
+            it(&apos;should throw error when module name is missed&apos;, () =&gt; {
+                expect(() =&gt; {
+                    storage.addItem(new Module(&apos;/&apos;));
+                }).to.throw();
+            });
+
+            it(&apos;should throw error when module name is not string&apos;, () =&gt; {
+                const values = [
+                    new Date(),
+                    {},
+                    [],
+                    1,
+                    null,
+                    undefined
+                ];
+
+                values.forEach((value) =&gt; {
+                    expect(() =&gt; {
+                        storage.addItem(new Module(&apos;/&apos;, value));
+                    }).to.throw();
+                });
+            });
+
+            it(&apos;should throw error when module already exists&apos;, () =&gt; {
+                expect(() =&gt; {
+                    storage.addItem(new Module(&apos;/&apos;, &apos;foo&apos;, [], function init() {}));
+                    storage.addItem(new Module(&apos;/&apos;, &apos;foo&apos;, [], function init() {}));
+                }).to.throw();
+            });
+        });
+
+        context(&apos;valid parameters&apos;, () =&gt; {
+            it(&apos;should add new module&apos;, () =&gt; {
+                expect(() =&gt; {
+                    storage.addItem(new Module(&apos;/&apos;, &apos;foo&apos;, [], function init() {}));
+                }).to.not.throw();
+            });
+        });
+    });
+
+    describe(&apos;.getItem&apos;, () =&gt; {
+        context(&apos;invalid parameters&apos;, () =&gt; {
+            it(&apos;should throw error when module path is missed&apos;, () =&gt; {
+                expect(() =&gt; {
+                    storage.getItem();
+                }).to.throw();
+            });
+
+            it(&apos;should throw error when module path is not string&apos;, () =&gt; {
+                const values = [
+                    new Date(),
+                    {},
+                    [],
+                    1,
+                    null,
+                    undefined
+                ];
+
+                values.forEach((value) =&gt; {
+                    expect(() =&gt; {
+                        storage.getItem(value);
+                    }).to.throw();
+                });
+            });
+
+            it(&apos;should throw error when namespace does not exist&apos;, () =&gt; {
+                storage.addItem(new Module(&apos;foo&apos;, &apos;bar&apos;, [], function init() {}));
+
+                expect(() =&gt; {
+                    storage.getItem(&apos;qaz/bar&apos;);
+                }).to.throw();
+            });
+
+            it(&apos;should throw error when module does not exist&apos;, () =&gt; {
+                storage.addItem(new Module(&apos;foo&apos;, &apos;bar&apos;, [], function init() {}));
+
+                expect(() =&gt; {
+                    storage.getItem(&apos;foo/qaz&apos;);
+                }).to.throw();
+            });
+        });
+
+        context(&apos;valid parameters&apos;, () =&gt; {
+            it(&apos;should return item&apos;, () =&gt; {
+                storage.addItem(new Module(&apos;foo&apos;, &apos;bar&apos;, [], function init() {}));
+
+                expect(storage.getItem(&apos;foo/bar&apos;)).to.exist;
+            });
+        });
+    });
+
+    describe(&apos;.forEachIn&apos;, () =&gt; {
+        context(&apos;invalid parameters&apos;, () =&gt; {
+            it(&apos;should throw an error when namespace not passed&apos;, () =&gt; {
+                expect(storage.forEachIn).to.throw;
+            });
+
+            it(&apos;should throw an error when callback not passed&apos;, () =&gt; {
+                expect(() =&gt; {
+                    storage.addItem(new Module(&apos;foo&apos;, &apos;bar&apos;));
+                    storage.forEachIn(&apos;foo&apos;);
+                }).to.throw;
+            });
+        });
+
+        context(&apos;valid parameters&apos;, () =&gt; {
+            it(&apos;should iterate over modules inside target namespace&apos;, () =&gt; {
+                const fooModules = [
+                    new Module(&apos;foo&apos;, &apos;qaz&apos;),
+                    new Module(&apos;foo&apos;, &apos;wsx&apos;),
+                    new Module(&apos;foo&apos;, &apos;rfv&apos;)
+                ];
+
+                const barModules = [
+                    new Module(&apos;bar&apos;, &apos;tgb&apos;),
+                    new Module(&apos;bar&apos;, &apos;yhn&apos;)
+                ];
+
+                fooModules.forEach(module =&gt; storage.addItem(module));
+                barModules.forEach(module =&gt; storage.addItem(module));
+
+                const found = [];
+                storage.forEachIn(&apos;foo&apos;, module =&gt; found.push(module));
+                expect(found).to.eql(fooModules);
+            });
+
+            it(&apos;should pass module path during iteration&apos;, () =&gt; {
+                const fooModules = [
+                    new Module(&apos;foo&apos;, &apos;qaz&apos;),
+                    new Module(&apos;foo&apos;, &apos;wsx&apos;),
+                    new Module(&apos;foo&apos;, &apos;rfv&apos;)
+                ];
+
+                const barModules = [
+                    new Module(&apos;bar&apos;, &apos;tgb&apos;),
+                    new Module(&apos;bar&apos;, &apos;yhn&apos;)
+                ];
+
+                fooModules.forEach(module =&gt; storage.addItem(module));
+                barModules.forEach(module =&gt; storage.addItem(module));
+
+                const found = [];
+                storage.forEachIn(&apos;foo&apos;, (module, path) =&gt; found.push(path));
+                expect(found).to.eql([
+                    &apos;foo/qaz&apos;,
+                    &apos;foo/wsx&apos;,
+                    &apos;foo/rfv&apos;
+                ]);
+            });
+        });
+    });
+
+    it(&apos;should support different separators&apos;, () =&gt; {
+        const separators = [
+            &apos;/&apos;,
+            &apos;.&apos;,
+            &apos;-&apos;,
+            &apos;@&apos;
+        ];
+
+        separators.forEach((separator) =&gt; {
+            const s = new Storage(separator);
+            s.addItem(new Module(&apos;foo&apos;, &apos;bar&apos;));
+            const getItem = function getItem() {
+                return s.getItem(`foo${separator}bar`);
+            };
+
+            expect(getItem).not.to.throw;
+            const item = getItem();
+            expect(isNull(item) || isUndefined(item)).to.be.not.true;
+        });
+    });
+});
+
+/* eslint-enable no-unused-expressions, func-names  */
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.5)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

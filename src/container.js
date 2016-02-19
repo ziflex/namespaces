@@ -17,16 +17,6 @@ export default class Container extends Namespace {
     }
 
     /**
-     * Returns a module namespace.
-     * @param {string} namespace - Module namespace. Optional.
-     * @returns {Namespace} Module namespace.
-     */
-    register(namespace) {
-        console.warn('Method "register" is deprecated. Use container itself or "namespace" method instead.');
-        return new Namespace(this._separator, namespace || this._name, this._storage);
-    }
-
-    /**
      * Resolve a module.
      * @param {string} path - Module namespace.
      * @returns {Module} new Module.

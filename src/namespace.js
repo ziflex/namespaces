@@ -4,6 +4,7 @@ import {
     parseArgs,
     joinPath
 } from './utils';
+import mapPath from './map-path';
 import Module from './module';
 
 /**
@@ -12,6 +13,12 @@ import Module from './module';
  * @classdesc Represents a module namespace.
  */
 export default class Namespace {
+
+    /**
+     * Converts object/array to a function chain that's help to use namespaces.
+     */
+    static map = mapPath;
+
     /** @constructor
      * @param {string} separator - Namespace separator.
      * @param {string} name - Namespace name.
@@ -24,6 +31,14 @@ export default class Namespace {
     }
 
     /**
+     * Returns a namespace name.
+     * @returns {string} Namespace name.
+     */
+    getName() {
+        return this._name;
+    }
+
+    /**
      * Returns a module namespace.
      * @param {string} name - Module namespace. Optional.
      * @returns {Namespace} Module namespace.
@@ -33,12 +48,28 @@ export default class Namespace {
     }
 
     /**
+     * Register a value, such as a string, a number, an array, an object or a function.
+     * @param {string} name - Module name.
+     * @param {(string|number|object|array|function)} definition - Module value.
+     * @returns {function} Value.
+     */
+    const(name, definition) {
+        const args = parseArgs(name, definition);
+
+        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize() {
+            return function factory() {
+                return args.definition;
+            };
+        }));
+    }
+
+    /**
      * Register a value, such as a string, a number, an array, an object or a constructor.
      * Note: If passed value is function type, it will be treated as constructor
      * and every time when it's injected, new instance will be created.
      * @param {string} name - Module name.
      * @param {array} dependencies - Module dependencies. Optional.
-     * @param {string | number | object | array | function} definition - Module value.
+     * @param {(string|number|object|array|function)} definition - Module value.
      * @returns {function} Value factory.
      */
     value(name, dependencies, definition) {

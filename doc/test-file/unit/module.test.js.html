@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">unit/module.test.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/ziflex/namespaces.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/container.js~Container.html">Container</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/module.js~Module.html">Module</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/namespace.js~Namespace.html">Namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFunction">isFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNullOrUndefined">isNullOrUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObject">isObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isValidName">isValidName</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-joinPath">joinPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">unit/module.test.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* eslint-disable no-unused-expressions, func-names */
+
+import {expect} from &apos;chai&apos;;
+import {isFunction} from &apos;../../src/utils&apos;;
+import Module from &apos;../../src/module&apos;;
+
+describe(&apos;Module&apos;, function() {
+    describe(&apos;.getNamespace&apos;, function() {
+        it(&apos;should return module namespace&apos;, function() {
+            const namespace = &apos;foo&apos;;
+            const module = new Module(namespace);
+
+            expect(module.getNamespace).to.not.throw;
+            expect(module.getNamespace()).to.be.equal(namespace);
+        });
+    });
+    describe(&apos;.getName&apos;, function() {
+        it(&apos;should return module name&apos;, function() {
+            const namespace = &apos;foo&apos;;
+            const name = &apos;bar&apos;;
+            const module = new Module(namespace, name);
+
+            expect(module.getName).to.not.throw;
+            expect(module.getName()).to.be.equal(name);
+        });
+    });
+    describe(&apos;.getDependencies&apos;, function() {
+        it(&apos;should return module dependencies&apos;, function() {
+            const namespace = &apos;foo&apos;;
+            const name = &apos;bar&apos;;
+            const dependencies = [&apos;foo/qaz&apos;, &apos;foo/wsx&apos;];
+            const module = new Module(namespace, name, dependencies);
+
+            expect(module.getDependencies).to.not.throw;
+            expect(module.getDependencies()).to.be.equal(dependencies);
+        });
+    });
+    describe(&apos;.getValue&apos;, function() {
+        context(&apos;when is initialized&apos;, function() {
+            it(&apos;should return value&apos;, function() {
+                const values = [
+                    1,
+                    &apos;string&apos;,
+                    {foo: &apos;bar&apos;},
+                    [&apos;foo&apos;, &apos;bar&apos;],
+                    function() {
+                        return &apos;function&apos;;
+                    }
+                ];
+
+                values.forEach((value) =&gt; {
+                    const namespace = &apos;foo&apos;;
+                    const name = &apos;bar&apos;;
+                    const dependencies = [];
+                    const module = new Module(namespace, name, dependencies, () =&gt; {
+                        return value;
+                    });
+
+                    module.initialize();
+                    expect(module.getValue).to.not.throw;
+                    expect(module.getValue()).to.be.equal(isFunction(value) ? value() : value);
+                });
+            });
+        });
+        context(&apos;when is not initialized&apos;, function() {
+            it(&apos;should throw an error&apos;, function() {
+                const module = new Module(&apos;foo&apos;, &apos;bar&apos;, []);
+
+                expect(module.getValue).to.throw;
+            });
+        });
+    });
+    describe(&apos;.isInitialized&apos;, function() {
+        context(&apos;when is initialized&apos;, function() {
+            it(&apos;should return &quot;true&quot;&apos;, function() {
+                const namespace = &apos;foo&apos;;
+                const name = &apos;bar&apos;;
+                const dependencies = [];
+                const module = new Module(namespace, name, dependencies, function init() {
+                    return 1;
+                });
+
+                module.initialize();
+                expect(module.isInitialized()).to.equal(true);
+            });
+        });
+        context(&apos;when is not initialized&apos;, function() {
+            it(&apos;should return &quot;false&quot;&apos;, function() {
+                const namespace = &apos;foo&apos;;
+                const name = &apos;bar&apos;;
+                const dependencies = [];
+                const module = new Module(namespace, name, dependencies, function init() {
+                    return 1;
+                });
+
+                expect(module.isInitialized()).to.equal(false);
+            });
+        });
+    });
+    describe(&apos;initialize&apos;, function() {
+        context(&apos;when is initialized&apos;, function() {
+            it(&apos;should not throw an error&apos;, function() {
+                const namespace = &apos;foo&apos;;
+                const name = &apos;bar&apos;;
+                const dependencies = [];
+                const module = new Module(namespace, name, dependencies, function init() {
+                    return 1;
+                });
+
+                expect(module.initialize).to.not.throw;
+            });
+        });
+        context(&apos;when is not initialized&apos;, function() {
+            it(&apos;should throw an error&apos;, function() {
+                const namespace = &apos;foo&apos;;
+                const name = &apos;bar&apos;;
+                const dependencies = [];
+                const module = new Module(namespace, name, dependencies, function init() {
+                    return 1;
+                });
+
+                module.initialize();
+                expect(module.initialize).to.throw;
+            });
+        });
+    });
+});
+
+/* eslint-enable no-unused-expressions, func-names  */
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.5)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

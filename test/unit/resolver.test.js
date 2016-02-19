@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions, func-names  */
 
-import {expect} from 'chai';
+import { expect } from 'chai';
 import Container from '../../src/container';
 
 describe('Resolver', function() {
@@ -18,6 +18,57 @@ describe('Resolver', function() {
                 };
 
                 expect(resolve).to.throw();
+            });
+        });
+
+        describe('#const', () => {
+            context('plain types', () => {
+                it('should successfully resolve function', () => {
+                    const module = function foo() { return 'bar'; };
+                    container.const('value', module);
+                    const found = container.resolve('value');
+                    const found2 = container.resolve('value');
+                    expect(found).to.equal(module);
+                    expect(found2).to.equal(module);
+                    expect(found).to.eql(found2);
+                    expect(found() === 'bar').to.be.true;
+                });
+
+                it('should successfully resolve object', () => {
+                    const module = { name: 'bar' };
+                    container.const('value', module);
+                    const found = container.resolve('value');
+                    const found2 = container.resolve('value');
+                    expect(found).to.equal(module);
+                    expect(found2).to.equal(module);
+                });
+
+                it('should successfully resolve number', () => {
+                    const module = 10;
+                    container.const('value', module);
+                    const found = container.resolve('value');
+                    const found2 = container.resolve('value');
+                    expect(found).to.equal(module);
+                    expect(found2).to.equal(module);
+                });
+
+                it('should successfully resolve string', () => {
+                    const module = 'foo';
+                    container.const('value', module);
+                    const found = container.resolve('value');
+                    const found2 = container.resolve('value');
+                    expect(found).to.equal(module);
+                    expect(found2).to.equal(module);
+                });
+
+                it('should successfully resolve array', () => {
+                    const module = [1, 2, 3];
+                    container.const('value', module);
+                    const found = container.resolve('value');
+                    const found2 = container.resolve('value');
+                    expect(found).to.equal(module);
+                    expect(found2).to.equal(module);
+                });
             });
         });
 

@@ -103,3 +103,17 @@ export function splitPath(separator = '/', path) {
 
     return result;
 }
+
+export function forEach(collection, iteratee, context = this) {
+    if (isArray(collection)) {
+        for (let i = 0; i < collection.length; i += 1) {
+            iteratee.call(context, collection[i], i);
+        }
+    } else if (isObject(collection)) {
+        for (const prop in collection) {
+            if (collection.hasOwnProperty(prop)) {
+                iteratee.call(context, collection[prop], prop);
+            }
+        }
+    }
+}

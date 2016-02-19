@@ -1,0 +1,5072 @@
+[
+  {
+    "__docId__": 0,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/container.js",
+    "memberof": null,
+    "longname": "src/container.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import Namespace from './namespace';\nimport Storage from './storage';\nimport Resolver from './resolver';\n\n/**\n * Creates a new Container.\n * @class\n * @classdesc Represents a container for registered modules.\n */\nexport default class Container extends Namespace {\n    /** @constructs\n     * @param {string} separator - Namespace separator. Optional. Default '/'.\n     */\n    constructor(separator = '/') {\n        super(separator, '', new Storage(separator));\n        this._resolver = new Resolver(this._storage);\n    }\n\n    /**\n     * Resolve a module.\n     * @param {string} path - Module namespace.\n     * @returns {Module} new Module.\n     */\n    resolve(path) {\n        return this._resolver.resolve(path);\n    }\n\n    /**\n     * Resolves all modules from particular namespace.\n     * @param {string} namespace - Target namespace.\n     * @returns {Map<string, any>} Map of module values, where key is module name.\n     */\n    resolveAll(namespace) {\n        return this._resolver.resolveAll(namespace);\n    }\n}\n"
+  },
+  {
+    "__docId__": 1,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "Container",
+    "memberof": "src/container.js",
+    "longname": "src/container.js~Container",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/container.js",
+    "importStyle": "Container",
+    "description": "Creates a new Container.",
+    "lineNumber": 10,
+    "unknown": [
+      {
+        "tagName": "@class",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@classdesc",
+        "tagValue": "Represents a container for registered modules."
+      }
+    ],
+    "interface": false,
+    "extends": [
+      "src/namespace.js~Namespace"
+    ]
+  },
+  {
+    "__docId__": 2,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/container.js~Container",
+    "longname": "src/container.js~Container#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 14,
+    "unknown": [
+      {
+        "tagName": "@constructs",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "separator",
+        "description": "Namespace separator. Optional. Default '/'."
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 3,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_resolver",
+    "memberof": "src/container.js~Container",
+    "longname": "src/container.js~Container#_resolver",
+    "access": null,
+    "description": null,
+    "lineNumber": 16,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 4,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "resolve",
+    "memberof": "src/container.js~Container",
+    "longname": "src/container.js~Container#resolve",
+    "access": null,
+    "description": "Resolve a module.",
+    "lineNumber": 24,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Module} new Module."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "path",
+        "description": "Module namespace."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Module"
+      ],
+      "spread": false,
+      "description": "new Module."
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 5,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "resolveAll",
+    "memberof": "src/container.js~Container",
+    "longname": "src/container.js~Container#resolveAll",
+    "access": null,
+    "description": "Resolves all modules from particular namespace.",
+    "lineNumber": 33,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Map<string, any>} Map of module values, where key is module name."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "namespace",
+        "description": "Target namespace."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Map<string, any>"
+      ],
+      "spread": false,
+      "description": "Map of module values, where key is module name."
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 6,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/index.js",
+    "memberof": null,
+    "longname": "src/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "export default from './container';\n"
+  },
+  {
+    "__docId__": 7,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/map-path.js",
+    "memberof": null,
+    "longname": "src/map-path.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import {\n  isArray,\n  isObject,\n  isString,\n  forEach,\n  joinPath\n} from './utils';\n\nfunction create(separator, parentPath, current) {\n    return function path(name) {\n        return joinPath(separator, parentPath, current, name);\n    };\n}\n\nfunction transform(separator, parent, current) {\n    forEach(current, (val, key) => {\n        if (isString(val)) {\n            parent[key] = create(separator, parent(), val);\n        } else if (isArray(val)) {\n            parent[key] = create(separator, parent(), key);\n\n            forEach(val, i => {\n                parent[key][i] = create(separator, parent[key](), i);\n            });\n        } else if (isObject(val)) {\n            parent[key] = create(separator, parent(), key);\n            transform(separator, parent[key], val);\n        }\n    });\n\n    return parent;\n}\n\nexport default function createPathMap(target, separator = '/') {\n    return transform(separator, create(separator), target);\n}\n"
+  },
+  {
+    "__docId__": 8,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "create",
+    "memberof": "src/map-path.js",
+    "longname": "src/map-path.js~create",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/map-path.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 9,
+    "undocument": true,
+    "params": [
+      {
+        "name": "separator",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "parentPath",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "current",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 9,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "transform",
+    "memberof": "src/map-path.js",
+    "longname": "src/map-path.js~transform",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/map-path.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 15,
+    "undocument": true,
+    "params": [
+      {
+        "name": "separator",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "parent",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "current",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 10,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "createPathMap",
+    "memberof": "src/map-path.js",
+    "longname": "src/map-path.js~createPathMap",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/map-path.js",
+    "importStyle": "createPathMap",
+    "description": null,
+    "lineNumber": 34,
+    "undocument": true,
+    "params": [
+      {
+        "name": "target",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "separator",
+        "optional": true,
+        "types": [
+          "string"
+        ],
+        "defaultRaw": "/",
+        "defaultValue": "/"
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 11,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/module.js",
+    "memberof": null,
+    "longname": "src/module.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import { isFunction } from './utils';\r\n\r\n/**\r\n * Creates a new Module.\r\n * @class\r\n * @classdesc Represents a module.\r\n */\r\nexport default class Module {\r\n    constructor(namespace, name, dependencies, initialize) {\r\n        this._namespace = namespace;\r\n        this._name = name;\r\n        this._initialize = initialize;\r\n        this._dependencies = dependencies;\r\n        this._isInitialized = false;\r\n        this._value = null;\r\n    }\r\n\r\n    getNamespace() {\r\n        return this._namespace;\r\n    }\r\n\r\n    getName() {\r\n        return this._name;\r\n    }\r\n\r\n    getDependencies() {\r\n        return this._dependencies;\r\n    }\r\n\r\n    getValue() {\r\n        if (!this.isInitialized()) {\r\n            throw new Error('Module is not initialized!');\r\n        }\r\n\r\n        if (isFunction(this._value)) {\r\n            return this._value();\r\n        }\r\n\r\n        return this._value;\r\n    }\r\n\r\n    isInitialized() {\r\n        return this._isInitialized;\r\n    }\r\n\r\n    initialize(dependencies) {\r\n        if (this.isInitialized()) {\r\n            throw new Error(`Module has been already initialized!`);\r\n        }\r\n\r\n        this._value = this._initialize(dependencies);\r\n        this._isInitialized = true;\r\n    }\r\n}\r\n"
+  },
+  {
+    "__docId__": 12,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "Module",
+    "memberof": "src/module.js",
+    "longname": "src/module.js~Module",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/module.js",
+    "importStyle": "Module",
+    "description": "Creates a new Module.",
+    "lineNumber": 8,
+    "unknown": [
+      {
+        "tagName": "@class",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@classdesc",
+        "tagValue": "Represents a module."
+      }
+    ],
+    "interface": false
+  },
+  {
+    "__docId__": 13,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 9,
+    "undocument": true,
+    "params": [
+      {
+        "name": "namespace",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "name",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "dependencies",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "initialize",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 14,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_namespace",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#_namespace",
+    "access": null,
+    "description": null,
+    "lineNumber": 10,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 15,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_name",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#_name",
+    "access": null,
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 16,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_initialize",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#_initialize",
+    "access": null,
+    "description": null,
+    "lineNumber": 12,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 17,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_dependencies",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#_dependencies",
+    "access": null,
+    "description": null,
+    "lineNumber": 13,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 18,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_isInitialized",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#_isInitialized",
+    "access": null,
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 19,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_value",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#_value",
+    "access": null,
+    "description": null,
+    "lineNumber": 15,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 20,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getNamespace",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#getNamespace",
+    "access": null,
+    "description": null,
+    "lineNumber": 18,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 21,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getName",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#getName",
+    "access": null,
+    "description": null,
+    "lineNumber": 22,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 22,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getDependencies",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#getDependencies",
+    "access": null,
+    "description": null,
+    "lineNumber": 26,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 23,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getValue",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#getValue",
+    "access": null,
+    "description": null,
+    "lineNumber": 30,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 24,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "isInitialized",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#isInitialized",
+    "access": null,
+    "description": null,
+    "lineNumber": 42,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 25,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "initialize",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#initialize",
+    "access": null,
+    "description": null,
+    "lineNumber": 46,
+    "undocument": true,
+    "params": [
+      {
+        "name": "dependencies",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 26,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_value",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#_value",
+    "access": null,
+    "description": null,
+    "lineNumber": 51,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 27,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_isInitialized",
+    "memberof": "src/module.js~Module",
+    "longname": "src/module.js~Module#_isInitialized",
+    "access": null,
+    "description": null,
+    "lineNumber": 52,
+    "undocument": true,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 28,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/namespace.js",
+    "memberof": null,
+    "longname": "src/namespace.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import {\n    isFunction,\n    create,\n    parseArgs,\n    joinPath\n} from './utils';\nimport mapPath from './map-path';\nimport Module from './module';\n\n/**\n * Creates a new Namespace.\n * @class\n * @classdesc Represents a module namespace.\n */\nexport default class Namespace {\n\n    /**\n     * Converts object/array to a function chain that's help to use namespaces.\n     */\n    static map = mapPath;\n\n    /** @constructor\n     * @param {string} separator - Namespace separator.\n     * @param {string} name - Namespace name.\n     * @param {Storage} storage - Global modules storage.\n     */\n    constructor(separator = '/', name = '', storage) {\n        this._separator = separator;\n        this._name = name;\n        this._storage = storage;\n    }\n\n    /**\n     * Returns a namespace name.\n     * @returns {string} Namespace name.\n     */\n    getName() {\n        return this._name;\n    }\n\n    /**\n     * Returns a module namespace.\n     * @param {string} name - Module namespace. Optional.\n     * @returns {Namespace} Module namespace.\n     */\n    namespace(name) {\n        return new Namespace(this._separator, joinPath(this._separator, this._name, name), this._storage);\n    }\n\n    /**\n     * Register a value, such as a string, a number, an array, an object or a function.\n     * @param {string} name - Module name.\n     * @param {(string|number|object|array|function)} definition - Module value.\n     * @returns {function} Value.\n     */\n    const(name, definition) {\n        const args = parseArgs(name, definition);\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize() {\n            return function factory() {\n                return args.definition;\n            };\n        }));\n    }\n\n    /**\n     * Register a value, such as a string, a number, an array, an object or a constructor.\n     * Note: If passed value is function type, it will be treated as constructor\n     * and every time when it's injected, new instance will be created.\n     * @param {string} name - Module name.\n     * @param {array} dependencies - Module dependencies. Optional.\n     * @param {(string|number|object|array|function)} definition - Module value.\n     * @returns {function} Value factory.\n     */\n    value(name, dependencies, definition) {\n        const args = parseArgs(name, dependencies, definition);\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {\n            // instances, simple types\n            if (!isFunction(args.definition)) {\n                return args.definition;\n            }\n\n            return function factory() {\n                return create(args.definition, resolved);\n            };\n        }));\n    }\n\n    /**\n     * Register a service constructor, which will be invoked with `new` to create the service instance.\n     * Any type which was registered as a service is singleton.\n     * @param {string} name - Module name.\n     * @param {array} dependencies - Module dependencies. Optional.\n     * @param {function} definition - Module constructor that will be instantiated.\n     * @returns {function} Value factory.\n     */\n    service(name, dependencies, definition) {\n        const args = parseArgs(name, dependencies, definition);\n\n        if (!isFunction(args.definition)) {\n            throw new Error(`Service supports only constructors.`);\n        }\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {\n            return create(args.definition, resolved);\n        }));\n    }\n\n    /**\n     * Register a service factory, which will be called to return the service instance.\n     * Any function's value will be registered as a singleton.\n     * @param {string} name - Module name.\n     * @param {array} dependencies - Module dependencies. Optional.\n     * @param {function} definition - Module factory.\n     * @returns {function} Value factory.\n     */\n    factory(name, dependencies, definition) {\n        const args = parseArgs(name, dependencies, definition);\n\n        if (!isFunction(args.definition)) {\n            throw new Error(`Factory supports only functions.`);\n        }\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {\n            return args.definition(...resolved);\n        }));\n    }\n}\n"
+  },
+  {
+    "__docId__": 29,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "Namespace",
+    "memberof": "src/namespace.js",
+    "longname": "src/namespace.js~Namespace",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/namespace.js",
+    "importStyle": "Namespace",
+    "description": "Creates a new Namespace.",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@class",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@classdesc",
+        "tagValue": "Represents a module namespace."
+      }
+    ],
+    "interface": false
+  },
+  {
+    "__docId__": 30,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/namespace.js~Namespace",
+    "longname": "src/namespace.js~Namespace#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 27,
+    "unknown": [
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "separator",
+        "description": "Namespace separator."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": "Namespace name."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Storage"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "storage",
+        "description": "Global modules storage."
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 31,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_separator",
+    "memberof": "src/namespace.js~Namespace",
+    "longname": "src/namespace.js~Namespace#_separator",
+    "access": null,
+    "description": null,
+    "lineNumber": 28,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 32,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_name",
+    "memberof": "src/namespace.js~Namespace",
+    "longname": "src/namespace.js~Namespace#_name",
+    "access": null,
+    "description": null,
+    "lineNumber": 29,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 33,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_storage",
+    "memberof": "src/namespace.js~Namespace",
+    "longname": "src/namespace.js~Namespace#_storage",
+    "access": null,
+    "description": null,
+    "lineNumber": 30,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 34,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getName",
+    "memberof": "src/namespace.js~Namespace",
+    "longname": "src/namespace.js~Namespace#getName",
+    "access": null,
+    "description": "Returns a namespace name.",
+    "lineNumber": 37,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{string} Namespace name."
+      }
+    ],
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "string"
+      ],
+      "spread": false,
+      "description": "Namespace name."
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 35,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "namespace",
+    "memberof": "src/namespace.js~Namespace",
+    "longname": "src/namespace.js~Namespace#namespace",
+    "access": null,
+    "description": "Returns a module namespace.",
+    "lineNumber": 46,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Namespace} Module namespace."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": "Module namespace. Optional."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Namespace"
+      ],
+      "spread": false,
+      "description": "Module namespace."
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 36,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "const",
+    "memberof": "src/namespace.js~Namespace",
+    "longname": "src/namespace.js~Namespace#const",
+    "access": null,
+    "description": "Register a value, such as a string, a number, an array, an object or a function.",
+    "lineNumber": 56,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{function} Value."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": "Module name."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string",
+          "number",
+          "object",
+          "array",
+          "function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "definition",
+        "description": "Module value."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "function"
+      ],
+      "spread": false,
+      "description": "Value."
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 37,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "value",
+    "memberof": "src/namespace.js~Namespace",
+    "longname": "src/namespace.js~Namespace#value",
+    "access": null,
+    "description": "Register a value, such as a string, a number, an array, an object or a constructor.\nNote: If passed value is function type, it will be treated as constructor\nand every time when it's injected, new instance will be created.",
+    "lineNumber": 75,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{function} Value factory."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": "Module name."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "dependencies",
+        "description": "Module dependencies. Optional."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "string",
+          "number",
+          "object",
+          "array",
+          "function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "definition",
+        "description": "Module value."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "function"
+      ],
+      "spread": false,
+      "description": "Value factory."
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 38,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "service",
+    "memberof": "src/namespace.js~Namespace",
+    "longname": "src/namespace.js~Namespace#service",
+    "access": null,
+    "description": "Register a service constructor, which will be invoked with `new` to create the service instance.\nAny type which was registered as a service is singleton.",
+    "lineNumber": 98,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{function} Value factory."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": "Module name."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "dependencies",
+        "description": "Module dependencies. Optional."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "definition",
+        "description": "Module constructor that will be instantiated."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "function"
+      ],
+      "spread": false,
+      "description": "Value factory."
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 39,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "factory",
+    "memberof": "src/namespace.js~Namespace",
+    "longname": "src/namespace.js~Namespace#factory",
+    "access": null,
+    "description": "Register a service factory, which will be called to return the service instance.\nAny function's value will be registered as a singleton.",
+    "lineNumber": 118,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{function} Value factory."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "name",
+        "description": "Module name."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "array"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "dependencies",
+        "description": "Module dependencies. Optional."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "function"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "definition",
+        "description": "Module factory."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "function"
+      ],
+      "spread": false,
+      "description": "Value factory."
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 40,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/resolver.js",
+    "memberof": null,
+    "longname": "src/resolver.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import { isArray } from './utils';\n\n/**\n * Creates a new Resolver.\n * @class\n * @classdesc Represents a dependency resolver for particular module.\n */\nexport default class Resolver {\n    /**\n     * @constructor\n     * @param storage - Module's storage.\n     */\n    constructor(storage) {\n        this._storage = storage;\n    }\n\n    /**\n     * Resolves particular module.\n     * @returns {any} Module's value.\n     */\n    resolve(path) {\n        const resolveModule = (targetPath) => {\n            const module = this._storage.getItem(targetPath);\n\n            if (module.isInitialized()) {\n                return module.getValue();\n            }\n\n            const deps = module.getDependencies();\n            let resolvedDeps = [];\n            if (isArray(deps)) {\n                resolvedDeps = deps.map(resolveModule);\n            }\n\n            module.initialize(resolvedDeps);\n            return module.getValue();\n        };\n\n        return resolveModule(path);\n    }\n\n    /**\n     * Resolves all modules from particular namespace.\n     * @param {string} namespace - Target namespace.\n     * @returns {Map<string, any>} Map of module values, where key is module name.\n     */\n    resolveAll(namespace) {\n        const result = {};\n\n        this._storage.forEachIn(namespace, (module, path) => {\n            result[module.getName()] = this.resolve(path);\n        });\n\n        return result;\n    }\n}\n"
+  },
+  {
+    "__docId__": 41,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "Resolver",
+    "memberof": "src/resolver.js",
+    "longname": "src/resolver.js~Resolver",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/resolver.js",
+    "importStyle": "Resolver",
+    "description": "Creates a new Resolver.",
+    "lineNumber": 8,
+    "unknown": [
+      {
+        "tagName": "@class",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@classdesc",
+        "tagValue": "Represents a dependency resolver for particular module."
+      }
+    ],
+    "interface": false
+  },
+  {
+    "__docId__": 42,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/resolver.js~Resolver",
+    "longname": "src/resolver.js~Resolver#constructor",
+    "access": null,
+    "description": "",
+    "lineNumber": 13,
+    "unknown": [
+      {
+        "tagName": "@constructor",
+        "tagValue": ""
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "*"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "storage",
+        "description": "Module's storage."
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 43,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_storage",
+    "memberof": "src/resolver.js~Resolver",
+    "longname": "src/resolver.js~Resolver#_storage",
+    "access": null,
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 44,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "resolve",
+    "memberof": "src/resolver.js~Resolver",
+    "longname": "src/resolver.js~Resolver#resolve",
+    "access": null,
+    "description": "Resolves particular module.",
+    "lineNumber": 21,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{any} Module's value."
+      }
+    ],
+    "params": [
+      {
+        "name": "path",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "any"
+      ],
+      "spread": false,
+      "description": "Module's value."
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 45,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "resolveAll",
+    "memberof": "src/resolver.js~Resolver",
+    "longname": "src/resolver.js~Resolver#resolveAll",
+    "access": null,
+    "description": "Resolves all modules from particular namespace.",
+    "lineNumber": 47,
+    "unknown": [
+      {
+        "tagName": "@returns",
+        "tagValue": "{Map<string, any>} Map of module values, where key is module name."
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "namespace",
+        "description": "Target namespace."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Map<string, any>"
+      ],
+      "spread": false,
+      "description": "Map of module values, where key is module name."
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 46,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/storage.js",
+    "memberof": null,
+    "longname": "src/storage.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import Module from './module';\r\nimport {\r\n    splitPath,\r\n    joinPath,\r\n    isString,\r\n    isNullOrUndefined,\r\n    isFunction,\r\n    isValidName\r\n} from './utils';\r\n\r\nconst MISSED_MODULE = 'Missed module!';\r\nconst MISSED_MODULE_NAME = 'Missed module name!';\r\nconst MISSED_NAMESPACE = 'Missed module namespace!';\r\nconst MISSED_CALLBACK = 'Missed callback';\r\nconst INVALID_MODULE = 'Invalid module!';\r\nconst INVALID_NAMESPACE = 'Invalid namespace!';\r\nconst INVALID_MODULE_NAME = 'Invalid module name!';\r\nconst INVALID_MODULE_PATH = 'Invalid module path!';\r\nconst NAMESPACE_NOT_FOUND = 'Namespace was not found';\r\nconst MODULE_NOT_FOUND = 'Module with path was not found';\r\n\r\n/**\r\n * Creates a new Storage.\r\n * @class\r\n * @classdesc Represents a modules storage.\r\n */\r\nexport default class Storage {\r\n    constructor(pathSeparator = '/') {\r\n        this._separator = pathSeparator;\r\n        this._namespaces = {};\r\n    }\r\n\r\n    /**\r\n     * Adds module to storage.\r\n     * @param {Module} module - Target module to add.\r\n     * @throws {Error} Throws an error if module with same path already exists.\r\n     */\r\n    addItem(module) {\r\n        if (!module) {\r\n            throw new Error(MISSED_MODULE);\r\n        }\r\n\r\n        if (!(module instanceof Module)) {\r\n            throw new Error(INVALID_MODULE);\r\n        }\r\n\r\n        const namespace = module.getNamespace();\r\n\r\n        if (!isString(namespace)) {\r\n            throw new Error(INVALID_NAMESPACE);\r\n        }\r\n\r\n        const name = module.getName();\r\n\r\n        if (!name) {\r\n            throw new Error(MISSED_MODULE_NAME);\r\n        }\r\n\r\n        if (!isString(name)) {\r\n            throw new Error(INVALID_MODULE_NAME);\r\n        }\r\n\r\n        if (!isValidName(this._separator, name)) {\r\n            throw new Error(`${INVALID_MODULE_PATH} Module is now alllowed to contain namespace separators.`);\r\n        }\r\n\r\n        let registry = this._namespaces[namespace];\r\n\r\n        if (!registry) {\r\n            registry = {};\r\n            this._namespaces[namespace] = registry;\r\n        }\r\n\r\n        if (registry[name]) {\r\n            throw new Error(`${name} is already registered.`);\r\n        }\r\n\r\n        registry[name] = module;\r\n    }\r\n\r\n    /**\r\n     * Tries to find a module with passed path.\r\n     * @param {string} path - Module's path.\r\n     * @return {Module} found module.\r\n     * @throws {Error} Throws error in module wasn't found.\r\n     */\r\n    getItem(path) {\r\n        if (!isString(path)) {\r\n            throw new Error(INVALID_MODULE_PATH);\r\n        }\r\n\r\n        const parts = splitPath(this._separator, path);\r\n        const namespace = this._namespaces[parts.namespace];\r\n\r\n        if (!namespace) {\r\n            throw new Error(`${NAMESPACE_NOT_FOUND}: ${parts.namespace}!`);\r\n        }\r\n\r\n        const module = namespace[parts.name];\r\n\r\n        if (!module) {\r\n            throw new Error(`${MODULE_NOT_FOUND}: ${parts.name}!`);\r\n        }\r\n\r\n        return module;\r\n    }\r\n\r\n    forEachIn(namespace, callback) {\r\n        if (isNullOrUndefined(namespace)) {\r\n            throw new Error(MISSED_NAMESPACE);\r\n        }\r\n\r\n        if (!isFunction(callback)) {\r\n            throw new Error(MISSED_CALLBACK);\r\n        }\r\n\r\n        const registry = this._namespaces[namespace];\r\n\r\n        if (!registry) {\r\n            throw new Error(`${NAMESPACE_NOT_FOUND}: ${namespace}!`);\r\n        }\r\n\r\n        for (const name in registry) {\r\n            if (registry.hasOwnProperty(name) && registry[name]) {\r\n                callback(registry[name], joinPath(this._separator, namespace, name));\r\n            }\r\n        }\r\n    }\r\n}\r\n"
+  },
+  {
+    "__docId__": 47,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "MISSED_MODULE",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~MISSED_MODULE",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 48,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "MISSED_MODULE_NAME",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~MISSED_MODULE_NAME",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 12,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 49,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "MISSED_NAMESPACE",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~MISSED_NAMESPACE",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 13,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 50,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "MISSED_CALLBACK",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~MISSED_CALLBACK",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 51,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "INVALID_MODULE",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~INVALID_MODULE",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 15,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 52,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "INVALID_NAMESPACE",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~INVALID_NAMESPACE",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 16,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 53,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "INVALID_MODULE_NAME",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~INVALID_MODULE_NAME",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 17,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 54,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "INVALID_MODULE_PATH",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~INVALID_MODULE_PATH",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 18,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 55,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "NAMESPACE_NOT_FOUND",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~NAMESPACE_NOT_FOUND",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 19,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 56,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "MODULE_NOT_FOUND",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~MODULE_NOT_FOUND",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 20,
+    "undocument": true,
+    "type": {
+      "types": [
+        "string"
+      ]
+    }
+  },
+  {
+    "__docId__": 57,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "Storage",
+    "memberof": "src/storage.js",
+    "longname": "src/storage.js~Storage",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/storage.js",
+    "importStyle": "Storage",
+    "description": "Creates a new Storage.",
+    "lineNumber": 27,
+    "unknown": [
+      {
+        "tagName": "@class",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@classdesc",
+        "tagValue": "Represents a modules storage."
+      }
+    ],
+    "interface": false
+  },
+  {
+    "__docId__": 58,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/storage.js~Storage",
+    "longname": "src/storage.js~Storage#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 28,
+    "undocument": true,
+    "params": [
+      {
+        "name": "pathSeparator",
+        "optional": true,
+        "types": [
+          "string"
+        ],
+        "defaultRaw": "/",
+        "defaultValue": "/"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 59,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_separator",
+    "memberof": "src/storage.js~Storage",
+    "longname": "src/storage.js~Storage#_separator",
+    "access": null,
+    "description": null,
+    "lineNumber": 29,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 60,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_namespaces",
+    "memberof": "src/storage.js~Storage",
+    "longname": "src/storage.js~Storage#_namespaces",
+    "access": null,
+    "description": null,
+    "lineNumber": 30,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 61,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "addItem",
+    "memberof": "src/storage.js~Storage",
+    "longname": "src/storage.js~Storage#addItem",
+    "access": null,
+    "description": "Adds module to storage.",
+    "lineNumber": 38,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Module"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "module",
+        "description": "Target module to add."
+      }
+    ],
+    "throws": [
+      {
+        "types": [
+          "Error"
+        ],
+        "description": "Throws an error if module with same path already exists."
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 62,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getItem",
+    "memberof": "src/storage.js~Storage",
+    "longname": "src/storage.js~Storage#getItem",
+    "access": null,
+    "description": "Tries to find a module with passed path.",
+    "lineNumber": 87,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "string"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "path",
+        "description": "Module's path."
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Module"
+      ],
+      "spread": false,
+      "description": "found module."
+    },
+    "throws": [
+      {
+        "types": [
+          "Error"
+        ],
+        "description": "Throws error in module wasn't found."
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 63,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "forEachIn",
+    "memberof": "src/storage.js~Storage",
+    "longname": "src/storage.js~Storage#forEachIn",
+    "access": null,
+    "description": null,
+    "lineNumber": 108,
+    "undocument": true,
+    "params": [
+      {
+        "name": "namespace",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "callback",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 64,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "src/utils.js",
+    "memberof": null,
+    "longname": "src/utils.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "const toString = Object.prototype.toString;\n\nexport function isUndefined(value) {\n    return typeof value === 'undefined';\n}\n\nexport function isNull(value) {\n    return value === null;\n}\n\nexport function isNullOrUndefined(arg) {\n    return isNull(arg) || isUndefined(arg);\n}\n\nexport function isObject(value) {\n    return value !== null && typeof value === 'object';\n}\n\nexport function isString(value) {\n    return typeof value === 'string';\n}\n\nexport function isFunction(value) {\n    return typeof value === 'function';\n}\n\nexport function isArray(value) {\n    return toString.call(value) === '[object Array]';\n}\n\nexport function create(constructor, args) {\n    function Temp() {}\n    Temp.prototype = constructor.prototype;\n    const instance = new Temp();\n    const result = constructor.apply(instance, args);\n    return Object(result) === result ? result : instance;\n}\n\nexport function parseArgs(...args) {\n    const name = args[0];\n    let dependencies = args[1];\n    let definition = args[2];\n\n    if (isUndefined(definition)) {\n        definition = dependencies;\n        dependencies = null;\n    }\n\n    return { name, dependencies, definition };\n}\n\nexport function isValidName(separator = '/', name) {\n    return name.indexOf(separator) === -1;\n}\n\nexport function joinPath(separator = '/', ...parts) {\n    const paths = [];\n    const len = parts.length;\n\n    for (let i = 0; i <= len; i += 1) {\n        let part = parts[i];\n\n        if (isString(part)) {\n            part = part.trim();\n\n            if (part && part !== separator) {\n                paths.push(part);\n            }\n        }\n    }\n\n    return `${paths.join(separator)}`;\n}\n\nexport function splitPath(separator = '/', path) {\n    const result = { namespace: '', name: '' };\n\n    if (!isString(path)) {\n        return result;\n    }\n\n    const normalizedPath = path.trim();\n\n    if (normalizedPath === separator) {\n        result.namespace = '';\n        return result;\n    }\n\n    const parts = normalizedPath.split(separator);\n    const len = parts.length;\n\n    if (len > 1) {\n        result.namespace = joinPath(separator, ...parts.slice(0, len - 1));\n    } else {\n        result.namespace = '';\n    }\n\n    result.name = parts[len - 1] || '';\n\n    if (isString(result.name) && !result.name.trim()) {\n        result.name = '';\n    }\n\n    return result;\n}\n\nexport function forEach(collection, iteratee, context = this) {\n    if (isArray(collection)) {\n        for (let i = 0; i < collection.length; i += 1) {\n            iteratee.call(context, collection[i], i);\n        }\n    } else if (isObject(collection)) {\n        for (const prop in collection) {\n            if (collection.hasOwnProperty(prop)) {\n                iteratee.call(context, collection[prop], prop);\n            }\n        }\n    }\n}\n"
+  },
+  {
+    "__docId__": 65,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "toString",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~toString",
+    "access": null,
+    "export": false,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 66,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "isUndefined",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~isUndefined",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{isUndefined}",
+    "description": null,
+    "lineNumber": 3,
+    "undocument": true,
+    "params": [
+      {
+        "name": "value",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 67,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "isNull",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~isNull",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{isNull}",
+    "description": null,
+    "lineNumber": 7,
+    "undocument": true,
+    "params": [
+      {
+        "name": "value",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 68,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "isNullOrUndefined",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~isNullOrUndefined",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{isNullOrUndefined}",
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "params": [
+      {
+        "name": "arg",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 69,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "isObject",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~isObject",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{isObject}",
+    "description": null,
+    "lineNumber": 15,
+    "undocument": true,
+    "params": [
+      {
+        "name": "value",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 70,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "isString",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~isString",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{isString}",
+    "description": null,
+    "lineNumber": 19,
+    "undocument": true,
+    "params": [
+      {
+        "name": "value",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 71,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "isFunction",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~isFunction",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{isFunction}",
+    "description": null,
+    "lineNumber": 23,
+    "undocument": true,
+    "params": [
+      {
+        "name": "value",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 72,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "isArray",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~isArray",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{isArray}",
+    "description": null,
+    "lineNumber": 27,
+    "undocument": true,
+    "params": [
+      {
+        "name": "value",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 73,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "create",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~create",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{create}",
+    "description": null,
+    "lineNumber": 31,
+    "undocument": true,
+    "params": [
+      {
+        "name": "constructor",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "args",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 74,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "parseArgs",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~parseArgs",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{parseArgs}",
+    "description": null,
+    "lineNumber": 39,
+    "undocument": true,
+    "params": [
+      {
+        "name": "args",
+        "types": [
+          "...*"
+        ],
+        "spread": true
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 75,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "isValidName",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~isValidName",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{isValidName}",
+    "description": null,
+    "lineNumber": 52,
+    "undocument": true,
+    "params": [
+      {
+        "name": "separator",
+        "optional": true,
+        "types": [
+          "string"
+        ],
+        "defaultRaw": "/",
+        "defaultValue": "/"
+      },
+      {
+        "name": "name",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 76,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "joinPath",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~joinPath",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{joinPath}",
+    "description": null,
+    "lineNumber": 56,
+    "undocument": true,
+    "params": [
+      {
+        "name": "separator",
+        "optional": true,
+        "types": [
+          "string"
+        ],
+        "defaultRaw": "/",
+        "defaultValue": "/"
+      },
+      {
+        "name": "parts",
+        "types": [
+          "...*"
+        ],
+        "spread": true
+      }
+    ],
+    "return": {
+      "types": [
+        "string"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 77,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "splitPath",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~splitPath",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{splitPath}",
+    "description": null,
+    "lineNumber": 75,
+    "undocument": true,
+    "params": [
+      {
+        "name": "separator",
+        "optional": true,
+        "types": [
+          "string"
+        ],
+        "defaultRaw": "/",
+        "defaultValue": "/"
+      },
+      {
+        "name": "path",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 78,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "forEach",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~forEach",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{forEach}",
+    "description": null,
+    "lineNumber": 107,
+    "undocument": true,
+    "params": [
+      {
+        "name": "collection",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "iteratee",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "context",
+        "optional": true,
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 80,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Infinity",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 81,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~NaN",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 82,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~undefined",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 83,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~null",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 84,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Object",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 85,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~object",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 86,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Function",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 87,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~function",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 88,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Boolean",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 89,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~boolean",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 90,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Symbol",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 91,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Error",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 92,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~EvalError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 93,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~InternalError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 94,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RangeError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 95,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ReferenceError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 96,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~SyntaxError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 97,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~TypeError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 98,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~URIError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 99,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Number",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 100,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~number",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 101,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Date",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 102,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~String",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 103,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~string",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 104,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RegExp",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 105,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 106,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int8Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 107,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 108,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8ClampedArray",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 109,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int16Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 110,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint16Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 111,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 112,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 113,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 114,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float64Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 115,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Map",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 116,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Set",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 117,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakMap",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 118,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakSet",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 119,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ArrayBuffer",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 120,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~DataView",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 121,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~JSON",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 122,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Promise",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 123,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Generator",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 124,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~GeneratorFunction",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 125,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Reflect",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 126,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Proxy",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 128,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "CanvasRenderingContext2D",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 129,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DocumentFragment",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~DocumentFragment",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 130,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Element",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Element",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 131,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Event",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Event",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 132,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Node",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Node",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 133,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NodeList",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~NodeList",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 134,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "XMLHttpRequest",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 135,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "AudioContext",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~AudioContext",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 136,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "unit/container.test.js",
+    "memberof": null,
+    "longname": "unit/container.test.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "/* eslint-disable no-unused-expressions, func-names */\r\nimport {expect} from 'chai';\r\nimport Container from '../../src/index';\r\n\r\ndescribe('Container', () => {\r\n    let container = null;\r\n\r\n    beforeEach(() => {\r\n        container = new Container();\r\n    });\r\n\r\n    describe('registration', () => {\r\n        context('empty container', () => {\r\n            it('should successfully register modules', () => {\r\n                const register = () => {\r\n                    container.value('value', {name: 'bar'});\r\n                    container.service('service', function Service() {\r\n                        this.name = 'bar';\r\n                    });\r\n                    container.factory('factory', function Service() {\r\n                        return {value: new Date()};\r\n                    });\r\n                };\r\n\r\n                expect(register).to.not.throw();\r\n            });\r\n        });\r\n\r\n        context('not empty container', () => {\r\n            it('should throw error when register module twice', () => {\r\n                const register = () => {\r\n                    container.value('value', {name: 'bar'});\r\n                    container.value('value', {name: 'bar'});\r\n                };\r\n\r\n                expect(register).to.throw();\r\n            });\r\n        });\r\n\r\n        describe('register twice using namespace instance', () => {\r\n            context('same type of module', () => {\r\n                it('should throw error', () => {\r\n                    const register = () => {\r\n                        container.value('foo', 'foo');\r\n                        container.value('foo', 'bar');\r\n                    };\r\n\r\n                    expect(register).to.throw();\r\n                });\r\n            });\r\n\r\n            context('different type of module', () => {\r\n                it('should throw error', () => {\r\n                    const register = () => {\r\n                        container.value('foo', 'foo');\r\n                        container.service('foo', function Service() {});\r\n                    };\r\n\r\n                    expect(register).to.throw();\r\n                });\r\n            });\r\n\r\n            context('different type and name of module', () => {\r\n                it('should not throw error', () => {\r\n                    const register = () => {\r\n                        container.value('foo', 'foo');\r\n                        container.service('bar', function Service() {});\r\n                    };\r\n\r\n                    expect(register).to.not.throw();\r\n                });\r\n            });\r\n\r\n            context('module name with separator', () => {\r\n                it('should throw error', () => {\r\n                    const register = () => {\r\n                        container.value('foo/bar', 1);\r\n                    };\r\n\r\n                    expect(register).to.throw();\r\n                });\r\n            });\r\n        });\r\n\r\n        describe('.namespace', () => {\r\n            it('should support chain', () => {\r\n                let namespace = container.namespace('foo').namespace('bar');\r\n                namespace.value('qaz', 1);\r\n                let resolved = container.resolve('foo/bar/qaz');\r\n                expect(resolved).to.equal(1);\r\n\r\n                namespace = container.namespace('foo/bar').namespace('qaz');\r\n                namespace.value('wsx', 1);\r\n                resolved = container.resolve('foo/bar/qaz/wsx');\r\n                expect(resolved).to.equal(1);\r\n            });\r\n            context('same name', () => {\r\n                it('should register in different namespaces', () => {\r\n                    const register = () => {\r\n                        container.namespace('models').value('user', function User() {});\r\n                        container.namespace('services').service('user', function UserService() {});\r\n                    };\r\n\r\n                    expect(register).to.not.throw();\r\n                });\r\n\r\n                it('should not register in same namespace', () => {\r\n                    const register = () => {\r\n                        container.namespace('models').value('user', function User() {});\r\n                        container.namespace('models').service('user', function UserService() {});\r\n                    };\r\n\r\n                    expect(register).to.throw();\r\n                });\r\n            });\r\n        });\r\n    });\r\n});\r\n/* eslint-enable no-unused-expressions, func-names */\r\n"
+  },
+  {
+    "__docId__": 137,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe0",
+    "testId": 0,
+    "memberof": "unit/container.test.js",
+    "testDepth": 0,
+    "longname": "unit/container.test.js~describe0",
+    "access": null,
+    "description": "Container",
+    "lineNumber": 5
+  },
+  {
+    "__docId__": 138,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe1",
+    "testId": 1,
+    "memberof": "unit/container.test.js~describe0",
+    "testDepth": 1,
+    "longname": "unit/container.test.js~describe0.describe1",
+    "access": null,
+    "description": "registration",
+    "lineNumber": 12
+  },
+  {
+    "__docId__": 139,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context2",
+    "testId": 2,
+    "memberof": "unit/container.test.js~describe0.describe1",
+    "testDepth": 2,
+    "longname": "unit/container.test.js~describe0.describe1.context2",
+    "access": null,
+    "description": "empty container",
+    "lineNumber": 13
+  },
+  {
+    "__docId__": 140,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it3",
+    "testId": 3,
+    "memberof": "unit/container.test.js~describe0.describe1.context2",
+    "testDepth": 3,
+    "longname": "unit/container.test.js~describe0.describe1.context2.it3",
+    "access": null,
+    "description": "should successfully register modules",
+    "lineNumber": 14
+  },
+  {
+    "__docId__": 141,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context4",
+    "testId": 4,
+    "memberof": "unit/container.test.js~describe0.describe1",
+    "testDepth": 2,
+    "longname": "unit/container.test.js~describe0.describe1.context4",
+    "access": null,
+    "description": "not empty container",
+    "lineNumber": 29
+  },
+  {
+    "__docId__": 142,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it5",
+    "testId": 5,
+    "memberof": "unit/container.test.js~describe0.describe1.context4",
+    "testDepth": 3,
+    "longname": "unit/container.test.js~describe0.describe1.context4.it5",
+    "access": null,
+    "description": "should throw error when register module twice",
+    "lineNumber": 30
+  },
+  {
+    "__docId__": 143,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe6",
+    "testId": 6,
+    "memberof": "unit/container.test.js~describe0.describe1",
+    "testDepth": 2,
+    "longname": "unit/container.test.js~describe0.describe1.describe6",
+    "access": null,
+    "description": "register twice using namespace instance",
+    "lineNumber": 40
+  },
+  {
+    "__docId__": 144,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context7",
+    "testId": 7,
+    "memberof": "unit/container.test.js~describe0.describe1.describe6",
+    "testDepth": 3,
+    "longname": "unit/container.test.js~describe0.describe1.describe6.context7",
+    "access": null,
+    "description": "same type of module",
+    "lineNumber": 41
+  },
+  {
+    "__docId__": 145,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it8",
+    "testId": 8,
+    "memberof": "unit/container.test.js~describe0.describe1.describe6.context7",
+    "testDepth": 4,
+    "longname": "unit/container.test.js~describe0.describe1.describe6.context7.it8",
+    "access": null,
+    "description": "should throw error",
+    "lineNumber": 42
+  },
+  {
+    "__docId__": 146,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context9",
+    "testId": 9,
+    "memberof": "unit/container.test.js~describe0.describe1.describe6",
+    "testDepth": 3,
+    "longname": "unit/container.test.js~describe0.describe1.describe6.context9",
+    "access": null,
+    "description": "different type of module",
+    "lineNumber": 52
+  },
+  {
+    "__docId__": 147,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it10",
+    "testId": 10,
+    "memberof": "unit/container.test.js~describe0.describe1.describe6.context9",
+    "testDepth": 4,
+    "longname": "unit/container.test.js~describe0.describe1.describe6.context9.it10",
+    "access": null,
+    "description": "should throw error",
+    "lineNumber": 53
+  },
+  {
+    "__docId__": 148,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context11",
+    "testId": 11,
+    "memberof": "unit/container.test.js~describe0.describe1.describe6",
+    "testDepth": 3,
+    "longname": "unit/container.test.js~describe0.describe1.describe6.context11",
+    "access": null,
+    "description": "different type and name of module",
+    "lineNumber": 63
+  },
+  {
+    "__docId__": 149,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it12",
+    "testId": 12,
+    "memberof": "unit/container.test.js~describe0.describe1.describe6.context11",
+    "testDepth": 4,
+    "longname": "unit/container.test.js~describe0.describe1.describe6.context11.it12",
+    "access": null,
+    "description": "should not throw error",
+    "lineNumber": 64
+  },
+  {
+    "__docId__": 150,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context13",
+    "testId": 13,
+    "memberof": "unit/container.test.js~describe0.describe1.describe6",
+    "testDepth": 3,
+    "longname": "unit/container.test.js~describe0.describe1.describe6.context13",
+    "access": null,
+    "description": "module name with separator",
+    "lineNumber": 74
+  },
+  {
+    "__docId__": 151,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it14",
+    "testId": 14,
+    "memberof": "unit/container.test.js~describe0.describe1.describe6.context13",
+    "testDepth": 4,
+    "longname": "unit/container.test.js~describe0.describe1.describe6.context13.it14",
+    "access": null,
+    "description": "should throw error",
+    "lineNumber": 75
+  },
+  {
+    "__docId__": 152,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe15",
+    "testId": 15,
+    "memberof": "unit/container.test.js~describe0.describe1",
+    "testDepth": 2,
+    "longname": "unit/container.test.js~describe0.describe1.describe15",
+    "access": null,
+    "description": ".namespace",
+    "lineNumber": 85
+  },
+  {
+    "__docId__": 153,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it16",
+    "testId": 16,
+    "memberof": "unit/container.test.js~describe0.describe1.describe15",
+    "testDepth": 3,
+    "longname": "unit/container.test.js~describe0.describe1.describe15.it16",
+    "access": null,
+    "description": "should support chain",
+    "lineNumber": 86
+  },
+  {
+    "__docId__": 154,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context17",
+    "testId": 17,
+    "memberof": "unit/container.test.js~describe0.describe1.describe15",
+    "testDepth": 3,
+    "longname": "unit/container.test.js~describe0.describe1.describe15.context17",
+    "access": null,
+    "description": "same name",
+    "lineNumber": 97
+  },
+  {
+    "__docId__": 155,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it18",
+    "testId": 18,
+    "memberof": "unit/container.test.js~describe0.describe1.describe15.context17",
+    "testDepth": 4,
+    "longname": "unit/container.test.js~describe0.describe1.describe15.context17.it18",
+    "access": null,
+    "description": "should register in different namespaces",
+    "lineNumber": 98
+  },
+  {
+    "__docId__": 156,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it19",
+    "testId": 19,
+    "memberof": "unit/container.test.js~describe0.describe1.describe15.context17",
+    "testDepth": 4,
+    "longname": "unit/container.test.js~describe0.describe1.describe15.context17.it19",
+    "access": null,
+    "description": "should not register in same namespace",
+    "lineNumber": 107
+  },
+  {
+    "__docId__": 157,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "unit/map-path.test.js",
+    "memberof": null,
+    "longname": "unit/map-path.test.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport map from '../../src/map-path';\nimport {\n    isFunction\n} from '../../src/utils';\n\ndescribe('map-path', function() {\n    it('should map paths', () => {\n        const result = map({\n            consts: 'consts',\n            services: {\n                components: [\n                    'actions',\n                    'dispatcher'\n                ],\n                domain: 'domain',\n                core: {\n                    networking: 'networking',\n                    database: 'database'\n                }\n            }\n        });\n\n        expect(isFunction(result), '\"result\" must be a function').to.be.true;\n        expect(result(), '\"result()\"').to.eql('');\n        expect(result('foo'), '\"result(`foo`)\"').to.eql('foo');\n\n        expect(isFunction(result.consts), '\"result.consts\" must be a function').to.be.true;\n        expect(result.consts(), '\"result.consts()\"').to.eql('consts');\n        expect(result.consts('foo'), '\"result.consts(`foo`)\"').to.eql('consts/foo');\n\n        expect(isFunction(result.services), '\"result.services\" must be a function').to.be.true;\n        expect(result.services(), '\"result.services()\"').to.eql('services');\n        expect(result.services('foo'), '\"result.services(`foo`)\"').to.eql('services/foo');\n\n        expect(isFunction(result.services.components), '\"result.services.components\" must be a function').to.be.true;\n        expect(result.services.components(), '\"result.services.components()\"').to.eql('services/components');\n        expect(result.services.components('foo'), '\"result.services.components(`foo`)\"').to.eql('services/components/foo');\n\n        expect(isFunction(result.services.components.actions), '\"result.services.components.actions\" must be a function').to.be.true;\n        expect(result.services.components.actions(), '\"result.services.components.actions()\"').to.eql('services/components/actions');\n        expect(result.services.components.actions('foo'), '\"result.services.components.actions(`foo`)\"').to.eql('services/components/actions/foo');\n\n        expect(isFunction(result.services.components.dispatcher), '\"result.services.components.dispatcher\" must be a function').to.be.true;\n        expect(result.services.components.dispatcher(), '\"result.services.components.dispatcher()\"').to.eql('services/components/dispatcher');\n        expect(result.services.components.dispatcher('foo'), '\"result.services.components.dispatcher(`foo`)\"').to.eql('services/components/dispatcher/foo');\n\n        expect(isFunction(result.services.domain), '\"result.services.domain\" must be a function').to.be.true;\n        expect(result.services.domain(), '\"result.services.domain()\"').to.eql('services/domain');\n        expect(result.services.domain('foo'), '\"result.services.domain(`foo`)\"').to.eql('services/domain/foo');\n\n        expect(isFunction(result.services.core)).to.be.true;\n        expect(result.services.core()).to.eql('services/core');\n        expect(result.services.core('foo')).to.eql('services/core/foo');\n\n        expect(isFunction(result.services.core.networking)).to.be.true;\n        expect(result.services.core.networking()).to.eql('services/core/networking');\n        expect(result.services.core.networking('foo')).to.eql('services/core/networking/foo');\n\n        expect(isFunction(result.services.core.database)).to.be.true;\n        expect(result.services.core.database()).to.eql('services/core/database');\n        expect(result.services.core.database('foo')).to.eql('services/core/database/foo');\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
+  },
+  {
+    "__docId__": 158,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe20",
+    "testId": 20,
+    "memberof": "unit/map-path.test.js",
+    "testDepth": 0,
+    "longname": "unit/map-path.test.js~describe20",
+    "access": null,
+    "description": "map-path",
+    "lineNumber": 9
+  },
+  {
+    "__docId__": 159,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it21",
+    "testId": 21,
+    "memberof": "unit/map-path.test.js~describe20",
+    "testDepth": 1,
+    "longname": "unit/map-path.test.js~describe20.it21",
+    "access": null,
+    "description": "should map paths",
+    "lineNumber": 10
+  },
+  {
+    "__docId__": 160,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "unit/module.test.js",
+    "memberof": null,
+    "longname": "unit/module.test.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "/* eslint-disable no-unused-expressions, func-names */\n\nimport {expect} from 'chai';\nimport {isFunction} from '../../src/utils';\nimport Module from '../../src/module';\n\ndescribe('Module', function() {\n    describe('.getNamespace', function() {\n        it('should return module namespace', function() {\n            const namespace = 'foo';\n            const module = new Module(namespace);\n\n            expect(module.getNamespace).to.not.throw;\n            expect(module.getNamespace()).to.be.equal(namespace);\n        });\n    });\n    describe('.getName', function() {\n        it('should return module name', function() {\n            const namespace = 'foo';\n            const name = 'bar';\n            const module = new Module(namespace, name);\n\n            expect(module.getName).to.not.throw;\n            expect(module.getName()).to.be.equal(name);\n        });\n    });\n    describe('.getDependencies', function() {\n        it('should return module dependencies', function() {\n            const namespace = 'foo';\n            const name = 'bar';\n            const dependencies = ['foo/qaz', 'foo/wsx'];\n            const module = new Module(namespace, name, dependencies);\n\n            expect(module.getDependencies).to.not.throw;\n            expect(module.getDependencies()).to.be.equal(dependencies);\n        });\n    });\n    describe('.getValue', function() {\n        context('when is initialized', function() {\n            it('should return value', function() {\n                const values = [\n                    1,\n                    'string',\n                    {foo: 'bar'},\n                    ['foo', 'bar'],\n                    function() {\n                        return 'function';\n                    }\n                ];\n\n                values.forEach((value) => {\n                    const namespace = 'foo';\n                    const name = 'bar';\n                    const dependencies = [];\n                    const module = new Module(namespace, name, dependencies, () => {\n                        return value;\n                    });\n\n                    module.initialize();\n                    expect(module.getValue).to.not.throw;\n                    expect(module.getValue()).to.be.equal(isFunction(value) ? value() : value);\n                });\n            });\n        });\n        context('when is not initialized', function() {\n            it('should throw an error', function() {\n                const module = new Module('foo', 'bar', []);\n\n                expect(module.getValue).to.throw;\n            });\n        });\n    });\n    describe('.isInitialized', function() {\n        context('when is initialized', function() {\n            it('should return \"true\"', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                module.initialize();\n                expect(module.isInitialized()).to.equal(true);\n            });\n        });\n        context('when is not initialized', function() {\n            it('should return \"false\"', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                expect(module.isInitialized()).to.equal(false);\n            });\n        });\n    });\n    describe('initialize', function() {\n        context('when is initialized', function() {\n            it('should not throw an error', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                expect(module.initialize).to.not.throw;\n            });\n        });\n        context('when is not initialized', function() {\n            it('should throw an error', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                module.initialize();\n                expect(module.initialize).to.throw;\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
+  },
+  {
+    "__docId__": 161,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe22",
+    "testId": 22,
+    "memberof": "unit/module.test.js",
+    "testDepth": 0,
+    "longname": "unit/module.test.js~describe22",
+    "access": null,
+    "description": "Module",
+    "lineNumber": 7
+  },
+  {
+    "__docId__": 162,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe23",
+    "testId": 23,
+    "memberof": "unit/module.test.js~describe22",
+    "testDepth": 1,
+    "longname": "unit/module.test.js~describe22.describe23",
+    "access": null,
+    "description": ".getNamespace",
+    "lineNumber": 8
+  },
+  {
+    "__docId__": 163,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it24",
+    "testId": 24,
+    "memberof": "unit/module.test.js~describe22.describe23",
+    "testDepth": 2,
+    "longname": "unit/module.test.js~describe22.describe23.it24",
+    "access": null,
+    "description": "should return module namespace",
+    "lineNumber": 9
+  },
+  {
+    "__docId__": 164,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe25",
+    "testId": 25,
+    "memberof": "unit/module.test.js~describe22",
+    "testDepth": 1,
+    "longname": "unit/module.test.js~describe22.describe25",
+    "access": null,
+    "description": ".getName",
+    "lineNumber": 17
+  },
+  {
+    "__docId__": 165,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it26",
+    "testId": 26,
+    "memberof": "unit/module.test.js~describe22.describe25",
+    "testDepth": 2,
+    "longname": "unit/module.test.js~describe22.describe25.it26",
+    "access": null,
+    "description": "should return module name",
+    "lineNumber": 18
+  },
+  {
+    "__docId__": 166,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe27",
+    "testId": 27,
+    "memberof": "unit/module.test.js~describe22",
+    "testDepth": 1,
+    "longname": "unit/module.test.js~describe22.describe27",
+    "access": null,
+    "description": ".getDependencies",
+    "lineNumber": 27
+  },
+  {
+    "__docId__": 167,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it28",
+    "testId": 28,
+    "memberof": "unit/module.test.js~describe22.describe27",
+    "testDepth": 2,
+    "longname": "unit/module.test.js~describe22.describe27.it28",
+    "access": null,
+    "description": "should return module dependencies",
+    "lineNumber": 28
+  },
+  {
+    "__docId__": 168,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe29",
+    "testId": 29,
+    "memberof": "unit/module.test.js~describe22",
+    "testDepth": 1,
+    "longname": "unit/module.test.js~describe22.describe29",
+    "access": null,
+    "description": ".getValue",
+    "lineNumber": 38
+  },
+  {
+    "__docId__": 169,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context30",
+    "testId": 30,
+    "memberof": "unit/module.test.js~describe22.describe29",
+    "testDepth": 2,
+    "longname": "unit/module.test.js~describe22.describe29.context30",
+    "access": null,
+    "description": "when is initialized",
+    "lineNumber": 39
+  },
+  {
+    "__docId__": 170,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it31",
+    "testId": 31,
+    "memberof": "unit/module.test.js~describe22.describe29.context30",
+    "testDepth": 3,
+    "longname": "unit/module.test.js~describe22.describe29.context30.it31",
+    "access": null,
+    "description": "should return value",
+    "lineNumber": 40
+  },
+  {
+    "__docId__": 171,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context32",
+    "testId": 32,
+    "memberof": "unit/module.test.js~describe22.describe29",
+    "testDepth": 2,
+    "longname": "unit/module.test.js~describe22.describe29.context32",
+    "access": null,
+    "description": "when is not initialized",
+    "lineNumber": 65
+  },
+  {
+    "__docId__": 172,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it33",
+    "testId": 33,
+    "memberof": "unit/module.test.js~describe22.describe29.context32",
+    "testDepth": 3,
+    "longname": "unit/module.test.js~describe22.describe29.context32.it33",
+    "access": null,
+    "description": "should throw an error",
+    "lineNumber": 66
+  },
+  {
+    "__docId__": 173,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe34",
+    "testId": 34,
+    "memberof": "unit/module.test.js~describe22",
+    "testDepth": 1,
+    "longname": "unit/module.test.js~describe22.describe34",
+    "access": null,
+    "description": ".isInitialized",
+    "lineNumber": 73
+  },
+  {
+    "__docId__": 174,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context35",
+    "testId": 35,
+    "memberof": "unit/module.test.js~describe22.describe34",
+    "testDepth": 2,
+    "longname": "unit/module.test.js~describe22.describe34.context35",
+    "access": null,
+    "description": "when is initialized",
+    "lineNumber": 74
+  },
+  {
+    "__docId__": 175,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it36",
+    "testId": 36,
+    "memberof": "unit/module.test.js~describe22.describe34.context35",
+    "testDepth": 3,
+    "longname": "unit/module.test.js~describe22.describe34.context35.it36",
+    "access": null,
+    "description": "should return \"true\"",
+    "lineNumber": 75
+  },
+  {
+    "__docId__": 176,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context37",
+    "testId": 37,
+    "memberof": "unit/module.test.js~describe22.describe34",
+    "testDepth": 2,
+    "longname": "unit/module.test.js~describe22.describe34.context37",
+    "access": null,
+    "description": "when is not initialized",
+    "lineNumber": 87
+  },
+  {
+    "__docId__": 177,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it38",
+    "testId": 38,
+    "memberof": "unit/module.test.js~describe22.describe34.context37",
+    "testDepth": 3,
+    "longname": "unit/module.test.js~describe22.describe34.context37.it38",
+    "access": null,
+    "description": "should return \"false\"",
+    "lineNumber": 88
+  },
+  {
+    "__docId__": 178,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe39",
+    "testId": 39,
+    "memberof": "unit/module.test.js~describe22",
+    "testDepth": 1,
+    "longname": "unit/module.test.js~describe22.describe39",
+    "access": null,
+    "description": "initialize",
+    "lineNumber": 100
+  },
+  {
+    "__docId__": 179,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context40",
+    "testId": 40,
+    "memberof": "unit/module.test.js~describe22.describe39",
+    "testDepth": 2,
+    "longname": "unit/module.test.js~describe22.describe39.context40",
+    "access": null,
+    "description": "when is initialized",
+    "lineNumber": 101
+  },
+  {
+    "__docId__": 180,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it41",
+    "testId": 41,
+    "memberof": "unit/module.test.js~describe22.describe39.context40",
+    "testDepth": 3,
+    "longname": "unit/module.test.js~describe22.describe39.context40.it41",
+    "access": null,
+    "description": "should not throw an error",
+    "lineNumber": 102
+  },
+  {
+    "__docId__": 181,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context42",
+    "testId": 42,
+    "memberof": "unit/module.test.js~describe22.describe39",
+    "testDepth": 2,
+    "longname": "unit/module.test.js~describe22.describe39.context42",
+    "access": null,
+    "description": "when is not initialized",
+    "lineNumber": 113
+  },
+  {
+    "__docId__": 182,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it43",
+    "testId": 43,
+    "memberof": "unit/module.test.js~describe22.describe39.context42",
+    "testDepth": 3,
+    "longname": "unit/module.test.js~describe22.describe39.context42.it43",
+    "access": null,
+    "description": "should throw an error",
+    "lineNumber": 114
+  },
+  {
+    "__docId__": 183,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "unit/resolver.test.js",
+    "memberof": null,
+    "longname": "unit/resolver.test.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport Container from '../../src/container';\n\ndescribe('Resolver', function() {\n    let container = null;\n\n    beforeEach(function() {\n        container = new Container();\n    });\n\n    describe('.resolve', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                const resolve = () => {\n                    container.resolve('foo');\n                };\n\n                expect(resolve).to.throw();\n            });\n        });\n\n        describe('#const', () => {\n            context('plain types', () => {\n                it('should successfully resolve function', () => {\n                    const module = function foo() { return 'bar'; };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                    expect(found).to.eql(found2);\n                    expect(found() === 'bar').to.be.true;\n                });\n\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n        });\n\n        describe('#value', () => {\n            context('plain types', () => {\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n            context('constructor', () => {\n                context('without dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('value', function User() {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                        });\n\n                        const found = container.resolve('value');\n                        const found2 = container.resolve('value');\n                        expect(found).to.exist;\n                        expect(found2).to.exist;\n                        expect(found).to.not.equal(found2);\n                        expect(found.name).to.exist;\n                        expect(found.surname).to.exist;\n                    });\n                });\n                context('with dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('group', function Group() {\n                            this.accounts = [];\n                        });\n                        container.value('user', ['group'], function User(group) {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                            this.group = group;\n                        });\n\n                        const found = container.resolve('user');\n                        expect(found).to.exist;\n                        expect(found.group).to.exist;\n                        expect(found.group.accounts).to.exist;\n                    });\n                });\n            });\n        });\n\n        describe('#service', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.service('http', function HttpService() {\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.service('http', ['http-transport', 'settings'], function HttpService(transport, settings) {\n                        this.settings = settings;\n                        this.transport = transport;\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('#factory', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.factory('http', function HttpServiceFactory() {\n                        return new function HttpService() {\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.factory('http', ['http-transport', 'settings'], function HttpServiceFactory(transport, settings) {\n                        return new function HttpService() {\n                            this.settings = settings;\n                            this.transport = transport;\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('in namespace', () => {\n            describe('#value', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.value('value', 1);\n                        container.namespace('consts').value('value', 2);\n\n                        expect(container.resolve('value')).to.equal(1);\n                        expect(container.resolve('consts/value')).to.equal(2);\n                    });\n                });\n\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('consts').value('value', 1);\n                        container.namespace('models').value('user', ['consts/value'], function User(value) {\n                            this.value = value;\n                        });\n\n                        const user = container.resolve('models/user');\n                        expect(user).to.exist;\n                        expect(user.value).to.equal(1);\n                    });\n                });\n            });\n            describe('#factory', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', function factoryB() {\n                            return {name: 'B'};\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', ['services/api/service'], function factoryB(serviceA) {\n                            return {name: 'B', api: serviceA};\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n            describe('#service', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.service('service', function ServiceA() {\n                        });\n                        container.namespace('services').service('service', function ServiceB() {\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').service('service', function ServiceA() {});\n                        container.namespace('services').service('service', ['services/api/service'], function ServiceB(serviceA) {\n                            this.api = serviceA;\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n        });\n\n        // describe('circular dependency', () => {\n        //    it('should throw during resolving', () => {\n        //        const self = () => {\n        //            container.register().value('value1', ['value1'], 1);\n        //            container.resolve('value1');\n        //        };\n        //        const shallow = () => {\n        //            container.register().value('value1', ['value2'], 1);\n        //            container.register().value('value2', ['value1'], 2);\n        //            container.resolve('value1');\n        //            container.resolve('value2');\n        //        };\n        //        const deep = () => {\n        //            container.register().value('a', ['b', 'd'], 'a');\n        //            container.register().value('b', ['c', 'e'], 'b');\n        //            container.register().value('c', ['e', 'd'], 'c');\n        //            container.register().value('d', ['b'], 'd');\n        //            container.register().value('e', 'e');\n        //\n        //            container.resolve('a');\n        //        };\n        //\n        //        expect(self).to.throw(ReferenceError);\n        //        expect(shallow).to.throw(ReferenceError);\n        //        expect(deep).to.throw(ReferenceError);\n        //    });\n        // });\n    });\n    describe('.resolveAll', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                expect(() => {\n                    container.resolveAll('foo');\n                }).to.throw();\n            });\n        });\n\n        context('not empty container', () => {\n            it('should resolve all modules from particular namespace', () => {\n                const foo = container.namespace('foo');\n                foo.service('A', function() { this.name = 'A'; });\n                foo.service('B', ['foo/A'], function() { this.name = 'B'; });\n                foo.service('C', ['foo/B'], function() { this.name = 'C'; });\n                foo.service('D', ['foo/B', 'foo/C'], function() { this.name = 'D'; });\n\n                const bar = container.namespace('bar');\n                bar.service('E', ['foo/A'], function() { this.name = 'E'; });\n                bar.service('F', ['bar/E', 'foo/C'], function() { this.name = 'F'; });\n\n                const resolved = container.resolveAll('bar');\n                const arr = [];\n\n                for (const name in resolved) {\n                    if (resolved.hasOwnProperty(name)) {\n                        arr.push({\n                            name: name,\n                            value: resolved[name]\n                        });\n                    }\n                }\n\n                expect(arr.length).to.equal(2);\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
+  },
+  {
+    "__docId__": 184,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe44",
+    "testId": 44,
+    "memberof": "unit/resolver.test.js",
+    "testDepth": 0,
+    "longname": "unit/resolver.test.js~describe44",
+    "access": null,
+    "description": "Resolver",
+    "lineNumber": 6
+  },
+  {
+    "__docId__": 185,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe45",
+    "testId": 45,
+    "memberof": "unit/resolver.test.js~describe44",
+    "testDepth": 1,
+    "longname": "unit/resolver.test.js~describe44.describe45",
+    "access": null,
+    "description": ".resolve",
+    "lineNumber": 13
+  },
+  {
+    "__docId__": 186,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context46",
+    "testId": 46,
+    "memberof": "unit/resolver.test.js~describe44.describe45",
+    "testDepth": 2,
+    "longname": "unit/resolver.test.js~describe44.describe45.context46",
+    "access": null,
+    "description": "empty container",
+    "lineNumber": 14
+  },
+  {
+    "__docId__": 187,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it47",
+    "testId": 47,
+    "memberof": "unit/resolver.test.js~describe44.describe45.context46",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.context46.it47",
+    "access": null,
+    "description": "should throw error",
+    "lineNumber": 15
+  },
+  {
+    "__docId__": 188,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe48",
+    "testId": 48,
+    "memberof": "unit/resolver.test.js~describe44.describe45",
+    "testDepth": 2,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe48",
+    "access": null,
+    "description": "#const",
+    "lineNumber": 24
+  },
+  {
+    "__docId__": 189,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context49",
+    "testId": 49,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe48",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe48.context49",
+    "access": null,
+    "description": "plain types",
+    "lineNumber": 25
+  },
+  {
+    "__docId__": 190,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it50",
+    "testId": 50,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe48.context49",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe48.context49.it50",
+    "access": null,
+    "description": "should successfully resolve function",
+    "lineNumber": 26
+  },
+  {
+    "__docId__": 191,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it51",
+    "testId": 51,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe48.context49",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe48.context49.it51",
+    "access": null,
+    "description": "should successfully resolve object",
+    "lineNumber": 37
+  },
+  {
+    "__docId__": 192,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it52",
+    "testId": 52,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe48.context49",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe48.context49.it52",
+    "access": null,
+    "description": "should successfully resolve number",
+    "lineNumber": 46
+  },
+  {
+    "__docId__": 193,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it53",
+    "testId": 53,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe48.context49",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe48.context49.it53",
+    "access": null,
+    "description": "should successfully resolve string",
+    "lineNumber": 55
+  },
+  {
+    "__docId__": 194,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it54",
+    "testId": 54,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe48.context49",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe48.context49.it54",
+    "access": null,
+    "description": "should successfully resolve array",
+    "lineNumber": 64
+  },
+  {
+    "__docId__": 195,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe55",
+    "testId": 55,
+    "memberof": "unit/resolver.test.js~describe44.describe45",
+    "testDepth": 2,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55",
+    "access": null,
+    "description": "#value",
+    "lineNumber": 75
+  },
+  {
+    "__docId__": 196,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context56",
+    "testId": 56,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe55",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55.context56",
+    "access": null,
+    "description": "plain types",
+    "lineNumber": 76
+  },
+  {
+    "__docId__": 197,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it57",
+    "testId": 57,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe55.context56",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55.context56.it57",
+    "access": null,
+    "description": "should successfully resolve object",
+    "lineNumber": 77
+  },
+  {
+    "__docId__": 198,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it58",
+    "testId": 58,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe55.context56",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55.context56.it58",
+    "access": null,
+    "description": "should successfully resolve number",
+    "lineNumber": 86
+  },
+  {
+    "__docId__": 199,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it59",
+    "testId": 59,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe55.context56",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55.context56.it59",
+    "access": null,
+    "description": "should successfully resolve string",
+    "lineNumber": 95
+  },
+  {
+    "__docId__": 200,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it60",
+    "testId": 60,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe55.context56",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55.context56.it60",
+    "access": null,
+    "description": "should successfully resolve array",
+    "lineNumber": 104
+  },
+  {
+    "__docId__": 201,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context61",
+    "testId": 61,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe55",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55.context61",
+    "access": null,
+    "description": "constructor",
+    "lineNumber": 113
+  },
+  {
+    "__docId__": 202,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context62",
+    "testId": 62,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe55.context61",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55.context61.context62",
+    "access": null,
+    "description": "without dependencies",
+    "lineNumber": 114
+  },
+  {
+    "__docId__": 203,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it63",
+    "testId": 63,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe55.context61.context62",
+    "testDepth": 5,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55.context61.context62.it63",
+    "access": null,
+    "description": "should successfully resolved",
+    "lineNumber": 115
+  },
+  {
+    "__docId__": 204,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context64",
+    "testId": 64,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe55.context61",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55.context61.context64",
+    "access": null,
+    "description": "with dependencies",
+    "lineNumber": 132
+  },
+  {
+    "__docId__": 205,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it65",
+    "testId": 65,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe55.context61.context64",
+    "testDepth": 5,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe55.context61.context64.it65",
+    "access": null,
+    "description": "should successfully resolved",
+    "lineNumber": 133
+  },
+  {
+    "__docId__": 206,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe66",
+    "testId": 66,
+    "memberof": "unit/resolver.test.js~describe44.describe45",
+    "testDepth": 2,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe66",
+    "access": null,
+    "description": "#service",
+    "lineNumber": 154
+  },
+  {
+    "__docId__": 207,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context67",
+    "testId": 67,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe66",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe66.context67",
+    "access": null,
+    "description": "without dependencies",
+    "lineNumber": 155
+  },
+  {
+    "__docId__": 208,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it68",
+    "testId": 68,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe66.context67",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe66.context67.it68",
+    "access": null,
+    "description": "should resolve single service",
+    "lineNumber": 156
+  },
+  {
+    "__docId__": 209,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context69",
+    "testId": 69,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe66",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe66.context69",
+    "access": null,
+    "description": "with dependencies",
+    "lineNumber": 169
+  },
+  {
+    "__docId__": 210,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it70",
+    "testId": 70,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe66.context69",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe66.context69.it70",
+    "access": null,
+    "description": "should resolve single service",
+    "lineNumber": 170
+  },
+  {
+    "__docId__": 211,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe71",
+    "testId": 71,
+    "memberof": "unit/resolver.test.js~describe44.describe45",
+    "testDepth": 2,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe71",
+    "access": null,
+    "description": "#factory",
+    "lineNumber": 193
+  },
+  {
+    "__docId__": 212,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context72",
+    "testId": 72,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe71",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe71.context72",
+    "access": null,
+    "description": "without dependencies",
+    "lineNumber": 194
+  },
+  {
+    "__docId__": 213,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it73",
+    "testId": 73,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe71.context72",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe71.context72.it73",
+    "access": null,
+    "description": "should resolve single service",
+    "lineNumber": 195
+  },
+  {
+    "__docId__": 214,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context74",
+    "testId": 74,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe71",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe71.context74",
+    "access": null,
+    "description": "with dependencies",
+    "lineNumber": 210
+  },
+  {
+    "__docId__": 215,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it75",
+    "testId": 75,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe71.context74",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe71.context74.it75",
+    "access": null,
+    "description": "should resolve single service",
+    "lineNumber": 211
+  },
+  {
+    "__docId__": 216,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe76",
+    "testId": 76,
+    "memberof": "unit/resolver.test.js~describe44.describe45",
+    "testDepth": 2,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76",
+    "access": null,
+    "description": "in namespace",
+    "lineNumber": 236
+  },
+  {
+    "__docId__": 217,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe77",
+    "testId": 77,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe77",
+    "access": null,
+    "description": "#value",
+    "lineNumber": 237
+  },
+  {
+    "__docId__": 218,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context78",
+    "testId": 78,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe77",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe77.context78",
+    "access": null,
+    "description": "same name",
+    "lineNumber": 238
+  },
+  {
+    "__docId__": 219,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it79",
+    "testId": 79,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe77.context78",
+    "testDepth": 5,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe77.context78.it79",
+    "access": null,
+    "description": "should resolve from different namespaces",
+    "lineNumber": 239
+  },
+  {
+    "__docId__": 220,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context80",
+    "testId": 80,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe77",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe77.context80",
+    "access": null,
+    "description": "as dependency",
+    "lineNumber": 248
+  },
+  {
+    "__docId__": 221,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it81",
+    "testId": 81,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe77.context80",
+    "testDepth": 5,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe77.context80.it81",
+    "access": null,
+    "description": "should resolve",
+    "lineNumber": 249
+  },
+  {
+    "__docId__": 222,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe82",
+    "testId": 82,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe82",
+    "access": null,
+    "description": "#factory",
+    "lineNumber": 261
+  },
+  {
+    "__docId__": 223,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context83",
+    "testId": 83,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe82",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe82.context83",
+    "access": null,
+    "description": "same name",
+    "lineNumber": 262
+  },
+  {
+    "__docId__": 224,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it84",
+    "testId": 84,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe82.context83",
+    "testDepth": 5,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe82.context83.it84",
+    "access": null,
+    "description": "should resolve from different namespaces",
+    "lineNumber": 263
+  },
+  {
+    "__docId__": 225,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context85",
+    "testId": 85,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe82",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe82.context85",
+    "access": null,
+    "description": "as dependency",
+    "lineNumber": 278
+  },
+  {
+    "__docId__": 226,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it86",
+    "testId": 86,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe82.context85",
+    "testDepth": 5,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe82.context85.it86",
+    "access": null,
+    "description": "should resolve",
+    "lineNumber": 279
+  },
+  {
+    "__docId__": 227,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe87",
+    "testId": 87,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe87",
+    "access": null,
+    "description": "#service",
+    "lineNumber": 295
+  },
+  {
+    "__docId__": 228,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context88",
+    "testId": 88,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe87",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe87.context88",
+    "access": null,
+    "description": "same name",
+    "lineNumber": 296
+  },
+  {
+    "__docId__": 229,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it89",
+    "testId": 89,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe87.context88",
+    "testDepth": 5,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe87.context88.it89",
+    "access": null,
+    "description": "should resolve from different namespaces",
+    "lineNumber": 297
+  },
+  {
+    "__docId__": 230,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context90",
+    "testId": 90,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe87",
+    "testDepth": 4,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe87.context90",
+    "access": null,
+    "description": "as dependency",
+    "lineNumber": 310
+  },
+  {
+    "__docId__": 231,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it91",
+    "testId": 91,
+    "memberof": "unit/resolver.test.js~describe44.describe45.describe76.describe87.context90",
+    "testDepth": 5,
+    "longname": "unit/resolver.test.js~describe44.describe45.describe76.describe87.context90.it91",
+    "access": null,
+    "description": "should resolve",
+    "lineNumber": 311
+  },
+  {
+    "__docId__": 232,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe92",
+    "testId": 92,
+    "memberof": "unit/resolver.test.js~describe44",
+    "testDepth": 1,
+    "longname": "unit/resolver.test.js~describe44.describe92",
+    "access": null,
+    "description": ".resolveAll",
+    "lineNumber": 355
+  },
+  {
+    "__docId__": 233,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context93",
+    "testId": 93,
+    "memberof": "unit/resolver.test.js~describe44.describe92",
+    "testDepth": 2,
+    "longname": "unit/resolver.test.js~describe44.describe92.context93",
+    "access": null,
+    "description": "empty container",
+    "lineNumber": 356
+  },
+  {
+    "__docId__": 234,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it94",
+    "testId": 94,
+    "memberof": "unit/resolver.test.js~describe44.describe92.context93",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe92.context93.it94",
+    "access": null,
+    "description": "should throw error",
+    "lineNumber": 357
+  },
+  {
+    "__docId__": 235,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context95",
+    "testId": 95,
+    "memberof": "unit/resolver.test.js~describe44.describe92",
+    "testDepth": 2,
+    "longname": "unit/resolver.test.js~describe44.describe92.context95",
+    "access": null,
+    "description": "not empty container",
+    "lineNumber": 364
+  },
+  {
+    "__docId__": 236,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it96",
+    "testId": 96,
+    "memberof": "unit/resolver.test.js~describe44.describe92.context95",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe44.describe92.context95.it96",
+    "access": null,
+    "description": "should resolve all modules from particular namespace",
+    "lineNumber": 365
+  },
+  {
+    "__docId__": 237,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "unit/storage.test.js",
+    "memberof": null,
+    "longname": "unit/storage.test.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport {expect} from 'chai';\nimport { isNull, isUndefined } from '../../src/utils';\nimport Storage from '../../src/storage';\nimport Module from '../../src/module';\n\ndescribe('Storage', function() {\n    let storage = null;\n\n    beforeEach(() => {\n        storage = new Storage('/');\n    });\n\n    describe('.addItem', () => {\n        context('invalid parameters', () => {\n            it('should throw error when module is not passed', () => {\n                expect(() => {\n                    storage.addItem();\n                }).to.throw();\n            });\n\n            it('should throw error when module is not instance of Module class', () => {\n                const values = [\n                    new Date(),\n                    {},\n                    [],\n                    1,\n                    'foo'\n                ];\n\n                values.forEach((value) => {\n                    expect(() => {\n                        storage.addItem(value);\n                    }).to.throw();\n                });\n            });\n\n            it('should throw error when namespace name is not string', () => {\n                const values = [\n                    new Date(),\n                    {},\n                    [],\n                    1,\n                    null,\n                    undefined\n                ];\n\n                values.forEach((value) => {\n                    expect(() => {\n                        storage.addItem(new Module(value));\n                    }).to.throw();\n                });\n            });\n\n            it('should throw error when module name is missed', () => {\n                expect(() => {\n                    storage.addItem(new Module('/'));\n                }).to.throw();\n            });\n\n            it('should throw error when module name is not string', () => {\n                const values = [\n                    new Date(),\n                    {},\n                    [],\n                    1,\n                    null,\n                    undefined\n                ];\n\n                values.forEach((value) => {\n                    expect(() => {\n                        storage.addItem(new Module('/', value));\n                    }).to.throw();\n                });\n            });\n\n            it('should throw error when module already exists', () => {\n                expect(() => {\n                    storage.addItem(new Module('/', 'foo', [], function init() {}));\n                    storage.addItem(new Module('/', 'foo', [], function init() {}));\n                }).to.throw();\n            });\n        });\n\n        context('valid parameters', () => {\n            it('should add new module', () => {\n                expect(() => {\n                    storage.addItem(new Module('/', 'foo', [], function init() {}));\n                }).to.not.throw();\n            });\n        });\n    });\n\n    describe('.getItem', () => {\n        context('invalid parameters', () => {\n            it('should throw error when module path is missed', () => {\n                expect(() => {\n                    storage.getItem();\n                }).to.throw();\n            });\n\n            it('should throw error when module path is not string', () => {\n                const values = [\n                    new Date(),\n                    {},\n                    [],\n                    1,\n                    null,\n                    undefined\n                ];\n\n                values.forEach((value) => {\n                    expect(() => {\n                        storage.getItem(value);\n                    }).to.throw();\n                });\n            });\n\n            it('should throw error when namespace does not exist', () => {\n                storage.addItem(new Module('foo', 'bar', [], function init() {}));\n\n                expect(() => {\n                    storage.getItem('qaz/bar');\n                }).to.throw();\n            });\n\n            it('should throw error when module does not exist', () => {\n                storage.addItem(new Module('foo', 'bar', [], function init() {}));\n\n                expect(() => {\n                    storage.getItem('foo/qaz');\n                }).to.throw();\n            });\n        });\n\n        context('valid parameters', () => {\n            it('should return item', () => {\n                storage.addItem(new Module('foo', 'bar', [], function init() {}));\n\n                expect(storage.getItem('foo/bar')).to.exist;\n            });\n        });\n    });\n\n    describe('.forEachIn', () => {\n        context('invalid parameters', () => {\n            it('should throw an error when namespace not passed', () => {\n                expect(storage.forEachIn).to.throw;\n            });\n\n            it('should throw an error when callback not passed', () => {\n                expect(() => {\n                    storage.addItem(new Module('foo', 'bar'));\n                    storage.forEachIn('foo');\n                }).to.throw;\n            });\n        });\n\n        context('valid parameters', () => {\n            it('should iterate over modules inside target namespace', () => {\n                const fooModules = [\n                    new Module('foo', 'qaz'),\n                    new Module('foo', 'wsx'),\n                    new Module('foo', 'rfv')\n                ];\n\n                const barModules = [\n                    new Module('bar', 'tgb'),\n                    new Module('bar', 'yhn')\n                ];\n\n                fooModules.forEach(module => storage.addItem(module));\n                barModules.forEach(module => storage.addItem(module));\n\n                const found = [];\n                storage.forEachIn('foo', module => found.push(module));\n                expect(found).to.eql(fooModules);\n            });\n\n            it('should pass module path during iteration', () => {\n                const fooModules = [\n                    new Module('foo', 'qaz'),\n                    new Module('foo', 'wsx'),\n                    new Module('foo', 'rfv')\n                ];\n\n                const barModules = [\n                    new Module('bar', 'tgb'),\n                    new Module('bar', 'yhn')\n                ];\n\n                fooModules.forEach(module => storage.addItem(module));\n                barModules.forEach(module => storage.addItem(module));\n\n                const found = [];\n                storage.forEachIn('foo', (module, path) => found.push(path));\n                expect(found).to.eql([\n                    'foo/qaz',\n                    'foo/wsx',\n                    'foo/rfv'\n                ]);\n            });\n        });\n    });\n\n    it('should support different separators', () => {\n        const separators = [\n            '/',\n            '.',\n            '-',\n            '@'\n        ];\n\n        separators.forEach((separator) => {\n            const s = new Storage(separator);\n            s.addItem(new Module('foo', 'bar'));\n            const getItem = function getItem() {\n                return s.getItem(`foo${separator}bar`);\n            };\n\n            expect(getItem).not.to.throw;\n            const item = getItem();\n            expect(isNull(item) || isUndefined(item)).to.be.not.true;\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
+  },
+  {
+    "__docId__": 238,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe97",
+    "testId": 97,
+    "memberof": "unit/storage.test.js",
+    "testDepth": 0,
+    "longname": "unit/storage.test.js~describe97",
+    "access": null,
+    "description": "Storage",
+    "lineNumber": 8
+  },
+  {
+    "__docId__": 239,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe98",
+    "testId": 98,
+    "memberof": "unit/storage.test.js~describe97",
+    "testDepth": 1,
+    "longname": "unit/storage.test.js~describe97.describe98",
+    "access": null,
+    "description": ".addItem",
+    "lineNumber": 15
+  },
+  {
+    "__docId__": 240,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context99",
+    "testId": 99,
+    "memberof": "unit/storage.test.js~describe97.describe98",
+    "testDepth": 2,
+    "longname": "unit/storage.test.js~describe97.describe98.context99",
+    "access": null,
+    "description": "invalid parameters",
+    "lineNumber": 16
+  },
+  {
+    "__docId__": 241,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it100",
+    "testId": 100,
+    "memberof": "unit/storage.test.js~describe97.describe98.context99",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe98.context99.it100",
+    "access": null,
+    "description": "should throw error when module is not passed",
+    "lineNumber": 17
+  },
+  {
+    "__docId__": 242,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it101",
+    "testId": 101,
+    "memberof": "unit/storage.test.js~describe97.describe98.context99",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe98.context99.it101",
+    "access": null,
+    "description": "should throw error when module is not instance of Module class",
+    "lineNumber": 23
+  },
+  {
+    "__docId__": 243,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it102",
+    "testId": 102,
+    "memberof": "unit/storage.test.js~describe97.describe98.context99",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe98.context99.it102",
+    "access": null,
+    "description": "should throw error when namespace name is not string",
+    "lineNumber": 39
+  },
+  {
+    "__docId__": 244,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it103",
+    "testId": 103,
+    "memberof": "unit/storage.test.js~describe97.describe98.context99",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe98.context99.it103",
+    "access": null,
+    "description": "should throw error when module name is missed",
+    "lineNumber": 56
+  },
+  {
+    "__docId__": 245,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it104",
+    "testId": 104,
+    "memberof": "unit/storage.test.js~describe97.describe98.context99",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe98.context99.it104",
+    "access": null,
+    "description": "should throw error when module name is not string",
+    "lineNumber": 62
+  },
+  {
+    "__docId__": 246,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it105",
+    "testId": 105,
+    "memberof": "unit/storage.test.js~describe97.describe98.context99",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe98.context99.it105",
+    "access": null,
+    "description": "should throw error when module already exists",
+    "lineNumber": 79
+  },
+  {
+    "__docId__": 247,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context106",
+    "testId": 106,
+    "memberof": "unit/storage.test.js~describe97.describe98",
+    "testDepth": 2,
+    "longname": "unit/storage.test.js~describe97.describe98.context106",
+    "access": null,
+    "description": "valid parameters",
+    "lineNumber": 87
+  },
+  {
+    "__docId__": 248,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it107",
+    "testId": 107,
+    "memberof": "unit/storage.test.js~describe97.describe98.context106",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe98.context106.it107",
+    "access": null,
+    "description": "should add new module",
+    "lineNumber": 88
+  },
+  {
+    "__docId__": 249,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe108",
+    "testId": 108,
+    "memberof": "unit/storage.test.js~describe97",
+    "testDepth": 1,
+    "longname": "unit/storage.test.js~describe97.describe108",
+    "access": null,
+    "description": ".getItem",
+    "lineNumber": 96
+  },
+  {
+    "__docId__": 250,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context109",
+    "testId": 109,
+    "memberof": "unit/storage.test.js~describe97.describe108",
+    "testDepth": 2,
+    "longname": "unit/storage.test.js~describe97.describe108.context109",
+    "access": null,
+    "description": "invalid parameters",
+    "lineNumber": 97
+  },
+  {
+    "__docId__": 251,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it110",
+    "testId": 110,
+    "memberof": "unit/storage.test.js~describe97.describe108.context109",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe108.context109.it110",
+    "access": null,
+    "description": "should throw error when module path is missed",
+    "lineNumber": 98
+  },
+  {
+    "__docId__": 252,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it111",
+    "testId": 111,
+    "memberof": "unit/storage.test.js~describe97.describe108.context109",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe108.context109.it111",
+    "access": null,
+    "description": "should throw error when module path is not string",
+    "lineNumber": 104
+  },
+  {
+    "__docId__": 253,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it112",
+    "testId": 112,
+    "memberof": "unit/storage.test.js~describe97.describe108.context109",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe108.context109.it112",
+    "access": null,
+    "description": "should throw error when namespace does not exist",
+    "lineNumber": 121
+  },
+  {
+    "__docId__": 254,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it113",
+    "testId": 113,
+    "memberof": "unit/storage.test.js~describe97.describe108.context109",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe108.context109.it113",
+    "access": null,
+    "description": "should throw error when module does not exist",
+    "lineNumber": 129
+  },
+  {
+    "__docId__": 255,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context114",
+    "testId": 114,
+    "memberof": "unit/storage.test.js~describe97.describe108",
+    "testDepth": 2,
+    "longname": "unit/storage.test.js~describe97.describe108.context114",
+    "access": null,
+    "description": "valid parameters",
+    "lineNumber": 138
+  },
+  {
+    "__docId__": 256,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it115",
+    "testId": 115,
+    "memberof": "unit/storage.test.js~describe97.describe108.context114",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe108.context114.it115",
+    "access": null,
+    "description": "should return item",
+    "lineNumber": 139
+  },
+  {
+    "__docId__": 257,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe116",
+    "testId": 116,
+    "memberof": "unit/storage.test.js~describe97",
+    "testDepth": 1,
+    "longname": "unit/storage.test.js~describe97.describe116",
+    "access": null,
+    "description": ".forEachIn",
+    "lineNumber": 147
+  },
+  {
+    "__docId__": 258,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context117",
+    "testId": 117,
+    "memberof": "unit/storage.test.js~describe97.describe116",
+    "testDepth": 2,
+    "longname": "unit/storage.test.js~describe97.describe116.context117",
+    "access": null,
+    "description": "invalid parameters",
+    "lineNumber": 148
+  },
+  {
+    "__docId__": 259,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it118",
+    "testId": 118,
+    "memberof": "unit/storage.test.js~describe97.describe116.context117",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe116.context117.it118",
+    "access": null,
+    "description": "should throw an error when namespace not passed",
+    "lineNumber": 149
+  },
+  {
+    "__docId__": 260,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it119",
+    "testId": 119,
+    "memberof": "unit/storage.test.js~describe97.describe116.context117",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe116.context117.it119",
+    "access": null,
+    "description": "should throw an error when callback not passed",
+    "lineNumber": 153
+  },
+  {
+    "__docId__": 261,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context120",
+    "testId": 120,
+    "memberof": "unit/storage.test.js~describe97.describe116",
+    "testDepth": 2,
+    "longname": "unit/storage.test.js~describe97.describe116.context120",
+    "access": null,
+    "description": "valid parameters",
+    "lineNumber": 161
+  },
+  {
+    "__docId__": 262,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it121",
+    "testId": 121,
+    "memberof": "unit/storage.test.js~describe97.describe116.context120",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe116.context120.it121",
+    "access": null,
+    "description": "should iterate over modules inside target namespace",
+    "lineNumber": 162
+  },
+  {
+    "__docId__": 263,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it122",
+    "testId": 122,
+    "memberof": "unit/storage.test.js~describe97.describe116.context120",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe97.describe116.context120.it122",
+    "access": null,
+    "description": "should pass module path during iteration",
+    "lineNumber": 182
+  },
+  {
+    "__docId__": 264,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it123",
+    "testId": 123,
+    "memberof": "unit/storage.test.js~describe97",
+    "testDepth": 1,
+    "longname": "unit/storage.test.js~describe97.it123",
+    "access": null,
+    "description": "should support different separators",
+    "lineNumber": 208
+  },
+  {
+    "__docId__": 265,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "unit/utils.test.js",
+    "memberof": null,
+    "longname": "unit/utils.test.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport sinon from 'sinon';\nimport {\n    isFunction,\n    joinPath,\n    splitPath,\n    forEach\n} from '../../src/utils';\n\ndescribe('Utils', function() {\n    const separator = '/';\n\n    describe('isFunction', () => {\n        it('should return true when \"Function\" is passed', () => {\n            expect(isFunction(function() {})).to.be.true;\n        });\n\n        it('should return false when \"String\" is passed', () => {\n            expect(isFunction('')).to.be.false;\n        });\n\n        it('should return false when \"Number\" is passed', () => {\n            expect(isFunction(1)).to.be.false;\n        });\n\n        it('should return false when \"Object\" is passed', () => {\n            expect(isFunction({})).to.be.false;\n        });\n\n        it('should return false when \"Array\" is passed', () => {\n            expect(isFunction([])).to.be.false;\n        });\n\n        it('should return false when \"null\" is passed', () => {\n            expect(isFunction(null)).to.be.false;\n        });\n\n        it('should return false when \"undefined\" is passed', () => {\n            expect(isFunction(undefined)).to.be.false;\n        });\n\n        it('should return false when \"NaN\" is passed', () => {\n            expect(isFunction(NaN)).to.be.false;\n        });\n    });\n\n    describe('joinPath', () => {\n        it('should join \"foo\"', () => {\n            expect(joinPath(separator, 'foo')).to.equal('foo');\n        });\n\n        it('should join \"/, foo\"', () => {\n            expect(joinPath(separator, '/', 'foo')).to.equal('foo');\n        });\n\n        it('should join \"/, /, foo\"', () => {\n            expect(joinPath(separator, '/', '/', 'foo')).to.equal('foo');\n        });\n\n        it('should join \"foo, bar\"', () => {\n            expect(joinPath(separator, 'foo', 'bar')).to.equal('foo/bar');\n        });\n\n        it('should join \"/, foo, bar\"', () => {\n            expect(joinPath(separator, '/', 'foo', 'bar')).to.equal('foo/bar');\n        });\n\n        it('should join \"/, foo, bar, \"', () => {\n            expect(joinPath(separator, '/', 'foo', 'bar', ' ')).to.equal('foo/bar');\n        });\n\n        it('should join \"/, foo, bar, /\"', () => {\n            expect(joinPath(separator, '/', 'foo', 'bar', '/')).to.equal('foo/bar');\n        });\n\n        it('should join \"/, undefined, null, 1, [], {}\"', () => {\n            expect(joinPath(separator, '/', undefined, null, 1, [], {})).to.equal('');\n        });\n    });\n\n    describe('splitPath', () => {\n        it('should split \"/\"', () => {\n            expect(splitPath(separator, '/')).to.eql({ namespace: '', name: '' });\n        });\n\n        it('should split \"foo\"', () => {\n            expect(splitPath(separator, 'foo')).to.eql({ namespace: '', name: 'foo' });\n        });\n\n        it('should split \"/foo\"', () => {\n            expect(splitPath(separator, '/foo')).to.eql({ namespace: '', name: 'foo' });\n        });\n\n        it('should split \"/foo/bar\"', () => {\n            expect(splitPath(separator, '/foo/bar')).to.eql({ namespace: 'foo', name: 'bar' });\n        });\n\n        it('should split \"/foo/bar/\"', () => {\n            expect(splitPath(separator, '/foo/bar/')).to.eql({ namespace: 'foo/bar', name: '' });\n        });\n    });\n\n    describe('forEach', () => {\n        it('should iterate over an object', () => {\n            const key = 'foo';\n            const value = 'bar';\n\n            const obj = {\n                [key]: value\n            };\n\n            forEach(obj, (v, k) => {\n                expect(v).to.eql(value);\n                expect(k).to.eql(key);\n            });\n\n            const spy = sinon.spy();\n\n            const obj2 = {\n                'foo': 1,\n                'bar': 2,\n                'quz': 3\n            };\n\n            forEach(obj2, spy);\n\n            expect(spy.callCount).to.equal(3);\n        });\n\n        it('should iterate over an array', () => {\n            const value = 'bar';\n\n            const arr = ['bar'];\n\n            forEach(arr, (v, i) => {\n                expect(v).to.eql(value);\n                expect(i).to.eql(0);\n            });\n\n            const spy = sinon.spy();\n\n            const arr2 = [\n                1,\n                2,\n                3\n            ];\n\n            forEach(arr2, spy);\n\n            expect(spy.callCount).to.equal(3);\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
+  },
+  {
+    "__docId__": 266,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe124",
+    "testId": 124,
+    "memberof": "unit/utils.test.js",
+    "testDepth": 0,
+    "longname": "unit/utils.test.js~describe124",
+    "access": null,
+    "description": "Utils",
+    "lineNumber": 12
+  },
+  {
+    "__docId__": 267,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe125",
+    "testId": 125,
+    "memberof": "unit/utils.test.js~describe124",
+    "testDepth": 1,
+    "longname": "unit/utils.test.js~describe124.describe125",
+    "access": null,
+    "description": "isFunction",
+    "lineNumber": 15
+  },
+  {
+    "__docId__": 268,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it126",
+    "testId": 126,
+    "memberof": "unit/utils.test.js~describe124.describe125",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe125.it126",
+    "access": null,
+    "description": "should return true when \"Function\" is passed",
+    "lineNumber": 16
+  },
+  {
+    "__docId__": 269,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it127",
+    "testId": 127,
+    "memberof": "unit/utils.test.js~describe124.describe125",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe125.it127",
+    "access": null,
+    "description": "should return false when \"String\" is passed",
+    "lineNumber": 20
+  },
+  {
+    "__docId__": 270,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it128",
+    "testId": 128,
+    "memberof": "unit/utils.test.js~describe124.describe125",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe125.it128",
+    "access": null,
+    "description": "should return false when \"Number\" is passed",
+    "lineNumber": 24
+  },
+  {
+    "__docId__": 271,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it129",
+    "testId": 129,
+    "memberof": "unit/utils.test.js~describe124.describe125",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe125.it129",
+    "access": null,
+    "description": "should return false when \"Object\" is passed",
+    "lineNumber": 28
+  },
+  {
+    "__docId__": 272,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it130",
+    "testId": 130,
+    "memberof": "unit/utils.test.js~describe124.describe125",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe125.it130",
+    "access": null,
+    "description": "should return false when \"Array\" is passed",
+    "lineNumber": 32
+  },
+  {
+    "__docId__": 273,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it131",
+    "testId": 131,
+    "memberof": "unit/utils.test.js~describe124.describe125",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe125.it131",
+    "access": null,
+    "description": "should return false when \"null\" is passed",
+    "lineNumber": 36
+  },
+  {
+    "__docId__": 274,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it132",
+    "testId": 132,
+    "memberof": "unit/utils.test.js~describe124.describe125",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe125.it132",
+    "access": null,
+    "description": "should return false when \"undefined\" is passed",
+    "lineNumber": 40
+  },
+  {
+    "__docId__": 275,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it133",
+    "testId": 133,
+    "memberof": "unit/utils.test.js~describe124.describe125",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe125.it133",
+    "access": null,
+    "description": "should return false when \"NaN\" is passed",
+    "lineNumber": 44
+  },
+  {
+    "__docId__": 276,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe134",
+    "testId": 134,
+    "memberof": "unit/utils.test.js~describe124",
+    "testDepth": 1,
+    "longname": "unit/utils.test.js~describe124.describe134",
+    "access": null,
+    "description": "joinPath",
+    "lineNumber": 49
+  },
+  {
+    "__docId__": 277,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it135",
+    "testId": 135,
+    "memberof": "unit/utils.test.js~describe124.describe134",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe134.it135",
+    "access": null,
+    "description": "should join \"foo\"",
+    "lineNumber": 50
+  },
+  {
+    "__docId__": 278,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it136",
+    "testId": 136,
+    "memberof": "unit/utils.test.js~describe124.describe134",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe134.it136",
+    "access": null,
+    "description": "should join \"/, foo\"",
+    "lineNumber": 54
+  },
+  {
+    "__docId__": 279,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it137",
+    "testId": 137,
+    "memberof": "unit/utils.test.js~describe124.describe134",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe134.it137",
+    "access": null,
+    "description": "should join \"/, /, foo\"",
+    "lineNumber": 58
+  },
+  {
+    "__docId__": 280,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it138",
+    "testId": 138,
+    "memberof": "unit/utils.test.js~describe124.describe134",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe134.it138",
+    "access": null,
+    "description": "should join \"foo, bar\"",
+    "lineNumber": 62
+  },
+  {
+    "__docId__": 281,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it139",
+    "testId": 139,
+    "memberof": "unit/utils.test.js~describe124.describe134",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe134.it139",
+    "access": null,
+    "description": "should join \"/, foo, bar\"",
+    "lineNumber": 66
+  },
+  {
+    "__docId__": 282,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it140",
+    "testId": 140,
+    "memberof": "unit/utils.test.js~describe124.describe134",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe134.it140",
+    "access": null,
+    "description": "should join \"/, foo, bar, \"",
+    "lineNumber": 70
+  },
+  {
+    "__docId__": 283,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it141",
+    "testId": 141,
+    "memberof": "unit/utils.test.js~describe124.describe134",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe134.it141",
+    "access": null,
+    "description": "should join \"/, foo, bar, /\"",
+    "lineNumber": 74
+  },
+  {
+    "__docId__": 284,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it142",
+    "testId": 142,
+    "memberof": "unit/utils.test.js~describe124.describe134",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe134.it142",
+    "access": null,
+    "description": "should join \"/, undefined, null, 1, [], {}\"",
+    "lineNumber": 78
+  },
+  {
+    "__docId__": 285,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe143",
+    "testId": 143,
+    "memberof": "unit/utils.test.js~describe124",
+    "testDepth": 1,
+    "longname": "unit/utils.test.js~describe124.describe143",
+    "access": null,
+    "description": "splitPath",
+    "lineNumber": 83
+  },
+  {
+    "__docId__": 286,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it144",
+    "testId": 144,
+    "memberof": "unit/utils.test.js~describe124.describe143",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe143.it144",
+    "access": null,
+    "description": "should split \"/\"",
+    "lineNumber": 84
+  },
+  {
+    "__docId__": 287,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it145",
+    "testId": 145,
+    "memberof": "unit/utils.test.js~describe124.describe143",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe143.it145",
+    "access": null,
+    "description": "should split \"foo\"",
+    "lineNumber": 88
+  },
+  {
+    "__docId__": 288,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it146",
+    "testId": 146,
+    "memberof": "unit/utils.test.js~describe124.describe143",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe143.it146",
+    "access": null,
+    "description": "should split \"/foo\"",
+    "lineNumber": 92
+  },
+  {
+    "__docId__": 289,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it147",
+    "testId": 147,
+    "memberof": "unit/utils.test.js~describe124.describe143",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe143.it147",
+    "access": null,
+    "description": "should split \"/foo/bar\"",
+    "lineNumber": 96
+  },
+  {
+    "__docId__": 290,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it148",
+    "testId": 148,
+    "memberof": "unit/utils.test.js~describe124.describe143",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe143.it148",
+    "access": null,
+    "description": "should split \"/foo/bar/\"",
+    "lineNumber": 100
+  },
+  {
+    "__docId__": 291,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe149",
+    "testId": 149,
+    "memberof": "unit/utils.test.js~describe124",
+    "testDepth": 1,
+    "longname": "unit/utils.test.js~describe124.describe149",
+    "access": null,
+    "description": "forEach",
+    "lineNumber": 105
+  },
+  {
+    "__docId__": 292,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it150",
+    "testId": 150,
+    "memberof": "unit/utils.test.js~describe124.describe149",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe149.it150",
+    "access": null,
+    "description": "should iterate over an object",
+    "lineNumber": 106
+  },
+  {
+    "__docId__": 293,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it151",
+    "testId": 151,
+    "memberof": "unit/utils.test.js~describe124.describe149",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe124.describe149.it151",
+    "access": null,
+    "description": "should iterate over an array",
+    "lineNumber": 132
+  }
+]

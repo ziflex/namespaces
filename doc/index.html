@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/ziflex/namespaces.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/container.js~Container.html">Container</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/module.js~Module.html">Module</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/namespace.js~Namespace.html">Namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFunction">isFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNullOrUndefined">isNullOrUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObject">isObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isValidName">isValidName</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-joinPath">joinPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="namespaces">namespaces</h1>
+<p>Angular-flavored dependency injection container.</p>
+<p><a href="https://www.npmjs.com/package/namespaces-js"><img src="https://badge.fury.io/js/namespaces-js.svg" alt="npm version"></a>
+<a href="http://badge.fury.io/bo/namespaces-js"><img src="https://badge.fury.io/bo/namespaces-js.svg" alt="Bower version"></a>
+<a href="http://travis-ci.org/ziflex/namespaces"><img src="https://secure.travis-ci.org/ziflex/namespaces.svg?branch=master" alt="Build Status"></a></p>
+<h2 id="install">Install</h2>
+<p>via npm</p>
+<pre><code class="lang-sh"><code class="source-code prettyprint">
+    $ npm install --save namespaces-js</code>
+</code></pre>
+<p>via bower</p>
+<pre><code class="lang-sh"><code class="source-code prettyprint">
+    $ bower install --save namespaces-js</code>
+</code></pre>
+<h2 id="usage">Usage</h2>
+<h3 id="basic">Basic</h3>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+    var Container = require(&apos;namespaces-js&apos;);
+
+    container.value(&apos;settings&apos;, settings);
+    container.namespace(&apos;services/infrastructure&apos;).service(&apos;http&apos;, require(&apos;http&apos;));
+    container.namespace(&apos;services/external/api&apos;).factory(&apos;users&apos;, [&apos;settings&apos;, &apos;services/infrastructure/http&apos;], (settings, http) =&gt; {
+        return new UsersApi(settings.api, http);
+    });
+    container.namespace(&apos;services/business&apos;).service(&apos;users&apos;, [&apos;services/external/api/users&apos;], UsersService);
+
+
+    var usersServiceInstance = container.resolve(&apos;services/business/users&apos;);</code>
+</code></pre>
+<h3 id="namespaces">Namespaces</h3>
+<h4 id="basic">Basic</h4>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+    var Container = require(&apos;namespaces-js&apos;);
+
+    var container = new Container();    
+    container.namespace(&apos;models&apos;).value(&apos;user&apos;, require(&apos;./models/user&apos;);
+    container.namespace(&apos;services&apos;).service(&apos;user&apos;, require(&apos;./services/user&apos;);
+    container.namespace(&apos;core/infrastructure&apos;).service(&apos;logger&apos;, require(&apos;logger&apos;));
+
+    ...
+
+    var userService = container.resolve(&apos;services/user&apos;);
+    var userInstance = container.resolve(&apos;models/user&apos;);
+    var logger = container.resolve(&apos;core/infrastructure/logger&apos;);</code>
+</code></pre>
+<h4 id="modular">Modular</h4>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+    var Container = require(&apos;namespaces-js&apos;);
+
+    var container = new Container();
+    var ui = container.namespace(&apos;ui&apos;);
+    var actions = ui.namespace(&apos;actions&apos;);
+    actions.service(&apos;user&apos;, require(&apos;./ui/flux/actions/user&apos;));
+    actions.service(&apos;users&apos;, require(&apos;./ui/flux/actions/users&apos;));
+
+    var stores = ui.namespace(&apos;stores&apos;);
+    stores.service(&apos;users&apos;, [&apos;ui/actions/users&apos;, &apos;ui/actions/user&apos;], require(&apos;./ui/flux/stores/users&apos;));</code>
+</code></pre>
+<h3 id="custom-resolving">Custom resolving</h3>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+    var Container = require(&apos;namespaces-js&apos;);
+
+    var container = new Container();
+    var services = container.namespace(&apos;services&apos;);
+    services.service(&apos;users&apos;, UsersService);
+    services.service(&apos;accounts&apos;, AccountsService);
+
+    var actions = container.namespace(&apos;ui/actions&apos;);
+    actions.service(&apos;user&apos;, [&apos;services/users&apos;, &apos;services/accounts&apos;], UserActions);
+    actions.service(&apos;users&apos;, [&apos;services/users&apos;], UsersActions);
+
+    var allActions = container.resolveAll(&apos;ui/actions&apos;);</code>
+</code></pre>
+<h3 id="namespace-helper">Namespace Helper</h3>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+    var namespaces = Container.map({
+        settings: &apos;settings&apos;,
+        services: [&apos;core&apos;, &apos;domain&apos;]
+    });
+
+    var container = new Container();
+
+    container.namespace(namespaces.settings()).const(&apos;settings&apos;, { apiEndpoint: &apos;/&apos; });
+    container.namespace(namespaces.services.core()).service(&apos;database&apos;, require(&apos;./db-manager&apos;));
+    container.namespace(namespaces.services.domain()).service(&apos;account&apos;, require(&apos;./acount-service&apos;));</code>
+</code></pre>
+<h2 id="api">API</h2>
+<h3 id="new-container-namespaceseparator-string-">new Container([namespaceSeparator: string = &apos;/&apos;])</h3>
+<p>Creates new container.
+Arguments: namespaces separator. Optional. Default &apos;/&apos;.</p>
+<h3 id="container-namespace-namespacename-string-namespace">container.namespace([namespaceName: string]): Namespace</h3>
+<p>Returns or creates new namespace.    </p>
+<h3 id="container-resolve-modulepath-string-any">container.resolve(modulePath: string): any</h3>
+<p>Returns registered module&apos;s value.   </p>
+<h3 id="container-resolveall-namespace-string-map-string-any-">container.resolveAll(namespace: string): Map&lt;string, any&gt;</h3>
+<p>Returns all values from registered modules in particular namespace.      </p>
+<h3 id="namespace-const-name-string-value-number-string-array-object-function-void">Namespace.const(name: string, value: number | string | array | object | function): void</h3>
+<p>Registers a value, such as a string, a number, an array, an object or a function.    </p>
+<h3 id="namespace-value-name-string-dependencies-string-value-number-string-array-object-function-void">Namespace.value(name: string, [dependencies: string[]], value: number | string | array | object | function): void</h3>
+<p>Registers a value, such as a string, a number, an array, an object or a constructor.<br>Note: If passed value is function type, it will be treated as constructor and every time when it&apos;s injected, new instance will be created.</p>
+<h3 id="namespace-service-name-string-dependencies-string-value-function-void">Namespace.service(name: string, [dependencies: string[]], value: function): void</h3>
+<p>Registers a service constructor, which will be invoked with <code>new</code> to create the service instance.<br>Any type which was registered as a service is singleton.</p>
+<h3 id="namespace-factory-name-string-dependencies-string-value-function-void">Namespace.factory(name: string, [dependencies: string[]], value: function): void</h3>
+<p>Register a service factory, which will be called to return the service instance.<br>Any function&apos;s value will be registered as a singleton.</p>
+<h3 id="namespace-getname-string">Namespace.getName(): string</h3>
+<p>Returns name of current namespace.    </p>
+<h3 id="license">License</h3>
+<p>The MIT License (MIT)<br>Copyright (C) 2015 Tim Voronov</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.5)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

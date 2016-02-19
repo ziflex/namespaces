@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">unit/utils.test.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  <a href="test.html" data-ice="testLink">Test</a>
+  <a data-ice="repoURL" href="https://github.com/ziflex/namespaces.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/container.js~Container.html">Container</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/module.js~Module.html">Module</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/namespace.js~Namespace.html">Namespace</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/resolver.js~Resolver.html">Resolver</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/storage.js~Storage.html">Storage</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFunction">isFunction</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNullOrUndefined">isNullOrUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObject">isObject</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isValidName">isValidName</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-joinPath">joinPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">unit/utils.test.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* eslint-disable no-unused-expressions, func-names  */
+
+import { expect } from &apos;chai&apos;;
+import sinon from &apos;sinon&apos;;
+import {
+    isFunction,
+    joinPath,
+    splitPath,
+    forEach
+} from &apos;../../src/utils&apos;;
+
+describe(&apos;Utils&apos;, function() {
+    const separator = &apos;/&apos;;
+
+    describe(&apos;isFunction&apos;, () =&gt; {
+        it(&apos;should return true when &quot;Function&quot; is passed&apos;, () =&gt; {
+            expect(isFunction(function() {})).to.be.true;
+        });
+
+        it(&apos;should return false when &quot;String&quot; is passed&apos;, () =&gt; {
+            expect(isFunction(&apos;&apos;)).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;Number&quot; is passed&apos;, () =&gt; {
+            expect(isFunction(1)).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;Object&quot; is passed&apos;, () =&gt; {
+            expect(isFunction({})).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;Array&quot; is passed&apos;, () =&gt; {
+            expect(isFunction([])).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;null&quot; is passed&apos;, () =&gt; {
+            expect(isFunction(null)).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;undefined&quot; is passed&apos;, () =&gt; {
+            expect(isFunction(undefined)).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;NaN&quot; is passed&apos;, () =&gt; {
+            expect(isFunction(NaN)).to.be.false;
+        });
+    });
+
+    describe(&apos;joinPath&apos;, () =&gt; {
+        it(&apos;should join &quot;foo&quot;&apos;, () =&gt; {
+            expect(joinPath(separator, &apos;foo&apos;)).to.equal(&apos;foo&apos;);
+        });
+
+        it(&apos;should join &quot;/, foo&quot;&apos;, () =&gt; {
+            expect(joinPath(separator, &apos;/&apos;, &apos;foo&apos;)).to.equal(&apos;foo&apos;);
+        });
+
+        it(&apos;should join &quot;/, /, foo&quot;&apos;, () =&gt; {
+            expect(joinPath(separator, &apos;/&apos;, &apos;/&apos;, &apos;foo&apos;)).to.equal(&apos;foo&apos;);
+        });
+
+        it(&apos;should join &quot;foo, bar&quot;&apos;, () =&gt; {
+            expect(joinPath(separator, &apos;foo&apos;, &apos;bar&apos;)).to.equal(&apos;foo/bar&apos;);
+        });
+
+        it(&apos;should join &quot;/, foo, bar&quot;&apos;, () =&gt; {
+            expect(joinPath(separator, &apos;/&apos;, &apos;foo&apos;, &apos;bar&apos;)).to.equal(&apos;foo/bar&apos;);
+        });
+
+        it(&apos;should join &quot;/, foo, bar, &quot;&apos;, () =&gt; {
+            expect(joinPath(separator, &apos;/&apos;, &apos;foo&apos;, &apos;bar&apos;, &apos; &apos;)).to.equal(&apos;foo/bar&apos;);
+        });
+
+        it(&apos;should join &quot;/, foo, bar, /&quot;&apos;, () =&gt; {
+            expect(joinPath(separator, &apos;/&apos;, &apos;foo&apos;, &apos;bar&apos;, &apos;/&apos;)).to.equal(&apos;foo/bar&apos;);
+        });
+
+        it(&apos;should join &quot;/, undefined, null, 1, [], {}&quot;&apos;, () =&gt; {
+            expect(joinPath(separator, &apos;/&apos;, undefined, null, 1, [], {})).to.equal(&apos;&apos;);
+        });
+    });
+
+    describe(&apos;splitPath&apos;, () =&gt; {
+        it(&apos;should split &quot;/&quot;&apos;, () =&gt; {
+            expect(splitPath(separator, &apos;/&apos;)).to.eql({ namespace: &apos;&apos;, name: &apos;&apos; });
+        });
+
+        it(&apos;should split &quot;foo&quot;&apos;, () =&gt; {
+            expect(splitPath(separator, &apos;foo&apos;)).to.eql({ namespace: &apos;&apos;, name: &apos;foo&apos; });
+        });
+
+        it(&apos;should split &quot;/foo&quot;&apos;, () =&gt; {
+            expect(splitPath(separator, &apos;/foo&apos;)).to.eql({ namespace: &apos;&apos;, name: &apos;foo&apos; });
+        });
+
+        it(&apos;should split &quot;/foo/bar&quot;&apos;, () =&gt; {
+            expect(splitPath(separator, &apos;/foo/bar&apos;)).to.eql({ namespace: &apos;foo&apos;, name: &apos;bar&apos; });
+        });
+
+        it(&apos;should split &quot;/foo/bar/&quot;&apos;, () =&gt; {
+            expect(splitPath(separator, &apos;/foo/bar/&apos;)).to.eql({ namespace: &apos;foo/bar&apos;, name: &apos;&apos; });
+        });
+    });
+
+    describe(&apos;forEach&apos;, () =&gt; {
+        it(&apos;should iterate over an object&apos;, () =&gt; {
+            const key = &apos;foo&apos;;
+            const value = &apos;bar&apos;;
+
+            const obj = {
+                [key]: value
+            };
+
+            forEach(obj, (v, k) =&gt; {
+                expect(v).to.eql(value);
+                expect(k).to.eql(key);
+            });
+
+            const spy = sinon.spy();
+
+            const obj2 = {
+                &apos;foo&apos;: 1,
+                &apos;bar&apos;: 2,
+                &apos;quz&apos;: 3
+            };
+
+            forEach(obj2, spy);
+
+            expect(spy.callCount).to.equal(3);
+        });
+
+        it(&apos;should iterate over an array&apos;, () =&gt; {
+            const value = &apos;bar&apos;;
+
+            const arr = [&apos;bar&apos;];
+
+            forEach(arr, (v, i) =&gt; {
+                expect(v).to.eql(value);
+                expect(i).to.eql(0);
+            });
+
+            const spy = sinon.spy();
+
+            const arr2 = [
+                1,
+                2,
+                3
+            ];
+
+            forEach(arr2, spy);
+
+            expect(spy.callCount).to.equal(3);
+        });
+    });
+});
+
+/* eslint-enable no-unused-expressions, func-names  */
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.5)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

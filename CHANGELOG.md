@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0
+
+### Added
+* ```const``` method for namespace. Registers values which are resolved as they are.
+* ```getName``` for namespace
+* utility function ```map```
+
+### Removed
+* ```register```
+
 ## 0.3.0
 
 New shiny API!

@@ -1,19 +1,11 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Namespaces = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _namespace = require('./namespace');
 
@@ -27,13 +19,21 @@ var _resolver = require('./resolver');
 
 var _resolver2 = _interopRequireDefault(_resolver);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 /**
  * Creates a new Container.
  * @class
  * @classdesc Represents a container for registered modules.
  */
 
-var Container = (function (_Namespace) {
+var Container = function (_Namespace) {
   _inherits(Container, _Namespace);
 
   /** @constructs
@@ -45,29 +45,20 @@ var Container = (function (_Namespace) {
 
     _classCallCheck(this, Container);
 
-    _get(Object.getPrototypeOf(Container.prototype), 'constructor', this).call(this, separator, '', new _storage2['default'](separator));
-    this._resolver = new _resolver2['default'](this._storage);
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Container).call(this, separator, '', new _storage2.default(separator)));
+
+    _this._resolver = new _resolver2.default(_this._storage);
+    return _this;
   }
 
   /**
-   * Returns a module namespace.
-   * @param {string} namespace - Module namespace. Optional.
-   * @returns {Namespace} Module namespace.
+   * Resolve a module.
+   * @param {string} path - Module namespace.
+   * @returns {Module} new Module.
    */
 
-  _createClass(Container, [{
-    key: 'register',
-    value: function register(namespace) {
-      console.warn('Method "register" is deprecated. Use container itself or "namespace" method instead.');
-      return new _namespace2['default'](this._separator, namespace || this._name, this._storage);
-    }
 
-    /**
-     * Resolve a module.
-     * @param {string} path - Module namespace.
-     * @returns {Module} new Module.
-     */
-  }, {
+  _createClass(Container, [{
     key: 'resolve',
     value: function resolve(path) {
       return this._resolver.resolve(path);
@@ -78,6 +69,7 @@ var Container = (function (_Namespace) {
      * @param {string} namespace - Target namespace.
      * @returns {Map<string, any>} Map of module values, where key is module name.
      */
+
   }, {
     key: 'resolveAll',
     value: function resolveAll(namespace) {
@@ -86,39 +78,79 @@ var Container = (function (_Namespace) {
   }]);
 
   return Container;
-})(_namespace2['default']);
+}(_namespace2.default);
 
-exports['default'] = Container;
-module.exports = exports['default'];
+exports.default = Container;
 
-},{"./namespace":4,"./resolver":5,"./storage":6}],2:[function(require,module,exports){
+},{"./namespace":5,"./resolver":6,"./storage":7}],2:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+exports.default = undefined;
 
 var _container = require('./container');
 
 var _container2 = _interopRequireDefault(_container);
 
-exports['default'] = _container2['default'];
-module.exports = exports['default'];
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _container2.default;
 
 },{"./container":1}],3:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = createPathMap;
+
+var _utils = require('./utils');
+
+function create(separator, parentPath, current) {
+    return function path(name) {
+        return (0, _utils.joinPath)(separator, parentPath, current, name);
+    };
+}
+
+function transform(separator, parent, current) {
+    (0, _utils.forEach)(current, function (val, key) {
+        if ((0, _utils.isString)(val)) {
+            parent[key] = create(separator, parent(), val);
+        } else if ((0, _utils.isArray)(val)) {
+            parent[key] = create(separator, parent(), key);
+
+            (0, _utils.forEach)(val, function (i) {
+                parent[key][i] = create(separator, parent[key](), i);
+            });
+        } else if ((0, _utils.isObject)(val)) {
+            parent[key] = create(separator, parent(), key);
+            transform(separator, parent[key], val);
+        }
+    });
+
+    return parent;
+}
+
+function createPathMap(target) {
+    var separator = arguments.length <= 1 || arguments[1] === undefined ? '/' : arguments[1];
+
+    return transform(separator, create(separator), target);
+}
+
+},{"./utils":8}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _utils = require('./utils');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * Creates a new Module.
@@ -126,7 +158,7 @@ var _utils = require('./utils');
  * @classdesc Represents a module.
  */
 
-var Module = (function () {
+var Module = function () {
     function Module(namespace, name, dependencies, initialize) {
         _classCallCheck(this, Module);
 
@@ -184,31 +216,34 @@ var Module = (function () {
     }]);
 
     return Module;
-})();
+}();
 
-exports['default'] = Module;
-module.exports = exports['default'];
+exports.default = Module;
 
-},{"./utils":7}],4:[function(require,module,exports){
+},{"./utils":8}],5:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _utils = require('./utils');
 
-var _module2 = require('./module');
+var _mapPath = require('./map-path');
 
-var _module3 = _interopRequireDefault(_module2);
+var _mapPath2 = _interopRequireDefault(_mapPath);
+
+var _module = require('./module');
+
+var _module2 = _interopRequireDefault(_module);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * Creates a new Namespace.
@@ -216,16 +251,18 @@ var _module3 = _interopRequireDefault(_module2);
  * @classdesc Represents a module namespace.
  */
 
-var Namespace = (function () {
+var Namespace = function () {
+
     /** @constructor
      * @param {string} separator - Namespace separator.
      * @param {string} name - Namespace name.
      * @param {Storage} storage - Global modules storage.
      */
 
-    function Namespace(separator, name, storage) {
-        if (separator === undefined) separator = '/';
-        if (name === undefined) name = '';
+    function Namespace() {
+        var separator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
+        var name = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
+        var storage = arguments[2];
 
         _classCallCheck(this, Namespace);
 
@@ -235,15 +272,51 @@ var Namespace = (function () {
     }
 
     /**
-     * Returns a module namespace.
-     * @param {string} name - Module namespace. Optional.
-     * @returns {Namespace} Module namespace.
+     * Returns a namespace name.
+     * @returns {string} Namespace name.
      */
 
+
+    /**
+     * Converts object/array to a function chain that's help to use namespaces.
+     */
+
+
     _createClass(Namespace, [{
+        key: 'getName',
+        value: function getName() {
+            return this._name;
+        }
+
+        /**
+         * Returns a module namespace.
+         * @param {string} name - Module namespace. Optional.
+         * @returns {Namespace} Module namespace.
+         */
+
+    }, {
         key: 'namespace',
         value: function namespace(name) {
             return new Namespace(this._separator, (0, _utils.joinPath)(this._separator, this._name, name), this._storage);
+        }
+
+        /**
+         * Register a value, such as a string, a number, an array, an object or a function.
+         * @param {string} name - Module name.
+         * @param {(string|number|object|array|function)} definition - Module value.
+         * @returns {function} Value.
+         */
+
+    }, {
+        key: 'const',
+        value: function _const(name, definition) {
+            var args = (0, _utils.parseArgs)(name, definition);
+
+            this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize() {
+                return function factory() {
+                    return args.definition;
+                };
+            }));
         }
 
         /**
@@ -252,15 +325,16 @@ var Namespace = (function () {
          * and every time when it's injected, new instance will be created.
          * @param {string} name - Module name.
          * @param {array} dependencies - Module dependencies. Optional.
-         * @param {string | number | object | array | function} definition - Module value.
+         * @param {(string|number|object|array|function)} definition - Module value.
          * @returns {function} Value factory.
          */
+
     }, {
         key: 'value',
         value: function value(name, dependencies, definition) {
             var args = (0, _utils.parseArgs)(name, dependencies, definition);
 
-            this._storage.addItem(new _module3['default'](this._name, args.name, args.dependencies, function initialize(resolved) {
+            this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
                 // instances, simple types
                 if (!(0, _utils.isFunction)(args.definition)) {
                     return args.definition;
@@ -280,6 +354,7 @@ var Namespace = (function () {
          * @param {function} definition - Module constructor that will be instantiated.
          * @returns {function} Value factory.
          */
+
     }, {
         key: 'service',
         value: function service(name, dependencies, definition) {
@@ -289,7 +364,7 @@ var Namespace = (function () {
                 throw new Error('Service supports only constructors.');
             }
 
-            this._storage.addItem(new _module3['default'](this._name, args.name, args.dependencies, function initialize(resolved) {
+            this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
                 return (0, _utils.create)(args.definition, resolved);
             }));
         }
@@ -302,6 +377,7 @@ var Namespace = (function () {
          * @param {function} definition - Module factory.
          * @returns {function} Value factory.
          */
+
     }, {
         key: 'factory',
         value: function factory(name, dependencies, definition) {
@@ -311,30 +387,30 @@ var Namespace = (function () {
                 throw new Error('Factory supports only functions.');
             }
 
-            this._storage.addItem(new _module3['default'](this._name, args.name, args.dependencies, function initialize(resolved) {
+            this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
                 return args.definition.apply(args, _toConsumableArray(resolved));
             }));
         }
     }]);
 
     return Namespace;
-})();
+}();
 
-exports['default'] = Namespace;
-module.exports = exports['default'];
+Namespace.map = _mapPath2.default;
+exports.default = Namespace;
 
-},{"./module":3,"./utils":7}],5:[function(require,module,exports){
+},{"./map-path":3,"./module":4,"./utils":8}],6:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _utils = require('./utils');
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * Creates a new Resolver.
@@ -342,7 +418,7 @@ var _utils = require('./utils');
  * @classdesc Represents a dependency resolver for particular module.
  */
 
-var Resolver = (function () {
+var Resolver = function () {
     /**
      * @constructor
      * @param storage - Module's storage.
@@ -358,6 +434,7 @@ var Resolver = (function () {
      * Resolves particular module.
      * @returns {any} Module's value.
      */
+
 
     _createClass(Resolver, [{
         key: 'resolve',
@@ -389,6 +466,7 @@ var Resolver = (function () {
          * @param {string} namespace - Target namespace.
          * @returns {Map<string, any>} Map of module values, where key is module name.
          */
+
     }, {
         key: 'resolveAll',
         value: function resolveAll(namespace) {
@@ -405,29 +483,28 @@ var Resolver = (function () {
     }]);
 
     return Resolver;
-})();
+}();
 
-exports['default'] = Resolver;
-module.exports = exports['default'];
+exports.default = Resolver;
 
-},{"./utils":7}],6:[function(require,module,exports){
+},{"./utils":8}],7:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+var _module = require('./module');
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-var _module2 = require('./module');
-
-var _module3 = _interopRequireDefault(_module2);
+var _module2 = _interopRequireDefault(_module);
 
 var _utils = require('./utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MISSED_MODULE = 'Missed module!';
 var MISSED_MODULE_NAME = 'Missed module name!';
@@ -446,7 +523,7 @@ var MODULE_NOT_FOUND = 'Module with path was not found';
  * @classdesc Represents a modules storage.
  */
 
-var Storage = (function () {
+var Storage = function () {
     function Storage() {
         var pathSeparator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
 
@@ -462,6 +539,7 @@ var Storage = (function () {
      * @throws {Error} Throws an error if module with same path already exists.
      */
 
+
     _createClass(Storage, [{
         key: 'addItem',
         value: function addItem(module) {
@@ -469,7 +547,7 @@ var Storage = (function () {
                 throw new Error(MISSED_MODULE);
             }
 
-            if (!(module instanceof _module3['default'])) {
+            if (!(module instanceof _module2.default)) {
                 throw new Error(INVALID_MODULE);
             }
 
@@ -513,6 +591,7 @@ var Storage = (function () {
          * @return {Module} found module.
          * @throws {Error} Throws error in module wasn't found.
          */
+
     }, {
         key: 'getItem',
         value: function getItem(path) {
@@ -552,26 +631,28 @@ var Storage = (function () {
                 throw new Error(NAMESPACE_NOT_FOUND + ': ' + namespace + '!');
             }
 
-            for (var _name in registry) {
-                if (registry.hasOwnProperty(_name) && registry[_name]) {
-                    callback(registry[_name], (0, _utils.joinPath)(this._separator, namespace, _name));
+            for (var name in registry) {
+                if (registry.hasOwnProperty(name) && registry[name]) {
+                    callback(registry[name], (0, _utils.joinPath)(this._separator, namespace, name));
                 }
             }
         }
     }]);
 
     return Storage;
-})();
+}();
 
-exports['default'] = Storage;
-module.exports = exports['default'];
+exports.default = Storage;
 
-},{"./module":3,"./utils":7}],7:[function(require,module,exports){
+},{"./module":4,"./utils":8}],8:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 exports.isUndefined = isUndefined;
 exports.isNull = isNull;
 exports.isNullOrUndefined = isNullOrUndefined;
@@ -584,8 +665,9 @@ exports.parseArgs = parseArgs;
 exports.isValidName = isValidName;
 exports.joinPath = joinPath;
 exports.splitPath = splitPath;
+exports.forEach = forEach;
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var toString = Object.prototype.toString;
 
@@ -602,7 +684,7 @@ function isNullOrUndefined(arg) {
 }
 
 function isObject(value) {
-    return value !== null && typeof value === 'object';
+    return value !== null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object';
 }
 
 function isString(value) {
@@ -626,9 +708,9 @@ function create(constructor, args) {
 }
 
 function parseArgs() {
-    var name = arguments[0];
-    var dependencies = arguments[1];
-    var definition = arguments[2];
+    var name = arguments.length <= 0 ? undefined : arguments[0];
+    var dependencies = arguments.length <= 1 ? undefined : arguments[1];
+    var definition = arguments.length <= 2 ? undefined : arguments[2];
 
     if (isUndefined(definition)) {
         definition = dependencies;
@@ -638,8 +720,9 @@ function parseArgs() {
     return { name: name, dependencies: dependencies, definition: definition };
 }
 
-function isValidName(separator, name) {
-    if (separator === undefined) separator = '/';
+function isValidName() {
+    var separator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
+    var name = arguments[1];
 
     return name.indexOf(separator) === -1;
 }
@@ -648,15 +731,10 @@ function joinPath() {
     var separator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
 
     var paths = [];
-
-    for (var _len = arguments.length, parts = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        parts[_key - 1] = arguments[_key];
-    }
-
-    var len = parts.length;
+    var len = arguments.length - 1;
 
     for (var i = 0; i <= len; i += 1) {
-        var part = parts[i];
+        var part = arguments.length <= i + 1 ? undefined : arguments[i + 1];
 
         if (isString(part)) {
             part = part.trim();
@@ -670,8 +748,9 @@ function joinPath() {
     return '' + paths.join(separator);
 }
 
-function splitPath(separator, path) {
-    if (separator === undefined) separator = '/';
+function splitPath() {
+    var separator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
+    var path = arguments[1];
 
     var result = { namespace: '', name: '' };
 
@@ -702,6 +781,22 @@ function splitPath(separator, path) {
     }
 
     return result;
+}
+
+function forEach(collection, iteratee) {
+    var context = arguments.length <= 2 || arguments[2] === undefined ? this : arguments[2];
+
+    if (isArray(collection)) {
+        for (var i = 0; i < collection.length; i += 1) {
+            iteratee.call(context, collection[i], i);
+        }
+    } else if (isObject(collection)) {
+        for (var prop in collection) {
+            if (collection.hasOwnProperty(prop)) {
+                iteratee.call(context, collection[prop], prop);
+            }
+        }
+    }
 }
 
 },{}]},{},[2])(2)
