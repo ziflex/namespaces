@@ -1094,42 +1094,72 @@ window.esdocSearchIndex = [
   [
     "",
     "test-file/unit/storage.test.js.html#lineNumber147",
-    "Storage .forEachIn",
+    "Storage .contains",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/storage.test.js.html#lineNumber156",
+    "Storage .contains when module is not registered",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/storage.test.js.html#lineNumber157",
+    "Storage .contains when module is not registered should return \"false\"",
     "test"
   ],
   [
     "",
     "test-file/unit/storage.test.js.html#lineNumber148",
-    "Storage .forEachIn invalid parameters",
-    "test"
-  ],
-  [
-    "",
-    "test-file/unit/storage.test.js.html#lineNumber153",
-    "Storage .forEachIn invalid parameters should throw an error when callback not passed",
+    "Storage .contains when module is registered",
     "test"
   ],
   [
     "",
     "test-file/unit/storage.test.js.html#lineNumber149",
+    "Storage .contains when module is registered should return \"true\"",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/storage.test.js.html#lineNumber167",
+    "Storage .forEachIn",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/storage.test.js.html#lineNumber168",
+    "Storage .forEachIn invalid parameters",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/storage.test.js.html#lineNumber173",
+    "Storage .forEachIn invalid parameters should throw an error when callback not passed",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/storage.test.js.html#lineNumber169",
     "Storage .forEachIn invalid parameters should throw an error when namespace not passed",
     "test"
   ],
   [
     "",
-    "test-file/unit/storage.test.js.html#lineNumber161",
+    "test-file/unit/storage.test.js.html#lineNumber181",
     "Storage .forEachIn valid parameters",
     "test"
   ],
   [
     "",
-    "test-file/unit/storage.test.js.html#lineNumber162",
+    "test-file/unit/storage.test.js.html#lineNumber182",
     "Storage .forEachIn valid parameters should iterate over modules inside target namespace",
     "test"
   ],
   [
     "",
-    "test-file/unit/storage.test.js.html#lineNumber182",
+    "test-file/unit/storage.test.js.html#lineNumber202",
     "Storage .forEachIn valid parameters should pass module path during iteration",
     "test"
   ],
@@ -1183,7 +1213,7 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/unit/storage.test.js.html#lineNumber208",
+    "test-file/unit/storage.test.js.html#lineNumber228",
     "Storage should support different separators",
     "test"
   ],
@@ -1380,6 +1410,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/container.js~container#contains",
+    "class/src/container.js~Container.html#instance-method-contains",
+    "src/container.js~Container#contains",
+    "method"
+  ],
+  [
     "src/container.js~container#resolve",
     "class/src/container.js~Container.html#instance-method-resolve",
     "src/container.js~Container#resolve",
@@ -1539,6 +1575,12 @@ window.esdocSearchIndex = [
     "src/storage.js~storage#constructor",
     "class/src/storage.js~Storage.html#instance-constructor-constructor",
     "src/storage.js~Storage#constructor",
+    "method"
+  ],
+  [
+    "src/storage.js~storage#contains",
+    "class/src/storage.js~Storage.html#instance-method-contains",
+    "src/storage.js~Storage#contains",
     "method"
   ],
   [

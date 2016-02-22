@@ -105,6 +105,32 @@ export default class Storage {
         return module;
     }
 
+    /**
+     * Determines whether a module with passed path exists.
+     * @param {string} path - Module's path.
+     * @return {boolean} Value that determines whether a module with passed path exists.
+     */
+    contains(path) {
+        if (!isString(path)) {
+            throw new Error(INVALID_MODULE_PATH);
+        }
+
+        const parts = splitPath(this._separator, path);
+        const namespace = this._namespaces[parts.namespace];
+
+        if (!namespace) {
+            return false;
+        }
+
+        const module = namespace[parts.name];
+
+        if (!module) {
+            return false;
+        }
+
+        return true;
+    }
+
     forEachIn(namespace, callback) {
         if (isNullOrUndefined(namespace)) {
             throw new Error(MISSED_NAMESPACE);

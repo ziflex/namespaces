@@ -151,16 +151,18 @@ Arguments: namespaces separator. Optional. Default &apos;/&apos;.</p>
 <p>Returns registered module&apos;s value.   </p>
 <h3 id="container-resolveall-namespace-string-map-string-any-">container.resolveAll(namespace: string): Map&lt;string, any&gt;</h3>
 <p>Returns all values from registered modules in particular namespace.      </p>
-<h3 id="namespace-const-name-string-value-number-string-array-object-function-void">Namespace.const(name: string, value: number | string | array | object | function): void</h3>
+<h3 id="namespace-const-name-string-value-number-string-array-object-function-void">namespace.const(name: string, value: number | string | array | object | function): void</h3>
 <p>Registers a value, such as a string, a number, an array, an object or a function.    </p>
-<h3 id="namespace-value-name-string-dependencies-string-value-number-string-array-object-function-void">Namespace.value(name: string, [dependencies: string[]], value: number | string | array | object | function): void</h3>
+<h3 id="namespace-value-name-string-dependencies-string-value-number-string-array-object-function-void">namespace.value(name: string, [dependencies: string[]], value: number | string | array | object | function): void</h3>
 <p>Registers a value, such as a string, a number, an array, an object or a constructor.<br>Note: If passed value is function type, it will be treated as constructor and every time when it&apos;s injected, new instance will be created.</p>
-<h3 id="namespace-service-name-string-dependencies-string-value-function-void">Namespace.service(name: string, [dependencies: string[]], value: function): void</h3>
+<h3 id="namespace-service-name-string-dependencies-string-value-function-void">namespace.service(name: string, [dependencies: string[]], value: function): void</h3>
 <p>Registers a service constructor, which will be invoked with <code>new</code> to create the service instance.<br>Any type which was registered as a service is singleton.</p>
-<h3 id="namespace-factory-name-string-dependencies-string-value-function-void">Namespace.factory(name: string, [dependencies: string[]], value: function): void</h3>
+<h3 id="namespace-factory-name-string-dependencies-string-value-function-void">namespace.factory(name: string, [dependencies: string[]], value: function): void</h3>
 <p>Register a service factory, which will be called to return the service instance.<br>Any function&apos;s value will be registered as a singleton.</p>
-<h3 id="namespace-getname-string">Namespace.getName(): string</h3>
-<p>Returns name of current namespace.    </p>
+<h3 id="namespace-getname-string">namespace.getName(): string</h3>
+<p>Returns name of current namespace.   </p>
+<h3 id="container-map">Container.map</h3>
+<p>Helper function that converts object / array to chain of functions.      </p>
 <h3 id="license">License</h3>
 <p>The MIT License (MIT)<br>Copyright (C) 2015 Tim Voronov</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy

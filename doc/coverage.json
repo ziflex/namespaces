@@ -1,24 +1,18 @@
 {
-  "coverage": "46.51%",
-  "expectCount": 43,
-  "actualCount": 20,
+  "coverage": "62.22%",
+  "expectCount": 45,
+  "actualCount": 28,
   "files": {
     "src/container.js": {
-      "expectCount": 4,
-      "actualCount": 4,
+      "expectCount": 5,
+      "actualCount": 5,
       "undocumentLines": []
     },
     "src/module.js": {
       "expectCount": 8,
-      "actualCount": 1,
+      "actualCount": 7,
       "undocumentLines": [
-        9,
-        26,
-        22,
-        18,
-        30,
-        46,
-        42
+        9
       ]
     },
     "src/namespace.js": {
@@ -32,11 +26,11 @@
       "undocumentLines": []
     },
     "src/storage.js": {
-      "expectCount": 5,
-      "actualCount": 3,
+      "expectCount": 6,
+      "actualCount": 4,
       "undocumentLines": [
         28,
-        108
+        134
       ]
     },
     "src/utils.js": {

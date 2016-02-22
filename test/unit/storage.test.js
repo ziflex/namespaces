@@ -144,6 +144,26 @@ describe('Storage', function() {
         });
     });
 
+    describe('.contains', () => {
+        context('when module is registered', () => {
+            it('should return "true"', () => {
+                storage.addItem(new Module('foo', 'bar', [], function init() {}));
+
+                expect(storage.contains('foo/bar')).to.be.true;
+            });
+        });
+
+        context('when module is not registered', () => {
+            it('should return "false"', () => {
+                expect(storage.contains('foo/bar')).to.be.false;
+
+                storage.addItem(new Module('foo', 'bar', [], function init() {}));
+
+                expect(storage.contains('qaz/bar')).to.be.false;
+            });
+        });
+    });
+
     describe('.forEachIn', () => {
         context('invalid parameters', () => {
             it('should throw an error when namespace not passed', () => {

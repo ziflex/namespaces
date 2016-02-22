@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.2
+
+### Added
+* ```contains``` method that determines by passed path whether there is something registered.
+
+## 0.4.1
+
+### Fixed
+* Location of namespace helper
+
 ## 0.4.0
 
 ### Added

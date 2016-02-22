@@ -56,9 +56,9 @@ var Container = function (_Namespace) {
   }
 
   /**
-   * Resolve a module.
-   * @param {string} path - Module namespace.
-   * @returns {Module} new Module.
+   * Determines whether a module with passed path exists.
+   * @param {string} path - Module's path.
+   * @return {boolean} Value that determines whether a module with passed path exists.
    */
 
   /**
@@ -67,6 +67,18 @@ var Container = function (_Namespace) {
 
 
   _createClass(Container, [{
+    key: 'contains',
+    value: function contains(path) {
+      return this._storage.contains(path);
+    }
+
+    /**
+     * Resolve a module.
+     * @param {string} path - Module namespace.
+     * @returns {Module} new Module.
+     */
+
+  }, {
     key: 'resolve',
     value: function resolve(path) {
       return this._resolver.resolve(path);
@@ -179,21 +191,46 @@ var Module = function () {
         this._value = null;
     }
 
+    /**
+     * Returns module namespace.
+     * @returns {string} Module namespace.
+     */
+
+
     _createClass(Module, [{
         key: 'getNamespace',
         value: function getNamespace() {
             return this._namespace;
         }
+
+        /**
+         * Returns module name.
+         * @returns {string} Module name.
+         */
+
     }, {
         key: 'getName',
         value: function getName() {
             return this._name;
         }
+
+        /**
+         * Returns a list of module dependencies.
+         * @returns {(Array<string>|undefined)} List of module dependencies.
+         */
+
     }, {
         key: 'getDependencies',
         value: function getDependencies() {
             return this._dependencies;
         }
+
+        /**
+         * Returns initialized module value.
+         * @returns {any} Modules value.
+         * @throws {Error} Throws error if modules is not initialized.
+         */
+
     }, {
         key: 'getValue',
         value: function getValue() {
@@ -207,11 +244,23 @@ var Module = function () {
 
             return this._value;
         }
+
+        /**
+         * Returns value that determines whether module is initialized.
+         * @returns {boolean} Value that determines whether module is initialized.
+         */
+
     }, {
         key: 'isInitialized',
         value: function isInitialized() {
             return this._isInitialized;
         }
+
+        /**
+         * Initializes module.
+         * @throws {Error} Throws error if modules is already initialized.
+         */
+
     }, {
         key: 'initialize',
         value: function initialize(dependencies) {
@@ -612,6 +661,35 @@ var Storage = function () {
             }
 
             return module;
+        }
+
+        /**
+         * Determines whether a module with passed path exists.
+         * @param {string} path - Module's path.
+         * @return {boolean} Value that determines whether a module with passed path exists.
+         */
+
+    }, {
+        key: 'contains',
+        value: function contains(path) {
+            if (!(0, _utils.isString)(path)) {
+                throw new Error(INVALID_MODULE_PATH);
+            }
+
+            var parts = (0, _utils.splitPath)(this._separator, path);
+            var namespace = this._namespaces[parts.namespace];
+
+            if (!namespace) {
+                return false;
+            }
+
+            var module = namespace[parts.name];
+
+            if (!module) {
+                return false;
+            }
+
+            return true;
         }
     }, {
         key: 'forEachIn',

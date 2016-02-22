@@ -81,6 +81,15 @@ export default class Container extends Namespace {
     }
 
     /**
+     * Determines whether a module with passed path exists.
+     * @param {string} path - Module&apos;s path.
+     * @return {boolean} Value that determines whether a module with passed path exists.
+     */
+    contains(path) {
+        return this._storage.contains(path);
+    }
+
+    /**
      * Resolve a module.
      * @param {string} path - Module namespace.
      * @returns {Module} new Module.

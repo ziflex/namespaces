@@ -202,6 +202,26 @@ describe(&apos;Storage&apos;, function() {
         });
     });
 
+    describe(&apos;.contains&apos;, () =&gt; {
+        context(&apos;when module is registered&apos;, () =&gt; {
+            it(&apos;should return &quot;true&quot;&apos;, () =&gt; {
+                storage.addItem(new Module(&apos;foo&apos;, &apos;bar&apos;, [], function init() {}));
+
+                expect(storage.contains(&apos;foo/bar&apos;)).to.be.true;
+            });
+        });
+
+        context(&apos;when module is not registered&apos;, () =&gt; {
+            it(&apos;should return &quot;false&quot;&apos;, () =&gt; {
+                expect(storage.contains(&apos;foo/bar&apos;)).to.be.false;
+
+                storage.addItem(new Module(&apos;foo&apos;, &apos;bar&apos;, [], function init() {}));
+
+                expect(storage.contains(&apos;qaz/bar&apos;)).to.be.false;
+            });
+        });
+    });
+
     describe(&apos;.forEachIn&apos;, () =&gt; {
         context(&apos;invalid parameters&apos;, () =&gt; {
             it(&apos;should throw an error when namespace not passed&apos;, () =&gt; {
