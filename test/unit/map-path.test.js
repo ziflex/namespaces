@@ -14,7 +14,7 @@ describe('map-path', function() {
                 components: [
                     'actions',
                     'dispatcher',
-                    { 'stores': ['user', 'users'] }
+                    { 'stores': ['user', {'users': ['joe'] }] }
                 ],
                 domain: 'domain',
                 core: {
@@ -51,6 +51,14 @@ describe('map-path', function() {
         expect(isFunction(result.services.components.stores), '"result.services.components.stores" must be a function').to.be.true;
         expect(result.services.components.stores(), '"result.services.components.stores()"').to.eql('services/components/stores');
         expect(result.services.components.stores('foo'), '"result.services.components.stores(`foo`)"').to.eql('services/components/stores/foo');
+
+        expect(isFunction(result.services.components.stores.user), '"result.services.components.stores.user" must be a function').to.be.true;
+        expect(result.services.components.stores.user(), '"result.services.components.stores.user()"').to.eql('services/components/stores/user');
+        expect(result.services.components.stores.user('foo'), '"result.services.components.stores.user(`foo`)"').to.eql('services/components/stores/user/foo');
+
+        expect(isFunction(result.services.components.stores.users.joe), '"result.services.components.stores.users.joe" must be a function').to.be.true;
+        expect(result.services.components.stores.users.joe(), '"result.services.components.stores.users.joe()"').to.eql('services/components/stores/users/joe');
+        expect(result.services.components.stores.users.joe('foo'), '"result.services.components.stores.users.joe(`foo`)"').to.eql('services/components/stores/users/joe/foo');
 
         expect(isFunction(result.services.domain), '"result.services.domain" must be a function').to.be.true;
         expect(result.services.domain(), '"result.services.domain()"').to.eql('services/domain');
