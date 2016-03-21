@@ -143,7 +143,13 @@ function transform(separator, parent, current) {
             parent[key] = create(separator, parent(), key);
 
             (0, _utils.forEach)(val, function (i) {
-                parent[key][i] = create(separator, parent[key](), i);
+                var value = null;
+                if ((0, _utils.isString)(i)) {
+                    value = create(separator, parent[key](), i);
+                } else if ((0, _utils.isObject)(i)) {
+                    value = transform(separator, parent[key], i);
+                }
+                parent[key][i] = value;
             });
         } else if ((0, _utils.isObject)(val)) {
             parent[key] = create(separator, parent(), key);

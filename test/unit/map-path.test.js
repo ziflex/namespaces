@@ -13,7 +13,8 @@ describe('map-path', function() {
             services: {
                 components: [
                     'actions',
-                    'dispatcher'
+                    'dispatcher',
+                    { 'stores': ['user', 'users'] }
                 ],
                 domain: 'domain',
                 core: {
@@ -46,6 +47,10 @@ describe('map-path', function() {
         expect(isFunction(result.services.components.dispatcher), '"result.services.components.dispatcher" must be a function').to.be.true;
         expect(result.services.components.dispatcher(), '"result.services.components.dispatcher()"').to.eql('services/components/dispatcher');
         expect(result.services.components.dispatcher('foo'), '"result.services.components.dispatcher(`foo`)"').to.eql('services/components/dispatcher/foo');
+
+        expect(isFunction(result.services.components.stores), '"result.services.components.stores" must be a function').to.be.true;
+        expect(result.services.components.stores(), '"result.services.components.stores()"').to.eql('services/components/stores');
+        expect(result.services.components.stores('foo'), '"result.services.components.stores(`foo`)"').to.eql('services/components/stores/foo');
 
         expect(isFunction(result.services.domain), '"result.services.domain" must be a function').to.be.true;
         expect(result.services.domain(), '"result.services.domain()"').to.eql('services/domain');

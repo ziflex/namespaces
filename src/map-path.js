@@ -20,7 +20,13 @@ function transform(separator, parent, current) {
             parent[key] = create(separator, parent(), key);
 
             forEach(val, i => {
-                parent[key][i] = create(separator, parent[key](), i);
+                let value = null;
+                if (isString(i)) {
+                    value = create(separator, parent[key](), i);
+                } else if (isObject(i)) {
+                    value = transform(separator, parent[key], i);
+                }
+                parent[key][i] = value;
             });
         } else if (isObject(val)) {
             parent[key] = create(separator, parent(), key);

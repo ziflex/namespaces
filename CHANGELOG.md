@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.3
+### Fixed
+* ```map``` couldn't resolve object inside array.
+
 ## 0.4.2
 
 ### Added
