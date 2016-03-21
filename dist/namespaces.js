@@ -131,6 +131,10 @@ var _utils = require('./utils');
 
 function create(separator, parentPath, current) {
     return function path(name) {
+        if ((0, _utils.isArray)(name)) {
+            return (0, _utils.map)(name, path);
+        }
+
         return (0, _utils.joinPath)(separator, parentPath, current, name);
     };
 }
@@ -749,6 +753,7 @@ exports.isValidName = isValidName;
 exports.joinPath = joinPath;
 exports.splitPath = splitPath;
 exports.forEach = forEach;
+exports.map = map;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -880,6 +885,18 @@ function forEach(collection, iteratee) {
             }
         }
     }
+}
+
+function map(collection, iteratee) {
+    var context = arguments.length <= 2 || arguments[2] === undefined ? this : arguments[2];
+
+    var result = [];
+
+    forEach(collection, function (v, k) {
+        result.push(iteratee.call(context, v, k));
+    });
+
+    return result;
 }
 
 },{}]},{},[2])(2)

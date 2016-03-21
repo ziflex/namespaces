@@ -102,6 +102,12 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "namespaces-js/src/utils.js~map",
+    "function/index.html#static-function-map",
+    "<span>map</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
+    "function"
+  ],
+  [
     "namespaces-js/src/utils.js~parseargs",
     "function/index.html#static-function-parseArgs",
     "<span>parseArgs</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
@@ -1387,14 +1393,20 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/unit/map-path.test.js.html#lineNumber9",
+    "test-file/unit/map-path.test.js.html#lineNumber10",
     "map-path",
     "test"
   ],
   [
     "",
-    "test-file/unit/map-path.test.js.html#lineNumber10",
+    "test-file/unit/map-path.test.js.html#lineNumber11",
     "map-path should map paths",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/map-path.test.js.html#lineNumber81",
+    "map-path should resolve array of paths",
     "test"
   ],
   [

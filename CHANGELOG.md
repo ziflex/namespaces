@@ -3,6 +3,31 @@
 ## 0.4.3
 ### Fixed
 * ```map``` couldn't resolve object inside array.
+### Changed
+* ```map``` functions now can resolve multiple paths   
+````js
+    const namespaces = map({
+        core: {
+            infrastructure: [
+                'item1',
+                'item2'
+            ],
+            domain: 'foo'
+        },
+        system: [
+            'component1',
+            'component2'
+        ]
+    });
+
+    const paths = result.system([
+        'component1',
+        'component2'
+    ]);
+
+    // ['system/component1', 'system/component2']
+````
+
 
 ## 0.4.2
 

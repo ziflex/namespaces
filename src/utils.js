@@ -117,3 +117,13 @@ export function forEach(collection, iteratee, context = this) {
         }
     }
 }
+
+export function map(collection, iteratee, context = this) {
+    const result = [];
+
+    forEach(collection, (v, k) => {
+        result.push(iteratee.call(context, v, k));
+    });
+
+    return result;
+}

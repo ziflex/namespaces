@@ -49,6 +49,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isValidName">isValidName</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-joinPath">joinPath</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-map">map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
 </ul>
@@ -61,7 +62,8 @@
 import { expect } from &apos;chai&apos;;
 import map from &apos;../../src/map-path&apos;;
 import {
-    isFunction
+    isFunction,
+    isString
 } from &apos;../../src/utils&apos;;
 
 describe(&apos;map-path&apos;, function() {
@@ -72,7 +74,7 @@ describe(&apos;map-path&apos;, function() {
                 components: [
                     &apos;actions&apos;,
                     &apos;dispatcher&apos;,
-                    { &apos;stores&apos;: [&apos;user&apos;, &apos;users&apos;] }
+                    { &apos;stores&apos;: [&apos;user&apos;, {&apos;users&apos;: [&apos;joe&apos;] }] }
                 ],
                 domain: &apos;domain&apos;,
                 core: {
@@ -110,6 +112,14 @@ describe(&apos;map-path&apos;, function() {
         expect(result.services.components.stores(), &apos;&quot;result.services.components.stores()&quot;&apos;).to.eql(&apos;services/components/stores&apos;);
         expect(result.services.components.stores(&apos;foo&apos;), &apos;&quot;result.services.components.stores(`foo`)&quot;&apos;).to.eql(&apos;services/components/stores/foo&apos;);
 
+        expect(isFunction(result.services.components.stores.user), &apos;&quot;result.services.components.stores.user&quot; must be a function&apos;).to.be.true;
+        expect(result.services.components.stores.user(), &apos;&quot;result.services.components.stores.user()&quot;&apos;).to.eql(&apos;services/components/stores/user&apos;);
+        expect(result.services.components.stores.user(&apos;foo&apos;), &apos;&quot;result.services.components.stores.user(`foo`)&quot;&apos;).to.eql(&apos;services/components/stores/user/foo&apos;);
+
+        expect(isFunction(result.services.components.stores.users.joe), &apos;&quot;result.services.components.stores.users.joe&quot; must be a function&apos;).to.be.true;
+        expect(result.services.components.stores.users.joe(), &apos;&quot;result.services.components.stores.users.joe()&quot;&apos;).to.eql(&apos;services/components/stores/users/joe&apos;);
+        expect(result.services.components.stores.users.joe(&apos;foo&apos;), &apos;&quot;result.services.components.stores.users.joe(`foo`)&quot;&apos;).to.eql(&apos;services/components/stores/users/joe/foo&apos;);
+
         expect(isFunction(result.services.domain), &apos;&quot;result.services.domain&quot; must be a function&apos;).to.be.true;
         expect(result.services.domain(), &apos;&quot;result.services.domain()&quot;&apos;).to.eql(&apos;services/domain&apos;);
         expect(result.services.domain(&apos;foo&apos;), &apos;&quot;result.services.domain(`foo`)&quot;&apos;).to.eql(&apos;services/domain/foo&apos;);
@@ -125,6 +135,33 @@ describe(&apos;map-path&apos;, function() {
         expect(isFunction(result.services.core.database)).to.be.true;
         expect(result.services.core.database()).to.eql(&apos;services/core/database&apos;);
         expect(result.services.core.database(&apos;foo&apos;)).to.eql(&apos;services/core/database/foo&apos;);
+    });
+
+    it(&apos;should resolve array of paths&apos;, () =&gt; {
+        const result = map({
+            core: {
+                infrastructure: [
+                    &apos;item1&apos;,
+                    &apos;item2&apos;
+                ],
+                domain: &apos;foo&apos;
+            },
+            system: [
+                &apos;component1&apos;,
+                &apos;component2&apos;
+            ]
+        });
+
+        const paths = result.system([
+            &apos;component1&apos;,
+            &apos;component2&apos;
+        ]);
+
+        expect(isString(paths[0]), &apos;&quot;paths[0]&quot; must be a string&apos;).to.be.true;
+        expect(paths[0], &apos;&quot;path[0]&quot;&apos;).to.eql(&apos;system/component1&apos;);
+
+        expect(isString(paths[1]), &apos;&quot;paths[1]&quot; must be a string&apos;).to.be.true;
+        expect(paths[1], &apos;&quot;path[1]&quot;&apos;).to.eql(&apos;system/component2&apos;);
     });
 });
 

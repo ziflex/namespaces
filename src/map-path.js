@@ -3,11 +3,16 @@ import {
   isObject,
   isString,
   forEach,
+  map,
   joinPath
 } from './utils';
 
 function create(separator, parentPath, current) {
     return function path(name) {
+        if (isArray(name)) {
+            return map(name, path);
+        }
+
         return joinPath(separator, parentPath, current, name);
     };
 }

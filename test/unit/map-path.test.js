@@ -3,7 +3,8 @@
 import { expect } from 'chai';
 import map from '../../src/map-path';
 import {
-    isFunction
+    isFunction,
+    isString
 } from '../../src/utils';
 
 describe('map-path', function() {
@@ -75,6 +76,33 @@ describe('map-path', function() {
         expect(isFunction(result.services.core.database)).to.be.true;
         expect(result.services.core.database()).to.eql('services/core/database');
         expect(result.services.core.database('foo')).to.eql('services/core/database/foo');
+    });
+
+    it('should resolve array of paths', () => {
+        const result = map({
+            core: {
+                infrastructure: [
+                    'item1',
+                    'item2'
+                ],
+                domain: 'foo'
+            },
+            system: [
+                'component1',
+                'component2'
+            ]
+        });
+
+        const paths = result.system([
+            'component1',
+            'component2'
+        ]);
+
+        expect(isString(paths[0]), '"paths[0]" must be a string').to.be.true;
+        expect(paths[0], '"path[0]"').to.eql('system/component1');
+
+        expect(isString(paths[1]), '"paths[1]" must be a string').to.be.true;
+        expect(paths[1], '"path[1]"').to.eql('system/component2');
     });
 });
 
