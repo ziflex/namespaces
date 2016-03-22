@@ -51,13 +51,22 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-joinPath">joinPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-map">map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-reduce">reduce</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/resolver.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isArray } from &apos;./utils&apos;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
+    isString,
+    isArray,
+    isFunction,
+    reduce,
+    forEach
+} from &apos;./utils&apos;;
+
+const DEFAULT_DEPENDENCIES = [];
 
 /**
  * Creates a new Resolver.
@@ -85,13 +94,42 @@ export default class Resolver {
                 return module.getValue();
             }
 
-            const deps = module.getDependencies();
-            let resolvedDeps = [];
-            if (isArray(deps)) {
-                resolvedDeps = deps.map(resolveModule);
-            }
+            const resolveDependencies = (dependencies) =&gt; {
+                if (isArray(dependencies)) {
+                    return reduce(dependencies, (result, currentPath) =&gt; {
+                        const all = result;
+                        let current = null;
 
-            module.initialize(resolvedDeps);
+                        if (isString(currentPath)) {
+                            current = resolveModule(currentPath);
+                        } else {
+                            current = resolveDependencies(currentPath);
+                        }
+
+                        if (isArray(current)) {
+                            forEach(current, i =&gt; all.push(i));
+                        } else {
+                            all.push(current);
+                        }
+
+                        return all;
+                    }, []);
+                }
+
+                if (isFunction(dependencies)) {
+                    const result = dependencies();
+
+                    if (!isArray(result)) {
+                        return [result];
+                    }
+
+                    return result;
+                }
+
+                return DEFAULT_DEPENDENCIES;
+            };
+
+            module.initialize(resolveDependencies(module.getDependencies()));
             return module.getValue();
         };
 

@@ -51,6 +51,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-joinPath">joinPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-map">map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-reduce">reduce</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
 </ul>
 </div>
@@ -183,6 +184,16 @@ export function map(collection, iteratee, context = this) {
     forEach(collection, (v, k) =&gt; {
         result.push(iteratee.call(context, v, k));
     });
+
+    return result;
+}
+
+export function reduce(collection, iteratee, initialValue, context = this) {
+    let result = initialValue;
+
+    forEach(collection, (v, k) =&gt; {
+        result = iteratee.call(this, result || v, v, k);
+    }, context);
 
     return result;
 }

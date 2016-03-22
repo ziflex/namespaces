@@ -127,3 +127,13 @@ export function map(collection, iteratee, context = this) {
 
     return result;
 }
+
+export function reduce(collection, iteratee, initialValue, context = this) {
+    let result = initialValue;
+
+    forEach(collection, (v, k) => {
+        result = iteratee.call(this, result || v, v, k);
+    }, context);
+
+    return result;
+}

@@ -1,4 +1,12 @@
-import { isArray } from './utils';
+import {
+    isString,
+    isArray,
+    isFunction,
+    reduce,
+    forEach
+} from './utils';
+
+const DEFAULT_DEPENDENCIES = [];
 
 /**
  * Creates a new Resolver.
@@ -26,13 +34,42 @@ export default class Resolver {
                 return module.getValue();
             }
 
-            const deps = module.getDependencies();
-            let resolvedDeps = [];
-            if (isArray(deps)) {
-                resolvedDeps = deps.map(resolveModule);
-            }
+            const resolveDependencies = (dependencies) => {
+                if (isArray(dependencies)) {
+                    return reduce(dependencies, (result, currentPath) => {
+                        const all = result;
+                        let current = null;
 
-            module.initialize(resolvedDeps);
+                        if (isString(currentPath)) {
+                            current = resolveModule(currentPath);
+                        } else {
+                            current = resolveDependencies(currentPath);
+                        }
+
+                        if (isArray(current)) {
+                            forEach(current, i => all.push(i));
+                        } else {
+                            all.push(current);
+                        }
+
+                        return all;
+                    }, []);
+                }
+
+                if (isFunction(dependencies)) {
+                    const result = dependencies();
+
+                    if (!isArray(result)) {
+                        return [result];
+                    }
+
+                    return result;
+                }
+
+                return DEFAULT_DEPENDENCIES;
+            };
+
+            module.initialize(resolveDependencies(module.getDependencies()));
             return module.getValue();
         };
 

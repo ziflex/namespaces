@@ -21,6 +21,53 @@ describe('Resolver', function() {
             });
         });
 
+        context('custom resolver', () => {
+            it('should return array of dependencies', () => {
+                container.factory('my-service', () => {
+                    return [
+                        'foo',
+                        'bar'
+                    ];
+                }, (arg1, arg2) => {
+                    expect(arg1, 'arg1 exists').to.exist;
+                    expect(arg2, 'arg1 exists').to.exist;
+                    expect(arg1, 'arg1 equals to "foo"').to.equal('foo');
+                    expect(arg2, 'arg2 equals to "bar"').to.equal('bar');
+                });
+
+                container.resolve('my-service');
+            });
+
+            it('should return object as single dependency', () => {
+                container.factory('my-service', () => {
+                    return { foo: 'bar' };
+                }, (arg1, arg2) => {
+                    expect(arg1, 'arg1 exists').to.exist;
+                    expect(arg2, 'arg1 exists').to.not.exist;
+                    expect(arg1, 'arg1 equals to "{ foo: \'bar\' }"').to.eql({ foo: 'bar' });
+                });
+
+                container.resolve('my-service');
+            });
+
+            it('should handle function insed regular array of paths', () => {
+                container.const('my-val', 'value');
+                container.factory('my-service', [
+                    'my-val',
+                    () => {
+                        return { foo: 'bar' };
+                    }
+                ], (arg1, arg2) => {
+                    expect(arg1, 'arg1 exists').to.exist;
+                    expect(arg2, 'arg1 exists').to.exist;
+                    expect(arg1, 'arg2 equals to "value"').to.equal('value');
+                    expect(arg2, 'arg2 equals to "{ foo: \'bar\' }"').to.eql({ foo: 'bar' });
+                });
+
+                container.resolve('my-service');
+            });
+        });
+
         describe('#const', () => {
             context('plain types', () => {
                 it('should successfully resolve function', () => {

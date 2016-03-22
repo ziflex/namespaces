@@ -470,6 +470,8 @@ var _utils = require('./utils');
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var DEFAULT_DEPENDENCIES = [];
+
 /**
  * Creates a new Resolver.
  * @class
@@ -506,13 +508,44 @@ var Resolver = function () {
                     return module.getValue();
                 }
 
-                var deps = module.getDependencies();
-                var resolvedDeps = [];
-                if ((0, _utils.isArray)(deps)) {
-                    resolvedDeps = deps.map(resolveModule);
-                }
+                var resolveDependencies = function resolveDependencies(dependencies) {
+                    if ((0, _utils.isArray)(dependencies)) {
+                        return (0, _utils.reduce)(dependencies, function (result, currentPath) {
+                            var all = result;
+                            var current = null;
 
-                module.initialize(resolvedDeps);
+                            if ((0, _utils.isString)(currentPath)) {
+                                current = resolveModule(currentPath);
+                            } else {
+                                current = resolveDependencies(currentPath);
+                            }
+
+                            if ((0, _utils.isArray)(current)) {
+                                (0, _utils.forEach)(current, function (i) {
+                                    return all.push(i);
+                                });
+                            } else {
+                                all.push(current);
+                            }
+
+                            return all;
+                        }, []);
+                    }
+
+                    if ((0, _utils.isFunction)(dependencies)) {
+                        var result = dependencies();
+
+                        if (!(0, _utils.isArray)(result)) {
+                            return [result];
+                        }
+
+                        return result;
+                    }
+
+                    return DEFAULT_DEPENDENCIES;
+                };
+
+                module.initialize(resolveDependencies(module.getDependencies()));
                 return module.getValue();
             };
 
@@ -754,6 +787,7 @@ exports.joinPath = joinPath;
 exports.splitPath = splitPath;
 exports.forEach = forEach;
 exports.map = map;
+exports.reduce = reduce;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -895,6 +929,20 @@ function map(collection, iteratee) {
     forEach(collection, function (v, k) {
         result.push(iteratee.call(context, v, k));
     });
+
+    return result;
+}
+
+function reduce(collection, iteratee, initialValue) {
+    var _this = this;
+
+    var context = arguments.length <= 3 || arguments[3] === undefined ? this : arguments[3];
+
+    var result = initialValue;
+
+    forEach(collection, function (v, k) {
+        result = iteratee.call(_this, result || v, v, k);
+    }, context);
 
     return result;
 }

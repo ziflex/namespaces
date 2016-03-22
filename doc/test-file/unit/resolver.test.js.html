@@ -51,6 +51,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-joinPath">joinPath</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-map">map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-reduce">reduce</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
 </ul>
 </div>
@@ -77,6 +78,53 @@ describe(&apos;Resolver&apos;, function() {
                 };
 
                 expect(resolve).to.throw();
+            });
+        });
+
+        context(&apos;custom resolver&apos;, () =&gt; {
+            it(&apos;should return array of dependencies&apos;, () =&gt; {
+                container.factory(&apos;my-service&apos;, () =&gt; {
+                    return [
+                        &apos;foo&apos;,
+                        &apos;bar&apos;
+                    ];
+                }, (arg1, arg2) =&gt; {
+                    expect(arg1, &apos;arg1 exists&apos;).to.exist;
+                    expect(arg2, &apos;arg1 exists&apos;).to.exist;
+                    expect(arg1, &apos;arg1 equals to &quot;foo&quot;&apos;).to.equal(&apos;foo&apos;);
+                    expect(arg2, &apos;arg2 equals to &quot;bar&quot;&apos;).to.equal(&apos;bar&apos;);
+                });
+
+                container.resolve(&apos;my-service&apos;);
+            });
+
+            it(&apos;should return object as single dependency&apos;, () =&gt; {
+                container.factory(&apos;my-service&apos;, () =&gt; {
+                    return { foo: &apos;bar&apos; };
+                }, (arg1, arg2) =&gt; {
+                    expect(arg1, &apos;arg1 exists&apos;).to.exist;
+                    expect(arg2, &apos;arg1 exists&apos;).to.not.exist;
+                    expect(arg1, &apos;arg1 equals to &quot;{ foo: \&apos;bar\&apos; }&quot;&apos;).to.eql({ foo: &apos;bar&apos; });
+                });
+
+                container.resolve(&apos;my-service&apos;);
+            });
+
+            it(&apos;should handle function insed regular array of paths&apos;, () =&gt; {
+                container.const(&apos;my-val&apos;, &apos;value&apos;);
+                container.factory(&apos;my-service&apos;, [
+                    &apos;my-val&apos;,
+                    () =&gt; {
+                        return { foo: &apos;bar&apos; };
+                    }
+                ], (arg1, arg2) =&gt; {
+                    expect(arg1, &apos;arg1 exists&apos;).to.exist;
+                    expect(arg2, &apos;arg1 exists&apos;).to.exist;
+                    expect(arg1, &apos;arg2 equals to &quot;value&quot;&apos;).to.equal(&apos;value&apos;);
+                    expect(arg2, &apos;arg2 equals to &quot;{ foo: \&apos;bar\&apos; }&quot;&apos;).to.eql({ foo: &apos;bar&apos; });
+                });
+
+                container.resolve(&apos;my-service&apos;);
             });
         });
 

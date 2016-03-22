@@ -1,6 +1,8 @@
 # Changelog
 
 ## 0.4.3
+### Added
+* Custom resolver for modules
 ### Fixed
 * ```map``` couldn't resolve object inside array.
 ### Changed
