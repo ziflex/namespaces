@@ -3,6 +3,21 @@
 ## 0.4.3
 ### Added
 * Custom resolver for modules
+````js
+
+    // global resolver
+    container.service('my-service-1', () => {
+        return ['dep1', 'dep2'];
+    }, MyServiceClass);
+
+    // per-dependency-resolver-with
+    container.service('my-service-2', [
+        'my-service-1',
+        () => {
+            return 'foo';
+        }
+    ], MyService2Class);
+````
 ### Fixed
 * ```map``` couldn't resolve object inside array.
 ### Changed

@@ -1207,7 +1207,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {\n    isString,\n    isArray,\n    isFunction,\n    reduce,\n    forEach\n} from './utils';\n\nconst DEFAULT_DEPENDENCIES = [];\n\n/**\n * Creates a new Resolver.\n * @class\n * @classdesc Represents a dependency resolver for particular module.\n */\nexport default class Resolver {\n    /**\n     * @constructor\n     * @param storage - Module's storage.\n     */\n    constructor(storage) {\n        this._storage = storage;\n    }\n\n    /**\n     * Resolves particular module.\n     * @returns {any} Module's value.\n     */\n    resolve(path) {\n        const resolveModule = (targetPath) => {\n            const module = this._storage.getItem(targetPath);\n\n            if (module.isInitialized()) {\n                return module.getValue();\n            }\n\n            const resolveDependencies = (dependencies) => {\n                if (isArray(dependencies)) {\n                    return reduce(dependencies, (result, currentPath) => {\n                        const all = result;\n                        let current = null;\n\n                        if (isString(currentPath)) {\n                            current = resolveModule(currentPath);\n                        } else {\n                            current = resolveDependencies(currentPath);\n                        }\n\n                        if (isArray(current)) {\n                            forEach(current, i => all.push(i));\n                        } else {\n                            all.push(current);\n                        }\n\n                        return all;\n                    }, []);\n                }\n\n                if (isFunction(dependencies)) {\n                    const result = dependencies();\n\n                    if (!isArray(result)) {\n                        return [result];\n                    }\n\n                    return result;\n                }\n\n                return DEFAULT_DEPENDENCIES;\n            };\n\n            module.initialize(resolveDependencies(module.getDependencies()));\n            return module.getValue();\n        };\n\n        return resolveModule(path);\n    }\n\n    /**\n     * Resolves all modules from particular namespace.\n     * @param {string} namespace - Target namespace.\n     * @returns {Map<string, any>} Map of module values, where key is module name.\n     */\n    resolveAll(namespace) {\n        const result = {};\n\n        this._storage.forEachIn(namespace, (module, path) => {\n            result[module.getName()] = this.resolve(path);\n        });\n\n        return result;\n    }\n}\n"
+    "content": "import {\n    isString,\n    isArray,\n    isFunction,\n    map\n} from './utils';\n\nconst DEFAULT_DEPENDENCIES = [];\n\n/**\n * Creates a new Resolver.\n * @class\n * @classdesc Represents a dependency resolver for particular module.\n */\nexport default class Resolver {\n    /**\n     * @constructor\n     * @param storage - Module's storage.\n     */\n    constructor(storage) {\n        this._storage = storage;\n    }\n\n    /**\n     * Resolves particular module.\n     * @returns {any} Module's value.\n     */\n    resolve(path) {\n        const resolveModule = (targetPath) => {\n            const module = this._storage.getItem(targetPath);\n\n            if (module.isInitialized()) {\n                return module.getValue();\n            }\n\n            const resolveDependencies = (dependencies) => {\n                if (isArray(dependencies)) {\n                    return map(dependencies, (currentPath) => {\n                        if (isString(currentPath)) {\n                            return resolveModule(currentPath);\n                        } else if (isFunction(currentPath)) {\n                            return currentPath();\n                        }\n\n                        return undefined;\n                    });\n                }\n\n                if (isFunction(dependencies)) {\n                    const result = dependencies();\n\n                    if (!isArray(result)) {\n                        return [result];\n                    }\n\n                    return result;\n                }\n\n                return DEFAULT_DEPENDENCIES;\n            };\n\n            module.initialize(resolveDependencies(module.getDependencies()));\n            return module.getValue();\n        };\n\n        return resolveModule(path);\n    }\n\n    /**\n     * Resolves all modules from particular namespace.\n     * @param {string} namespace - Target namespace.\n     * @returns {Map<string, any>} Map of module values, where key is module name.\n     */\n    resolveAll(namespace) {\n        const result = {};\n\n        this._storage.forEachIn(namespace, (module, path) => {\n            result[module.getName()] = this.resolve(path);\n        });\n\n        return result;\n    }\n}\n"
   },
   {
     "__docId__": 42,
@@ -1222,7 +1222,7 @@
     "importPath": "namespaces-js/src/resolver.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 9,
+    "lineNumber": 8,
     "undocument": true,
     "type": {
       "types": [
@@ -1243,7 +1243,7 @@
     "importPath": "namespaces-js/src/resolver.js",
     "importStyle": "Resolver",
     "description": "Creates a new Resolver.",
-    "lineNumber": 16,
+    "lineNumber": 15,
     "unknown": [
       {
         "tagName": "@class",
@@ -1266,7 +1266,7 @@
     "longname": "src/resolver.js~Resolver#constructor",
     "access": null,
     "description": "",
-    "lineNumber": 21,
+    "lineNumber": 20,
     "unknown": [
       {
         "tagName": "@constructor",
@@ -1297,7 +1297,7 @@
     "longname": "src/resolver.js~Resolver#_storage",
     "access": null,
     "description": null,
-    "lineNumber": 22,
+    "lineNumber": 21,
     "undocument": true,
     "type": {
       "types": [
@@ -1315,7 +1315,7 @@
     "longname": "src/resolver.js~Resolver#resolve",
     "access": null,
     "description": "Resolves particular module.",
-    "lineNumber": 29,
+    "lineNumber": 28,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1350,7 +1350,7 @@
     "longname": "src/resolver.js~Resolver#resolveAll",
     "access": null,
     "description": "Resolves all modules from particular namespace.",
-    "lineNumber": 84,
+    "lineNumber": 74,
     "unknown": [
       {
         "tagName": "@returns",
@@ -3806,7 +3806,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport Container from '../../src/container';\n\ndescribe('Resolver', function() {\n    let container = null;\n\n    beforeEach(function() {\n        container = new Container();\n    });\n\n    describe('.resolve', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                const resolve = () => {\n                    container.resolve('foo');\n                };\n\n                expect(resolve).to.throw();\n            });\n        });\n\n        context('custom resolver', () => {\n            it('should return array of dependencies', () => {\n                container.factory('my-service', () => {\n                    return [\n                        'foo',\n                        'bar'\n                    ];\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg1 equals to \"foo\"').to.equal('foo');\n                    expect(arg2, 'arg2 equals to \"bar\"').to.equal('bar');\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return object as single dependency', () => {\n                container.factory('my-service', () => {\n                    return { foo: 'bar' };\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.not.exist;\n                    expect(arg1, 'arg1 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should handle function insed regular array of paths', () => {\n                container.const('my-val', 'value');\n                container.factory('my-service', [\n                    'my-val',\n                    () => {\n                        return { foo: 'bar' };\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                });\n\n                container.resolve('my-service');\n            });\n        });\n\n        describe('#const', () => {\n            context('plain types', () => {\n                it('should successfully resolve function', () => {\n                    const module = function foo() { return 'bar'; };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                    expect(found).to.eql(found2);\n                    expect(found() === 'bar').to.be.true;\n                });\n\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n        });\n\n        describe('#value', () => {\n            context('plain types', () => {\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n            context('constructor', () => {\n                context('without dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('value', function User() {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                        });\n\n                        const found = container.resolve('value');\n                        const found2 = container.resolve('value');\n                        expect(found).to.exist;\n                        expect(found2).to.exist;\n                        expect(found).to.not.equal(found2);\n                        expect(found.name).to.exist;\n                        expect(found.surname).to.exist;\n                    });\n                });\n                context('with dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('group', function Group() {\n                            this.accounts = [];\n                        });\n                        container.value('user', ['group'], function User(group) {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                            this.group = group;\n                        });\n\n                        const found = container.resolve('user');\n                        expect(found).to.exist;\n                        expect(found.group).to.exist;\n                        expect(found.group.accounts).to.exist;\n                    });\n                });\n            });\n        });\n\n        describe('#service', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.service('http', function HttpService() {\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.service('http', ['http-transport', 'settings'], function HttpService(transport, settings) {\n                        this.settings = settings;\n                        this.transport = transport;\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('#factory', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.factory('http', function HttpServiceFactory() {\n                        return new function HttpService() {\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.factory('http', ['http-transport', 'settings'], function HttpServiceFactory(transport, settings) {\n                        return new function HttpService() {\n                            this.settings = settings;\n                            this.transport = transport;\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('in namespace', () => {\n            describe('#value', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.value('value', 1);\n                        container.namespace('consts').value('value', 2);\n\n                        expect(container.resolve('value')).to.equal(1);\n                        expect(container.resolve('consts/value')).to.equal(2);\n                    });\n                });\n\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('consts').value('value', 1);\n                        container.namespace('models').value('user', ['consts/value'], function User(value) {\n                            this.value = value;\n                        });\n\n                        const user = container.resolve('models/user');\n                        expect(user).to.exist;\n                        expect(user.value).to.equal(1);\n                    });\n                });\n            });\n            describe('#factory', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', function factoryB() {\n                            return {name: 'B'};\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', ['services/api/service'], function factoryB(serviceA) {\n                            return {name: 'B', api: serviceA};\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n            describe('#service', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.service('service', function ServiceA() {\n                        });\n                        container.namespace('services').service('service', function ServiceB() {\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').service('service', function ServiceA() {});\n                        container.namespace('services').service('service', ['services/api/service'], function ServiceB(serviceA) {\n                            this.api = serviceA;\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n        });\n\n        // describe('circular dependency', () => {\n        //    it('should throw during resolving', () => {\n        //        const self = () => {\n        //            container.register().value('value1', ['value1'], 1);\n        //            container.resolve('value1');\n        //        };\n        //        const shallow = () => {\n        //            container.register().value('value1', ['value2'], 1);\n        //            container.register().value('value2', ['value1'], 2);\n        //            container.resolve('value1');\n        //            container.resolve('value2');\n        //        };\n        //        const deep = () => {\n        //            container.register().value('a', ['b', 'd'], 'a');\n        //            container.register().value('b', ['c', 'e'], 'b');\n        //            container.register().value('c', ['e', 'd'], 'c');\n        //            container.register().value('d', ['b'], 'd');\n        //            container.register().value('e', 'e');\n        //\n        //            container.resolve('a');\n        //        };\n        //\n        //        expect(self).to.throw(ReferenceError);\n        //        expect(shallow).to.throw(ReferenceError);\n        //        expect(deep).to.throw(ReferenceError);\n        //    });\n        // });\n    });\n    describe('.resolveAll', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                expect(() => {\n                    container.resolveAll('foo');\n                }).to.throw();\n            });\n        });\n\n        context('not empty container', () => {\n            it('should resolve all modules from particular namespace', () => {\n                const foo = container.namespace('foo');\n                foo.service('A', function() { this.name = 'A'; });\n                foo.service('B', ['foo/A'], function() { this.name = 'B'; });\n                foo.service('C', ['foo/B'], function() { this.name = 'C'; });\n                foo.service('D', ['foo/B', 'foo/C'], function() { this.name = 'D'; });\n\n                const bar = container.namespace('bar');\n                bar.service('E', ['foo/A'], function() { this.name = 'E'; });\n                bar.service('F', ['bar/E', 'foo/C'], function() { this.name = 'F'; });\n\n                const resolved = container.resolveAll('bar');\n                const arr = [];\n\n                for (const name in resolved) {\n                    if (resolved.hasOwnProperty(name)) {\n                        arr.push({\n                            name: name,\n                            value: resolved[name]\n                        });\n                    }\n                }\n\n                expect(arr.length).to.equal(2);\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
+    "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport Container from '../../src/container';\n\ndescribe('Resolver', function() {\n    let container = null;\n\n    beforeEach(function() {\n        container = new Container();\n    });\n\n    describe('.resolve', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                const resolve = () => {\n                    container.resolve('foo');\n                };\n\n                expect(resolve).to.throw();\n            });\n        });\n\n        context('custom resolver', () => {\n            it('should return array of dependencies', () => {\n                container.factory('my-service', () => {\n                    return [\n                        'foo',\n                        'bar'\n                    ];\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg1 equals to \"foo\"').to.equal('foo');\n                    expect(arg2, 'arg2 equals to \"bar\"').to.equal('bar');\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return object as single dependency', () => {\n                container.factory('my-service', () => {\n                    return { foo: 'bar' };\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.not.exist;\n                    expect(arg1, 'arg1 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return single value for dependency', () => {\n                container.const('my-val', 'value');\n                container.factory('my-service', [\n                    'my-val',\n                    () => {\n                        return { foo: 'bar' };\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                });\n\n                container.factory('my-service2', [\n                    'my-val',\n                    () => {\n                        return [{ foo: 'bar' }, { qaz: 'wsx'}];\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"[{ foo: \\'bar\\' }, { qaz: \\'wsx\\'}]\"').to.eql([{ foo: 'bar' }, { qaz: 'wsx'}]);\n                });\n\n                container.resolve('my-service');\n                container.resolve('my-service2');\n            });\n        });\n\n        describe('#const', () => {\n            context('plain types', () => {\n                it('should successfully resolve function', () => {\n                    const module = function foo() { return 'bar'; };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                    expect(found).to.eql(found2);\n                    expect(found() === 'bar').to.be.true;\n                });\n\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n        });\n\n        describe('#value', () => {\n            context('plain types', () => {\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n            context('constructor', () => {\n                context('without dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('value', function User() {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                        });\n\n                        const found = container.resolve('value');\n                        const found2 = container.resolve('value');\n                        expect(found).to.exist;\n                        expect(found2).to.exist;\n                        expect(found).to.not.equal(found2);\n                        expect(found.name).to.exist;\n                        expect(found.surname).to.exist;\n                    });\n                });\n                context('with dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('group', function Group() {\n                            this.accounts = [];\n                        });\n                        container.value('user', ['group'], function User(group) {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                            this.group = group;\n                        });\n\n                        const found = container.resolve('user');\n                        expect(found).to.exist;\n                        expect(found.group).to.exist;\n                        expect(found.group.accounts).to.exist;\n                    });\n                });\n            });\n        });\n\n        describe('#service', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.service('http', function HttpService() {\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.service('http', ['http-transport', 'settings'], function HttpService(transport, settings) {\n                        this.settings = settings;\n                        this.transport = transport;\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('#factory', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.factory('http', function HttpServiceFactory() {\n                        return new function HttpService() {\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.factory('http', ['http-transport', 'settings'], function HttpServiceFactory(transport, settings) {\n                        return new function HttpService() {\n                            this.settings = settings;\n                            this.transport = transport;\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('in namespace', () => {\n            describe('#value', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.value('value', 1);\n                        container.namespace('consts').value('value', 2);\n\n                        expect(container.resolve('value')).to.equal(1);\n                        expect(container.resolve('consts/value')).to.equal(2);\n                    });\n                });\n\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('consts').value('value', 1);\n                        container.namespace('models').value('user', ['consts/value'], function User(value) {\n                            this.value = value;\n                        });\n\n                        const user = container.resolve('models/user');\n                        expect(user).to.exist;\n                        expect(user.value).to.equal(1);\n                    });\n                });\n            });\n            describe('#factory', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', function factoryB() {\n                            return {name: 'B'};\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', ['services/api/service'], function factoryB(serviceA) {\n                            return {name: 'B', api: serviceA};\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n            describe('#service', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.service('service', function ServiceA() {\n                        });\n                        container.namespace('services').service('service', function ServiceB() {\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').service('service', function ServiceA() {});\n                        container.namespace('services').service('service', ['services/api/service'], function ServiceB(serviceA) {\n                            this.api = serviceA;\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n        });\n\n        // describe('circular dependency', () => {\n        //    it('should throw during resolving', () => {\n        //        const self = () => {\n        //            container.register().value('value1', ['value1'], 1);\n        //            container.resolve('value1');\n        //        };\n        //        const shallow = () => {\n        //            container.register().value('value1', ['value2'], 1);\n        //            container.register().value('value2', ['value1'], 2);\n        //            container.resolve('value1');\n        //            container.resolve('value2');\n        //        };\n        //        const deep = () => {\n        //            container.register().value('a', ['b', 'd'], 'a');\n        //            container.register().value('b', ['c', 'e'], 'b');\n        //            container.register().value('c', ['e', 'd'], 'c');\n        //            container.register().value('d', ['b'], 'd');\n        //            container.register().value('e', 'e');\n        //\n        //            container.resolve('a');\n        //        };\n        //\n        //        expect(self).to.throw(ReferenceError);\n        //        expect(shallow).to.throw(ReferenceError);\n        //        expect(deep).to.throw(ReferenceError);\n        //    });\n        // });\n    });\n    describe('.resolveAll', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                expect(() => {\n                    container.resolveAll('foo');\n                }).to.throw();\n            });\n        });\n\n        context('not empty container', () => {\n            it('should resolve all modules from particular namespace', () => {\n                const foo = container.namespace('foo');\n                foo.service('A', function() { this.name = 'A'; });\n                foo.service('B', ['foo/A'], function() { this.name = 'B'; });\n                foo.service('C', ['foo/B'], function() { this.name = 'C'; });\n                foo.service('D', ['foo/B', 'foo/C'], function() { this.name = 'D'; });\n\n                const bar = container.namespace('bar');\n                bar.service('E', ['foo/A'], function() { this.name = 'E'; });\n                bar.service('F', ['bar/E', 'foo/C'], function() { this.name = 'F'; });\n\n                const resolved = container.resolveAll('bar');\n                const arr = [];\n\n                for (const name in resolved) {\n                    if (resolved.hasOwnProperty(name)) {\n                        arr.push({\n                            name: name,\n                            value: resolved[name]\n                        });\n                    }\n                }\n\n                expect(arr.length).to.equal(2);\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
   },
   {
     "__docId__": 192,
@@ -3917,7 +3917,7 @@
     "testDepth": 3,
     "longname": "unit/resolver.test.js~describe47.describe48.context51.it54",
     "access": null,
-    "description": "should handle function insed regular array of paths",
+    "description": "should return single value for dependency",
     "lineNumber": 53
   },
   {
@@ -3932,7 +3932,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55",
     "access": null,
     "description": "#const",
-    "lineNumber": 71
+    "lineNumber": 84
   },
   {
     "__docId__": 201,
@@ -3946,7 +3946,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56",
     "access": null,
     "description": "plain types",
-    "lineNumber": 72
+    "lineNumber": 85
   },
   {
     "__docId__": 202,
@@ -3960,7 +3960,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56.it57",
     "access": null,
     "description": "should successfully resolve function",
-    "lineNumber": 73
+    "lineNumber": 86
   },
   {
     "__docId__": 203,
@@ -3974,7 +3974,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56.it58",
     "access": null,
     "description": "should successfully resolve object",
-    "lineNumber": 84
+    "lineNumber": 97
   },
   {
     "__docId__": 204,
@@ -3988,7 +3988,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56.it59",
     "access": null,
     "description": "should successfully resolve number",
-    "lineNumber": 93
+    "lineNumber": 106
   },
   {
     "__docId__": 205,
@@ -4002,7 +4002,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56.it60",
     "access": null,
     "description": "should successfully resolve string",
-    "lineNumber": 102
+    "lineNumber": 115
   },
   {
     "__docId__": 206,
@@ -4016,7 +4016,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56.it61",
     "access": null,
     "description": "should successfully resolve array",
-    "lineNumber": 111
+    "lineNumber": 124
   },
   {
     "__docId__": 207,
@@ -4030,7 +4030,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62",
     "access": null,
     "description": "#value",
-    "lineNumber": 122
+    "lineNumber": 135
   },
   {
     "__docId__": 208,
@@ -4044,7 +4044,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context63",
     "access": null,
     "description": "plain types",
-    "lineNumber": 123
+    "lineNumber": 136
   },
   {
     "__docId__": 209,
@@ -4058,7 +4058,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context63.it64",
     "access": null,
     "description": "should successfully resolve object",
-    "lineNumber": 124
+    "lineNumber": 137
   },
   {
     "__docId__": 210,
@@ -4072,7 +4072,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context63.it65",
     "access": null,
     "description": "should successfully resolve number",
-    "lineNumber": 133
+    "lineNumber": 146
   },
   {
     "__docId__": 211,
@@ -4086,7 +4086,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context63.it66",
     "access": null,
     "description": "should successfully resolve string",
-    "lineNumber": 142
+    "lineNumber": 155
   },
   {
     "__docId__": 212,
@@ -4100,7 +4100,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context63.it67",
     "access": null,
     "description": "should successfully resolve array",
-    "lineNumber": 151
+    "lineNumber": 164
   },
   {
     "__docId__": 213,
@@ -4114,7 +4114,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context68",
     "access": null,
     "description": "constructor",
-    "lineNumber": 160
+    "lineNumber": 173
   },
   {
     "__docId__": 214,
@@ -4128,7 +4128,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context68.context69",
     "access": null,
     "description": "without dependencies",
-    "lineNumber": 161
+    "lineNumber": 174
   },
   {
     "__docId__": 215,
@@ -4142,7 +4142,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context68.context69.it70",
     "access": null,
     "description": "should successfully resolved",
-    "lineNumber": 162
+    "lineNumber": 175
   },
   {
     "__docId__": 216,
@@ -4156,7 +4156,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context68.context71",
     "access": null,
     "description": "with dependencies",
-    "lineNumber": 179
+    "lineNumber": 192
   },
   {
     "__docId__": 217,
@@ -4170,7 +4170,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context68.context71.it72",
     "access": null,
     "description": "should successfully resolved",
-    "lineNumber": 180
+    "lineNumber": 193
   },
   {
     "__docId__": 218,
@@ -4184,7 +4184,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe73",
     "access": null,
     "description": "#service",
-    "lineNumber": 201
+    "lineNumber": 214
   },
   {
     "__docId__": 219,
@@ -4198,7 +4198,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe73.context74",
     "access": null,
     "description": "without dependencies",
-    "lineNumber": 202
+    "lineNumber": 215
   },
   {
     "__docId__": 220,
@@ -4212,7 +4212,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe73.context74.it75",
     "access": null,
     "description": "should resolve single service",
-    "lineNumber": 203
+    "lineNumber": 216
   },
   {
     "__docId__": 221,
@@ -4226,7 +4226,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe73.context76",
     "access": null,
     "description": "with dependencies",
-    "lineNumber": 216
+    "lineNumber": 229
   },
   {
     "__docId__": 222,
@@ -4240,7 +4240,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe73.context76.it77",
     "access": null,
     "description": "should resolve single service",
-    "lineNumber": 217
+    "lineNumber": 230
   },
   {
     "__docId__": 223,
@@ -4254,7 +4254,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe78",
     "access": null,
     "description": "#factory",
-    "lineNumber": 240
+    "lineNumber": 253
   },
   {
     "__docId__": 224,
@@ -4268,7 +4268,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe78.context79",
     "access": null,
     "description": "without dependencies",
-    "lineNumber": 241
+    "lineNumber": 254
   },
   {
     "__docId__": 225,
@@ -4282,7 +4282,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe78.context79.it80",
     "access": null,
     "description": "should resolve single service",
-    "lineNumber": 242
+    "lineNumber": 255
   },
   {
     "__docId__": 226,
@@ -4296,7 +4296,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe78.context81",
     "access": null,
     "description": "with dependencies",
-    "lineNumber": 257
+    "lineNumber": 270
   },
   {
     "__docId__": 227,
@@ -4310,7 +4310,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe78.context81.it82",
     "access": null,
     "description": "should resolve single service",
-    "lineNumber": 258
+    "lineNumber": 271
   },
   {
     "__docId__": 228,
@@ -4324,7 +4324,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83",
     "access": null,
     "description": "in namespace",
-    "lineNumber": 283
+    "lineNumber": 296
   },
   {
     "__docId__": 229,
@@ -4338,7 +4338,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe84",
     "access": null,
     "description": "#value",
-    "lineNumber": 284
+    "lineNumber": 297
   },
   {
     "__docId__": 230,
@@ -4352,7 +4352,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe84.context85",
     "access": null,
     "description": "same name",
-    "lineNumber": 285
+    "lineNumber": 298
   },
   {
     "__docId__": 231,
@@ -4366,7 +4366,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe84.context85.it86",
     "access": null,
     "description": "should resolve from different namespaces",
-    "lineNumber": 286
+    "lineNumber": 299
   },
   {
     "__docId__": 232,
@@ -4380,7 +4380,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe84.context87",
     "access": null,
     "description": "as dependency",
-    "lineNumber": 295
+    "lineNumber": 308
   },
   {
     "__docId__": 233,
@@ -4394,7 +4394,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe84.context87.it88",
     "access": null,
     "description": "should resolve",
-    "lineNumber": 296
+    "lineNumber": 309
   },
   {
     "__docId__": 234,
@@ -4408,7 +4408,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe89",
     "access": null,
     "description": "#factory",
-    "lineNumber": 308
+    "lineNumber": 321
   },
   {
     "__docId__": 235,
@@ -4422,7 +4422,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe89.context90",
     "access": null,
     "description": "same name",
-    "lineNumber": 309
+    "lineNumber": 322
   },
   {
     "__docId__": 236,
@@ -4436,7 +4436,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe89.context90.it91",
     "access": null,
     "description": "should resolve from different namespaces",
-    "lineNumber": 310
+    "lineNumber": 323
   },
   {
     "__docId__": 237,
@@ -4450,7 +4450,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe89.context92",
     "access": null,
     "description": "as dependency",
-    "lineNumber": 325
+    "lineNumber": 338
   },
   {
     "__docId__": 238,
@@ -4464,7 +4464,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe89.context92.it93",
     "access": null,
     "description": "should resolve",
-    "lineNumber": 326
+    "lineNumber": 339
   },
   {
     "__docId__": 239,
@@ -4478,7 +4478,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe94",
     "access": null,
     "description": "#service",
-    "lineNumber": 342
+    "lineNumber": 355
   },
   {
     "__docId__": 240,
@@ -4492,7 +4492,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe94.context95",
     "access": null,
     "description": "same name",
-    "lineNumber": 343
+    "lineNumber": 356
   },
   {
     "__docId__": 241,
@@ -4506,7 +4506,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe94.context95.it96",
     "access": null,
     "description": "should resolve from different namespaces",
-    "lineNumber": 344
+    "lineNumber": 357
   },
   {
     "__docId__": 242,
@@ -4520,7 +4520,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe94.context97",
     "access": null,
     "description": "as dependency",
-    "lineNumber": 357
+    "lineNumber": 370
   },
   {
     "__docId__": 243,
@@ -4534,7 +4534,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe94.context97.it98",
     "access": null,
     "description": "should resolve",
-    "lineNumber": 358
+    "lineNumber": 371
   },
   {
     "__docId__": 244,
@@ -4548,7 +4548,7 @@
     "longname": "unit/resolver.test.js~describe47.describe99",
     "access": null,
     "description": ".resolveAll",
-    "lineNumber": 402
+    "lineNumber": 415
   },
   {
     "__docId__": 245,
@@ -4562,7 +4562,7 @@
     "longname": "unit/resolver.test.js~describe47.describe99.context100",
     "access": null,
     "description": "empty container",
-    "lineNumber": 403
+    "lineNumber": 416
   },
   {
     "__docId__": 246,
@@ -4576,7 +4576,7 @@
     "longname": "unit/resolver.test.js~describe47.describe99.context100.it101",
     "access": null,
     "description": "should throw error",
-    "lineNumber": 404
+    "lineNumber": 417
   },
   {
     "__docId__": 247,
@@ -4590,7 +4590,7 @@
     "longname": "unit/resolver.test.js~describe47.describe99.context102",
     "access": null,
     "description": "not empty container",
-    "lineNumber": 411
+    "lineNumber": 424
   },
   {
     "__docId__": 248,
@@ -4604,7 +4604,7 @@
     "longname": "unit/resolver.test.js~describe47.describe99.context102.it103",
     "access": null,
     "description": "should resolve all modules from particular namespace",
-    "lineNumber": 412
+    "lineNumber": 425
   },
   {
     "__docId__": 249,

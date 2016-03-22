@@ -733,169 +733,169 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber71",
+    "test-file/unit/resolver.test.js.html#lineNumber84",
     "Resolver .resolve #const",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber72",
+    "test-file/unit/resolver.test.js.html#lineNumber85",
     "Resolver .resolve #const plain types",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber111",
+    "test-file/unit/resolver.test.js.html#lineNumber124",
     "Resolver .resolve #const plain types should successfully resolve array",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber73",
+    "test-file/unit/resolver.test.js.html#lineNumber86",
     "Resolver .resolve #const plain types should successfully resolve function",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber93",
+    "test-file/unit/resolver.test.js.html#lineNumber106",
     "Resolver .resolve #const plain types should successfully resolve number",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber84",
+    "test-file/unit/resolver.test.js.html#lineNumber97",
     "Resolver .resolve #const plain types should successfully resolve object",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber102",
+    "test-file/unit/resolver.test.js.html#lineNumber115",
     "Resolver .resolve #const plain types should successfully resolve string",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber240",
+    "test-file/unit/resolver.test.js.html#lineNumber253",
     "Resolver .resolve #factory",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber257",
+    "test-file/unit/resolver.test.js.html#lineNumber270",
     "Resolver .resolve #factory with dependencies",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber258",
+    "test-file/unit/resolver.test.js.html#lineNumber271",
     "Resolver .resolve #factory with dependencies should resolve single service",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber241",
+    "test-file/unit/resolver.test.js.html#lineNumber254",
     "Resolver .resolve #factory without dependencies",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber242",
+    "test-file/unit/resolver.test.js.html#lineNumber255",
     "Resolver .resolve #factory without dependencies should resolve single service",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber201",
+    "test-file/unit/resolver.test.js.html#lineNumber214",
     "Resolver .resolve #service",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber216",
+    "test-file/unit/resolver.test.js.html#lineNumber229",
     "Resolver .resolve #service with dependencies",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber217",
+    "test-file/unit/resolver.test.js.html#lineNumber230",
     "Resolver .resolve #service with dependencies should resolve single service",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber202",
+    "test-file/unit/resolver.test.js.html#lineNumber215",
     "Resolver .resolve #service without dependencies",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber203",
+    "test-file/unit/resolver.test.js.html#lineNumber216",
     "Resolver .resolve #service without dependencies should resolve single service",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber122",
+    "test-file/unit/resolver.test.js.html#lineNumber135",
     "Resolver .resolve #value",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber160",
+    "test-file/unit/resolver.test.js.html#lineNumber173",
     "Resolver .resolve #value constructor",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber179",
+    "test-file/unit/resolver.test.js.html#lineNumber192",
     "Resolver .resolve #value constructor with dependencies",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber180",
+    "test-file/unit/resolver.test.js.html#lineNumber193",
     "Resolver .resolve #value constructor with dependencies should successfully resolved",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber161",
+    "test-file/unit/resolver.test.js.html#lineNumber174",
     "Resolver .resolve #value constructor without dependencies",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber162",
+    "test-file/unit/resolver.test.js.html#lineNumber175",
     "Resolver .resolve #value constructor without dependencies should successfully resolved",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber123",
+    "test-file/unit/resolver.test.js.html#lineNumber136",
     "Resolver .resolve #value plain types",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber151",
+    "test-file/unit/resolver.test.js.html#lineNumber164",
     "Resolver .resolve #value plain types should successfully resolve array",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber133",
+    "test-file/unit/resolver.test.js.html#lineNumber146",
     "Resolver .resolve #value plain types should successfully resolve number",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber124",
+    "test-file/unit/resolver.test.js.html#lineNumber137",
     "Resolver .resolve #value plain types should successfully resolve object",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber142",
+    "test-file/unit/resolver.test.js.html#lineNumber155",
     "Resolver .resolve #value plain types should successfully resolve string",
     "test"
   ],
@@ -903,12 +903,6 @@ window.esdocSearchIndex = [
     "",
     "test-file/unit/resolver.test.js.html#lineNumber24",
     "Resolver .resolve custom resolver",
-    "test"
-  ],
-  [
-    "",
-    "test-file/unit/resolver.test.js.html#lineNumber53",
-    "Resolver .resolve custom resolver should handle function insed regular array of paths",
     "test"
   ],
   [
@@ -925,6 +919,12 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/unit/resolver.test.js.html#lineNumber53",
+    "Resolver .resolve custom resolver should return single value for dependency",
+    "test"
+  ],
+  [
+    "",
     "test-file/unit/resolver.test.js.html#lineNumber14",
     "Resolver .resolve empty container",
     "test"
@@ -937,127 +937,127 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber283",
+    "test-file/unit/resolver.test.js.html#lineNumber296",
     "Resolver .resolve in namespace",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber308",
+    "test-file/unit/resolver.test.js.html#lineNumber321",
     "Resolver .resolve in namespace #factory",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber325",
+    "test-file/unit/resolver.test.js.html#lineNumber338",
     "Resolver .resolve in namespace #factory as dependency",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber326",
+    "test-file/unit/resolver.test.js.html#lineNumber339",
     "Resolver .resolve in namespace #factory as dependency should resolve",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber309",
+    "test-file/unit/resolver.test.js.html#lineNumber322",
     "Resolver .resolve in namespace #factory same name",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber310",
+    "test-file/unit/resolver.test.js.html#lineNumber323",
     "Resolver .resolve in namespace #factory same name should resolve from different namespaces",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber342",
+    "test-file/unit/resolver.test.js.html#lineNumber355",
     "Resolver .resolve in namespace #service",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber357",
+    "test-file/unit/resolver.test.js.html#lineNumber370",
     "Resolver .resolve in namespace #service as dependency",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber358",
+    "test-file/unit/resolver.test.js.html#lineNumber371",
     "Resolver .resolve in namespace #service as dependency should resolve",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber343",
+    "test-file/unit/resolver.test.js.html#lineNumber356",
     "Resolver .resolve in namespace #service same name",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber344",
+    "test-file/unit/resolver.test.js.html#lineNumber357",
     "Resolver .resolve in namespace #service same name should resolve from different namespaces",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber284",
+    "test-file/unit/resolver.test.js.html#lineNumber297",
     "Resolver .resolve in namespace #value",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber295",
+    "test-file/unit/resolver.test.js.html#lineNumber308",
     "Resolver .resolve in namespace #value as dependency",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber296",
+    "test-file/unit/resolver.test.js.html#lineNumber309",
     "Resolver .resolve in namespace #value as dependency should resolve",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber285",
+    "test-file/unit/resolver.test.js.html#lineNumber298",
     "Resolver .resolve in namespace #value same name",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber286",
+    "test-file/unit/resolver.test.js.html#lineNumber299",
     "Resolver .resolve in namespace #value same name should resolve from different namespaces",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber402",
+    "test-file/unit/resolver.test.js.html#lineNumber415",
     "Resolver .resolveAll",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber403",
+    "test-file/unit/resolver.test.js.html#lineNumber416",
     "Resolver .resolveAll empty container",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber404",
+    "test-file/unit/resolver.test.js.html#lineNumber417",
     "Resolver .resolveAll empty container should throw error",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber411",
+    "test-file/unit/resolver.test.js.html#lineNumber424",
     "Resolver .resolveAll not empty container",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber412",
+    "test-file/unit/resolver.test.js.html#lineNumber425",
     "Resolver .resolveAll not empty container should resolve all modules from particular namespace",
     "test"
   ],

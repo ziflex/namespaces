@@ -2,8 +2,7 @@ import {
     isString,
     isArray,
     isFunction,
-    reduce,
-    forEach
+    map
 } from './utils';
 
 const DEFAULT_DEPENDENCIES = [];
@@ -36,24 +35,15 @@ export default class Resolver {
 
             const resolveDependencies = (dependencies) => {
                 if (isArray(dependencies)) {
-                    return reduce(dependencies, (result, currentPath) => {
-                        const all = result;
-                        let current = null;
-
+                    return map(dependencies, (currentPath) => {
                         if (isString(currentPath)) {
-                            current = resolveModule(currentPath);
-                        } else {
-                            current = resolveDependencies(currentPath);
+                            return resolveModule(currentPath);
+                        } else if (isFunction(currentPath)) {
+                            return currentPath();
                         }
 
-                        if (isArray(current)) {
-                            forEach(current, i => all.push(i));
-                        } else {
-                            all.push(current);
-                        }
-
-                        return all;
-                    }, []);
+                        return undefined;
+                    });
                 }
 
                 if (isFunction(dependencies)) {

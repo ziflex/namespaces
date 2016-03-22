@@ -50,7 +50,7 @@ describe('Resolver', function() {
                 container.resolve('my-service');
             });
 
-            it('should handle function insed regular array of paths', () => {
+            it('should return single value for dependency', () => {
                 container.const('my-val', 'value');
                 container.factory('my-service', [
                     'my-val',
@@ -64,7 +64,20 @@ describe('Resolver', function() {
                     expect(arg2, 'arg2 equals to "{ foo: \'bar\' }"').to.eql({ foo: 'bar' });
                 });
 
+                container.factory('my-service2', [
+                    'my-val',
+                    () => {
+                        return [{ foo: 'bar' }, { qaz: 'wsx'}];
+                    }
+                ], (arg1, arg2) => {
+                    expect(arg1, 'arg1 exists').to.exist;
+                    expect(arg2, 'arg1 exists').to.exist;
+                    expect(arg1, 'arg2 equals to "value"').to.equal('value');
+                    expect(arg2, 'arg2 equals to "[{ foo: \'bar\' }, { qaz: \'wsx\'}]"').to.eql([{ foo: 'bar' }, { qaz: 'wsx'}]);
+                });
+
                 container.resolve('my-service');
+                container.resolve('my-service2');
             });
         });
 

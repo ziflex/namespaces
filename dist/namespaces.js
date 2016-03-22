@@ -510,26 +510,15 @@ var Resolver = function () {
 
                 var resolveDependencies = function resolveDependencies(dependencies) {
                     if ((0, _utils.isArray)(dependencies)) {
-                        return (0, _utils.reduce)(dependencies, function (result, currentPath) {
-                            var all = result;
-                            var current = null;
-
+                        return (0, _utils.map)(dependencies, function (currentPath) {
                             if ((0, _utils.isString)(currentPath)) {
-                                current = resolveModule(currentPath);
-                            } else {
-                                current = resolveDependencies(currentPath);
+                                return resolveModule(currentPath);
+                            } else if ((0, _utils.isFunction)(currentPath)) {
+                                return currentPath();
                             }
 
-                            if ((0, _utils.isArray)(current)) {
-                                (0, _utils.forEach)(current, function (i) {
-                                    return all.push(i);
-                                });
-                            } else {
-                                all.push(current);
-                            }
-
-                            return all;
-                        }, []);
+                            return undefined;
+                        });
                     }
 
                     if ((0, _utils.isFunction)(dependencies)) {
