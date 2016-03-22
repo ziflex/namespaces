@@ -27,6 +27,7 @@
 
     // ['system/component1', 'system/component2']
 ````
+* improved error messaging
 
 
 ## 0.4.2

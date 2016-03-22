@@ -661,13 +661,13 @@ var Storage = function () {
             var namespace = this._namespaces[parts.namespace];
 
             if (!namespace) {
-                throw new Error(NAMESPACE_NOT_FOUND + ': ' + parts.namespace + '!');
+                throw new Error(MODULE_NOT_FOUND + ': ' + path + '!');
             }
 
             var module = namespace[parts.name];
 
             if (!module) {
-                throw new Error(MODULE_NOT_FOUND + ': ' + parts.name + '!');
+                throw new Error(MODULE_NOT_FOUND + ': ' + path + '!');
             }
 
             return module;
