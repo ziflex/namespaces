@@ -1,5 +1,3 @@
-import { isFunction } from './utils';
-
 /**
  * Creates a new Module.
  * @class
@@ -49,11 +47,7 @@ export default class Module {
             throw new Error('Module is not initialized!');
         }
 
-        if (isFunction(this._value)) {
-            return this._value();
-        }
-
-        return this._value;
+        return this._value();
     }
 
     /**

@@ -53,12 +53,12 @@ describe('Module', function() {
                     const name = 'bar';
                     const dependencies = [];
                     const module = new Module(namespace, name, dependencies, () => {
-                        return value;
+                        return () => value;
                     });
 
                     module.initialize();
                     expect(module.getValue).to.not.throw;
-                    expect(module.getValue()).to.be.equal(isFunction(value) ? value() : value);
+                    expect(module.getValue()).to.be.equal(value);
                 });
             });
         });

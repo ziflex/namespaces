@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.3
+## 0.5.0
 ### Added
 * Custom resolver for modules
 ````js
@@ -18,8 +18,6 @@
         }
     ], MyService2Class);
 ````
-### Fixed
-* ```map``` couldn't resolve object inside array.
 ### Changed
 * ```map``` functions now can resolve multiple paths   
 ````js
@@ -45,6 +43,9 @@
     // ['system/component1', 'system/component2']
 ````
 * improved error messaging
+### Fixed
+* ```map``` couldn't resolve object inside array.
+* Module created via ````factory```` initialized only once if the value is function.
 
 
 ## 0.4.2

@@ -72,7 +72,9 @@ export default class Namespace {
         this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {
             // instances, simple types
             if (!isFunction(args.definition)) {
-                return args.definition;
+                return function factory() {
+                    return args.definition;
+                };
             }
 
             return function factory() {
@@ -97,7 +99,11 @@ export default class Namespace {
         }
 
         this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {
-            return create(args.definition, resolved);
+            const value = create(args.definition, resolved);
+
+            return function factory() {
+                return value;
+            };
         }));
     }
 
@@ -117,7 +123,11 @@ export default class Namespace {
         }
 
         this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {
-            return args.definition(...resolved);
+            const value = args.definition(...resolved);
+
+            return function factory() {
+                return value;
+            };
         }));
     }
 }
