@@ -61,7 +61,6 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/* eslint-disable no-unused-expressions, func-names */
 
 import {expect} from &apos;chai&apos;;
-import {isFunction} from &apos;../../src/utils&apos;;
 import Module from &apos;../../src/module&apos;;
 
 describe(&apos;Module&apos;, function() {
@@ -113,12 +112,12 @@ describe(&apos;Module&apos;, function() {
                     const name = &apos;bar&apos;;
                     const dependencies = [];
                     const module = new Module(namespace, name, dependencies, () =&gt; {
-                        return value;
+                        return () =&gt; value;
                     });
 
                     module.initialize();
                     expect(module.getValue).to.not.throw;
-                    expect(module.getValue()).to.be.equal(isFunction(value) ? value() : value);
+                    expect(module.getValue()).to.be.equal(value);
                 });
             });
         });

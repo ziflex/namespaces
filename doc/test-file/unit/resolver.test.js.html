@@ -82,7 +82,7 @@ describe(&apos;Resolver&apos;, function() {
         });
 
         context(&apos;custom resolver&apos;, () =&gt; {
-            it(&apos;should return array of dependencies&apos;, () =&gt; {
+            it(&apos;should return array of dependencies&apos;, (done) =&gt; {
                 container.factory(&apos;my-service&apos;, () =&gt; {
                     return [
                         &apos;foo&apos;,
@@ -93,24 +93,26 @@ describe(&apos;Resolver&apos;, function() {
                     expect(arg2, &apos;arg1 exists&apos;).to.exist;
                     expect(arg1, &apos;arg1 equals to &quot;foo&quot;&apos;).to.equal(&apos;foo&apos;);
                     expect(arg2, &apos;arg2 equals to &quot;bar&quot;&apos;).to.equal(&apos;bar&apos;);
+                    done();
                 });
 
                 container.resolve(&apos;my-service&apos;);
             });
 
-            it(&apos;should return object as single dependency&apos;, () =&gt; {
+            it(&apos;should return object as single dependency&apos;, (done) =&gt; {
                 container.factory(&apos;my-service&apos;, () =&gt; {
                     return { foo: &apos;bar&apos; };
                 }, (arg1, arg2) =&gt; {
                     expect(arg1, &apos;arg1 exists&apos;).to.exist;
                     expect(arg2, &apos;arg1 exists&apos;).to.not.exist;
                     expect(arg1, &apos;arg1 equals to &quot;{ foo: \&apos;bar\&apos; }&quot;&apos;).to.eql({ foo: &apos;bar&apos; });
+                    done();
                 });
 
                 container.resolve(&apos;my-service&apos;);
             });
 
-            it(&apos;should return single value for dependency&apos;, () =&gt; {
+            it(&apos;should return single value for dependency&apos;, (done) =&gt; {
                 container.const(&apos;my-val&apos;, &apos;value&apos;);
                 container.factory(&apos;my-service&apos;, [
                     &apos;my-val&apos;,
@@ -122,6 +124,7 @@ describe(&apos;Resolver&apos;, function() {
                     expect(arg2, &apos;arg1 exists&apos;).to.exist;
                     expect(arg1, &apos;arg2 equals to &quot;value&quot;&apos;).to.equal(&apos;value&apos;);
                     expect(arg2, &apos;arg2 equals to &quot;{ foo: \&apos;bar\&apos; }&quot;&apos;).to.eql({ foo: &apos;bar&apos; });
+                    done();
                 });
 
                 container.factory(&apos;my-service2&apos;, [

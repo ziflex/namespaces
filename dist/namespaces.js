@@ -179,8 +179,6 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _utils = require('./utils');
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -248,11 +246,7 @@ var Module = function () {
                 throw new Error('Module is not initialized!');
             }
 
-            if ((0, _utils.isFunction)(this._value)) {
-                return this._value();
-            }
-
-            return this._value;
+            return this._value();
         }
 
         /**
@@ -288,7 +282,7 @@ var Module = function () {
 
 exports.default = Module;
 
-},{"./utils":8}],5:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -396,7 +390,9 @@ var Namespace = function () {
             this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
                 // instances, simple types
                 if (!(0, _utils.isFunction)(args.definition)) {
-                    return args.definition;
+                    return function factory() {
+                        return args.definition;
+                    };
                 }
 
                 return function factory() {
@@ -424,7 +420,11 @@ var Namespace = function () {
             }
 
             this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
-                return (0, _utils.create)(args.definition, resolved);
+                var value = (0, _utils.create)(args.definition, resolved);
+
+                return function factory() {
+                    return value;
+                };
             }));
         }
 
@@ -447,7 +447,11 @@ var Namespace = function () {
             }
 
             this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
-                return args.definition.apply(args, _toConsumableArray(resolved));
+                var value = args.definition.apply(args, _toConsumableArray(resolved));
+
+                return function factory() {
+                    return value;
+                };
             }));
         }
     }]);

@@ -58,9 +58,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/module.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { isFunction } from &apos;./utils&apos;;
-
-/**
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
  * Creates a new Module.
  * @class
  * @classdesc Represents a module.
@@ -109,11 +107,7 @@ export default class Module {
             throw new Error(&apos;Module is not initialized!&apos;);
         }
 
-        if (isFunction(this._value)) {
-            return this._value();
-        }
-
-        return this._value;
+        return this._value();
     }
 
     /**

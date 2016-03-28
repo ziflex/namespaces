@@ -58,7 +58,7 @@
 </nav>
 
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="namespaces">namespaces</h1>
-<p>Angular-flavored dependency injection container.</p>
+<p>Angular-flavored DI container.</p>
 <p><a href="https://www.npmjs.com/package/namespaces-js"><img src="https://badge.fury.io/js/namespaces-js.svg" alt="npm version"></a>
 <a href="http://badge.fury.io/bo/namespaces-js"><img src="https://badge.fury.io/bo/namespaces-js.svg" alt="Bower version"></a>
 <a href="http://travis-ci.org/ziflex/namespaces"><img src="https://secure.travis-ci.org/ziflex/namespaces.svg?branch=master" alt="Build Status"></a></p>
@@ -75,38 +75,40 @@
 <h3 id="basic">Basic</h3>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">
     var Container = require(&apos;namespaces-js&apos;);
+    var container = new Container();
 
-    container.value(&apos;settings&apos;, settings);
-    container.namespace(&apos;services/infrastructure&apos;).service(&apos;http&apos;, require(&apos;http&apos;));
-    container.namespace(&apos;services/external/api&apos;).factory(&apos;users&apos;, [&apos;settings&apos;, &apos;services/infrastructure/http&apos;], (settings, http) =&gt; {
-        return new UsersApi(settings.api, http);
-    });
-    container.namespace(&apos;services/business&apos;).service(&apos;users&apos;, [&apos;services/external/api/users&apos;], UsersService);
+    container.factory(&apos;a&apos;, () =&gt; &apos;a&apos;);
+    container.factory(&apos;b&apos;, [&apos;a&apos;] (a) =&gt; a + &apos;b&apos;);
 
-
-    var usersServiceInstance = container.resolve(&apos;services/business/users&apos;);</code>
+    const b = container.resolve(&apos;b&apos;); // -&gt; &apos;ab&apos;
+    const a = container.resolve(&apos;a&apos;); // -&gt; &apos;a&apos;</code>
 </code></pre>
 <h3 id="namespaces">Namespaces</h3>
-<h4 id="basic">Basic</h4>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">
     var Container = require(&apos;namespaces-js&apos;);
+    var container = new Container();
 
-    var container = new Container();    
-    container.namespace(&apos;models&apos;).value(&apos;user&apos;, require(&apos;./models/user&apos;);
-    container.namespace(&apos;services&apos;).service(&apos;user&apos;, require(&apos;./services/user&apos;);
-    container.namespace(&apos;core/infrastructure&apos;).service(&apos;logger&apos;, require(&apos;logger&apos;));
+    container.namespace(&apos;a&apos;).value(&apos;foo&apos;, &apos;bar&apos;);
+    container.namespace(&apos;b&apos;).service(&apos;foo&apos;, function Bar() { this.name = &apos;bar&apos;; });
+    container.namespace(&apos;c/d&apos;).factory(&apos;foo&apos;, () =&gt; &apos;bar&apos;);    
 
-    ...
+    const aFoo = container.resolve(&apos;a/foo&apos;); // -&gt; &apos;bar&apos;
+    const bFoo = container.resolve(&apos;b/foo&apos;); // -&gt; instance of Bar
+    const cdFoo = container.resolve(&apos;c/d/foo&apos;); // -&gt; &apos;bar&apos;</code>
+</code></pre>
+<p>Also, you can define custom namespace separator:</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+    var Container = require(&apos;namespaces-js&apos;);
+    var container = new Container(&apos;.&apos;);
 
-    var userService = container.resolve(&apos;services/user&apos;);
-    var userInstance = container.resolve(&apos;models/user&apos;);
-    var logger = container.resolve(&apos;core/infrastructure/logger&apos;);</code>
+    container.namespace(&apos;a.b.c&apos;).value(&apos;foo&apos;, &apos;bar&apos;);
+    container.namespace(&apos;d.e.f&apos;).service(&apos;foo&apos;, function Bar() { this.name = &apos;bar&apos;; });</code>
 </code></pre>
 <h4 id="modular">Modular</h4>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">
-    var Container = require(&apos;namespaces-js&apos;);
+    var Container = require(&apos;namespaces-js&apos;);    
+    var container = new Container();   
 
-    var container = new Container();
     var ui = container.namespace(&apos;ui&apos;);
     var actions = ui.namespace(&apos;actions&apos;);
     actions.service(&apos;user&apos;, require(&apos;./ui/flux/actions/user&apos;));
@@ -115,11 +117,21 @@
     var stores = ui.namespace(&apos;stores&apos;);
     stores.service(&apos;users&apos;, [&apos;ui/actions/users&apos;, &apos;ui/actions/user&apos;], require(&apos;./ui/flux/stores/users&apos;));</code>
 </code></pre>
-<h3 id="custom-resolving">Custom resolving</h3>
+<h3 id="resolving">Resolving</h3>
+<h4 id="basic">Basic</h4>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">
     var Container = require(&apos;namespaces-js&apos;);
-
     var container = new Container();
+
+    container.value(&apos;foo&apos;, &apos;bar&apos;);
+
+    const foo = container.resolve(&apos;foo&apos;); // -&gt; &apos;bar&apos;</code>
+</code></pre>
+<h4 id="group">Group</h4>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+    var Container = require(&apos;namespaces-js&apos;);
+    var container = new Container();
+
     var services = container.namespace(&apos;services&apos;);
     services.service(&apos;users&apos;, UsersService);
     services.service(&apos;accounts&apos;, AccountsService);
@@ -130,18 +142,35 @@
 
     var allActions = container.resolveAll(&apos;ui/actions&apos;);</code>
 </code></pre>
+<h4 id="custom">Custom</h4>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">
+    var Container = require(&apos;namespaces-js&apos;);
+    var container = new Container();
+
+    container.factory(&apos;a&apos;, () =&gt; &apos;a&apos;);
+    container.factory(&apos;b&apos;, [
+        &apos;a&apos;,
+        function customResolver() {
+            return { foo: &apos;bar&apos; };
+        }
+    ], (a, c) =&gt; [a, c]);</code>
+</code></pre>
 <h3 id="namespace-helper">Namespace Helper</h3>
 <pre><code class="lang-javascript"><code class="source-code prettyprint">
     var namespaces = Container.map({
-        settings: &apos;settings&apos;,
-        services: [&apos;core&apos;, &apos;domain&apos;]
+        a: &apos;b&apos;,
+        c: [&apos;d&apos;, &apos;e&apos;, { f: [&apos;g&apos;, &apos;h&apos;] }]
     });
 
     var container = new Container();
 
-    container.namespace(namespaces.settings()).const(&apos;settings&apos;, { apiEndpoint: &apos;/&apos; });
-    container.namespace(namespaces.services.core()).service(&apos;database&apos;, require(&apos;./db-manager&apos;));
-    container.namespace(namespaces.services.domain()).service(&apos;account&apos;, require(&apos;./acount-service&apos;));</code>
+    container.namespace(namespaces.a()).value(&apos;foo&apos;, &apos;bar&apos;);
+    container.namespace(namespaces.b()).factory(&apos;foo&apos;, () =&gt; &apos;bar&apos;);
+    container.namespace(namespaces.c()).factory(&apos;foo&apos;, () =&gt; &apos;bar&apos;);
+    container.namespace(namespaces.c.f.g()).value(&apos;foo&apos;, &apos;bar&apos;);
+
+    container.resolve(namespaces.a(&apos;foo&apos;));
+    container.resolve(namespaces.c.f.g(&apos;foo&apos;));</code>
 </code></pre>
 <h2 id="api">API</h2>
 <h3 id="new-container-namespaceseparator-string-">new Container([namespaceSeparator: string = &apos;/&apos;])</h3>
@@ -164,7 +193,7 @@ Arguments: namespaces separator. Optional. Default &apos;/&apos;.</p>
 <h3 id="namespace-getname-string">namespace.getName(): string</h3>
 <p>Returns name of current namespace.   </p>
 <h3 id="container-map">Container.map</h3>
-<p>Helper function that converts object / array to chain of functions.      </p>
+<p>Helper function that converts object / array to chain of functions in order to easily use namespace paths.      </p>
 <h3 id="license">License</h3>
 <p>The MIT License (MIT)<br>Copyright (C) 2015 Tim Voronov</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy

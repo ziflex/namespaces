@@ -22,7 +22,7 @@ describe('Resolver', function() {
         });
 
         context('custom resolver', () => {
-            it('should return array of dependencies', () => {
+            it('should return array of dependencies', (done) => {
                 container.factory('my-service', () => {
                     return [
                         'foo',
@@ -33,24 +33,26 @@ describe('Resolver', function() {
                     expect(arg2, 'arg1 exists').to.exist;
                     expect(arg1, 'arg1 equals to "foo"').to.equal('foo');
                     expect(arg2, 'arg2 equals to "bar"').to.equal('bar');
+                    done();
                 });
 
                 container.resolve('my-service');
             });
 
-            it('should return object as single dependency', () => {
+            it('should return object as single dependency', (done) => {
                 container.factory('my-service', () => {
                     return { foo: 'bar' };
                 }, (arg1, arg2) => {
                     expect(arg1, 'arg1 exists').to.exist;
                     expect(arg2, 'arg1 exists').to.not.exist;
                     expect(arg1, 'arg1 equals to "{ foo: \'bar\' }"').to.eql({ foo: 'bar' });
+                    done();
                 });
 
                 container.resolve('my-service');
             });
 
-            it('should return single value for dependency', () => {
+            it('should return single value for dependency', (done) => {
                 container.const('my-val', 'value');
                 container.factory('my-service', [
                     'my-val',
@@ -62,6 +64,7 @@ describe('Resolver', function() {
                     expect(arg2, 'arg1 exists').to.exist;
                     expect(arg1, 'arg2 equals to "value"').to.equal('value');
                     expect(arg2, 'arg2 equals to "{ foo: \'bar\' }"').to.eql({ foo: 'bar' });
+                    done();
                 });
 
                 container.factory('my-service2', [

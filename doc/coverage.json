@@ -12,7 +12,7 @@
       "expectCount": 8,
       "actualCount": 7,
       "undocumentLines": [
-        9
+        7
       ]
     },
     "src/namespace.js": {

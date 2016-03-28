@@ -1,6 +1,6 @@
 # namespaces
 
-Angular-flavored dependency injection container.
+Angular-flavored DI container.
 
 [![npm version](https://badge.fury.io/js/namespaces-js.svg)](https://www.npmjs.com/package/namespaces-js)
 [![Bower version](https://badge.fury.io/bo/namespaces-js.svg)](http://badge.fury.io/bo/namespaces-js)
@@ -30,37 +30,42 @@ via bower
 ```javascript
 
     var Container = require('namespaces-js');
+    var container = new Container();
 
-    container.value('settings', settings);
-    container.namespace('services/infrastructure').service('http', require('http'));
-    container.namespace('services/external/api').factory('users', ['settings', 'services/infrastructure/http'], (settings, http) => {
-        return new UsersApi(settings.api, http);
-    });
-    container.namespace('services/business').service('users', ['services/external/api/users'], UsersService);
+    container.factory('a', () => 'a');
+    container.factory('b', ['a'] (a) => a + 'b');
 
-
-    var usersServiceInstance = container.resolve('services/business/users');
+    const b = container.resolve('b'); // -> 'ab'
+    const a = container.resolve('a'); // -> 'a'
 
 ```
 
 ### Namespaces
 
-#### Basic
+```javascript
+
+    var Container = require('namespaces-js');
+    var container = new Container();
+
+    container.namespace('a').value('foo', 'bar');
+    container.namespace('b').service('foo', function Bar() { this.name = 'bar'; });
+    container.namespace('c/d').factory('foo', () => 'bar');    
+
+    const aFoo = container.resolve('a/foo'); // -> 'bar'
+    const bFoo = container.resolve('b/foo'); // -> instance of Bar
+    const cdFoo = container.resolve('c/d/foo'); // -> 'bar'
+
+```
+
+Also, you can define custom namespace separator:
 
 ```javascript
 
     var Container = require('namespaces-js');
+    var container = new Container('.');
 
-    var container = new Container();    
-    container.namespace('models').value('user', require('./models/user');
-    container.namespace('services').service('user', require('./services/user');
-    container.namespace('core/infrastructure').service('logger', require('logger'));
-
-    ...
-
-    var userService = container.resolve('services/user');
-    var userInstance = container.resolve('models/user');
-    var logger = container.resolve('core/infrastructure/logger');
+    container.namespace('a.b.c').value('foo', 'bar');
+    container.namespace('d.e.f').service('foo', function Bar() { this.name = 'bar'; });
 
 ```
 
@@ -68,9 +73,9 @@ via bower
 
 ```javascript
 
-    var Container = require('namespaces-js');
+    var Container = require('namespaces-js');    
+    var container = new Container();   
 
-    var container = new Container();
     var ui = container.namespace('ui');
     var actions = ui.namespace('actions');
     actions.service('user', require('./ui/flux/actions/user'));
@@ -81,13 +86,27 @@ via bower
 
 ```
 
-### Custom resolving
+### Resolving
+#### Basic
 
 ````javascript
 
     var Container = require('namespaces-js');
-
     var container = new Container();
+
+    container.value('foo', 'bar');
+
+    const foo = container.resolve('foo'); // -> 'bar'
+
+````
+
+#### Group
+
+````javascript
+
+    var Container = require('namespaces-js');
+    var container = new Container();
+
     var services = container.namespace('services');
     services.service('users', UsersService);
     services.service('accounts', AccountsService);
@@ -100,20 +119,42 @@ via bower
 
 ````
 
+#### Custom
+
+````javascript
+
+    var Container = require('namespaces-js');
+    var container = new Container();
+
+    container.factory('a', () => 'a');
+    container.factory('b', [
+        'a',
+        function customResolver() {
+            return { foo: 'bar' };
+        }
+    ], (a, c) => [a, c]);
+
+````
+
+
 ### Namespace Helper
 
 ````javascript
 
     var namespaces = Container.map({
-        settings: 'settings',
-        services: ['core', 'domain']
+        a: 'b',
+        c: ['d', 'e', { f: ['g', 'h'] }]
     });
 
     var container = new Container();
 
-    container.namespace(namespaces.settings()).const('settings', { apiEndpoint: '/' });
-    container.namespace(namespaces.services.core()).service('database', require('./db-manager'));
-    container.namespace(namespaces.services.domain()).service('account', require('./acount-service'));
+    container.namespace(namespaces.a()).value('foo', 'bar');
+    container.namespace(namespaces.b()).factory('foo', () => 'bar');
+    container.namespace(namespaces.c()).factory('foo', () => 'bar');
+    container.namespace(namespaces.c.f.g()).value('foo', 'bar');
+
+    container.resolve(namespaces.a('foo'));
+    container.resolve(namespaces.c.f.g('foo'));
 
 ````
 
@@ -152,7 +193,7 @@ Any function's value will be registered as a singleton.
 Returns name of current namespace.   
 
 ### Container.map     
-Helper function that converts object / array to chain of functions.      
+Helper function that converts object / array to chain of functions in order to easily use namespace paths.      
 
 ### License
 

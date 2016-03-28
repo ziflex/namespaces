@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-expressions, func-names */
 
 import {expect} from 'chai';
-import {isFunction} from '../../src/utils';
 import Module from '../../src/module';
 
 describe('Module', function() {

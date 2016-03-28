@@ -361,7 +361,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import { isFunction } from './utils';\r\n\r\n/**\r\n * Creates a new Module.\r\n * @class\r\n * @classdesc Represents a module.\r\n */\r\nexport default class Module {\r\n    constructor(namespace, name, dependencies, initialize) {\r\n        this._namespace = namespace;\r\n        this._name = name;\r\n        this._initialize = initialize;\r\n        this._dependencies = dependencies;\r\n        this._isInitialized = false;\r\n        this._value = null;\r\n    }\r\n\r\n    /**\r\n     * Returns module namespace.\r\n     * @returns {string} Module namespace.\r\n     */\r\n    getNamespace() {\r\n        return this._namespace;\r\n    }\r\n\r\n    /**\r\n     * Returns module name.\r\n     * @returns {string} Module name.\r\n     */\r\n    getName() {\r\n        return this._name;\r\n    }\r\n\r\n    /**\r\n     * Returns a list of module dependencies.\r\n     * @returns {(Array<string>|undefined)} List of module dependencies.\r\n     */\r\n    getDependencies() {\r\n        return this._dependencies;\r\n    }\r\n\r\n    /**\r\n     * Returns initialized module value.\r\n     * @returns {any} Modules value.\r\n     * @throws {Error} Throws error if modules is not initialized.\r\n     */\r\n    getValue() {\r\n        if (!this.isInitialized()) {\r\n            throw new Error('Module is not initialized!');\r\n        }\r\n\r\n        if (isFunction(this._value)) {\r\n            return this._value();\r\n        }\r\n\r\n        return this._value;\r\n    }\r\n\r\n    /**\r\n     * Returns value that determines whether module is initialized.\r\n     * @returns {boolean} Value that determines whether module is initialized.\r\n     */\r\n    isInitialized() {\r\n        return this._isInitialized;\r\n    }\r\n\r\n    /**\r\n     * Initializes module.\r\n     * @throws {Error} Throws error if modules is already initialized.\r\n     */\r\n    initialize(dependencies) {\r\n        if (this.isInitialized()) {\r\n            throw new Error(`Module has been already initialized!`);\r\n        }\r\n\r\n        this._value = this._initialize(dependencies);\r\n        this._isInitialized = true;\r\n    }\r\n}\r\n"
+    "content": "/**\r\n * Creates a new Module.\r\n * @class\r\n * @classdesc Represents a module.\r\n */\r\nexport default class Module {\r\n    constructor(namespace, name, dependencies, initialize) {\r\n        this._namespace = namespace;\r\n        this._name = name;\r\n        this._initialize = initialize;\r\n        this._dependencies = dependencies;\r\n        this._isInitialized = false;\r\n        this._value = null;\r\n    }\r\n\r\n    /**\r\n     * Returns module namespace.\r\n     * @returns {string} Module namespace.\r\n     */\r\n    getNamespace() {\r\n        return this._namespace;\r\n    }\r\n\r\n    /**\r\n     * Returns module name.\r\n     * @returns {string} Module name.\r\n     */\r\n    getName() {\r\n        return this._name;\r\n    }\r\n\r\n    /**\r\n     * Returns a list of module dependencies.\r\n     * @returns {(Array<string>|undefined)} List of module dependencies.\r\n     */\r\n    getDependencies() {\r\n        return this._dependencies;\r\n    }\r\n\r\n    /**\r\n     * Returns initialized module value.\r\n     * @returns {any} Modules value.\r\n     * @throws {Error} Throws error if modules is not initialized.\r\n     */\r\n    getValue() {\r\n        if (!this.isInitialized()) {\r\n            throw new Error('Module is not initialized!');\r\n        }\r\n\r\n        return this._value();\r\n    }\r\n\r\n    /**\r\n     * Returns value that determines whether module is initialized.\r\n     * @returns {boolean} Value that determines whether module is initialized.\r\n     */\r\n    isInitialized() {\r\n        return this._isInitialized;\r\n    }\r\n\r\n    /**\r\n     * Initializes module.\r\n     * @throws {Error} Throws error if modules is already initialized.\r\n     */\r\n    initialize(dependencies) {\r\n        if (this.isInitialized()) {\r\n            throw new Error(`Module has been already initialized!`);\r\n        }\r\n\r\n        this._value = this._initialize(dependencies);\r\n        this._isInitialized = true;\r\n    }\r\n}\r\n"
   },
   {
     "__docId__": 13,
@@ -376,7 +376,7 @@
     "importPath": "namespaces-js/src/module.js",
     "importStyle": "Module",
     "description": "Creates a new Module.",
-    "lineNumber": 8,
+    "lineNumber": 6,
     "unknown": [
       {
         "tagName": "@class",
@@ -399,7 +399,7 @@
     "longname": "src/module.js~Module#constructor",
     "access": null,
     "description": null,
-    "lineNumber": 9,
+    "lineNumber": 7,
     "undocument": true,
     "params": [
       {
@@ -439,7 +439,7 @@
     "longname": "src/module.js~Module#_namespace",
     "access": null,
     "description": null,
-    "lineNumber": 10,
+    "lineNumber": 8,
     "undocument": true,
     "type": {
       "types": [
@@ -457,7 +457,7 @@
     "longname": "src/module.js~Module#_name",
     "access": null,
     "description": null,
-    "lineNumber": 11,
+    "lineNumber": 9,
     "undocument": true,
     "type": {
       "types": [
@@ -475,7 +475,7 @@
     "longname": "src/module.js~Module#_initialize",
     "access": null,
     "description": null,
-    "lineNumber": 12,
+    "lineNumber": 10,
     "undocument": true,
     "type": {
       "types": [
@@ -493,7 +493,7 @@
     "longname": "src/module.js~Module#_dependencies",
     "access": null,
     "description": null,
-    "lineNumber": 13,
+    "lineNumber": 11,
     "undocument": true,
     "type": {
       "types": [
@@ -511,7 +511,7 @@
     "longname": "src/module.js~Module#_isInitialized",
     "access": null,
     "description": null,
-    "lineNumber": 14,
+    "lineNumber": 12,
     "undocument": true,
     "type": {
       "types": [
@@ -529,7 +529,7 @@
     "longname": "src/module.js~Module#_value",
     "access": null,
     "description": null,
-    "lineNumber": 15,
+    "lineNumber": 13,
     "undocument": true,
     "type": {
       "types": [
@@ -547,7 +547,7 @@
     "longname": "src/module.js~Module#getNamespace",
     "access": null,
     "description": "Returns module namespace.",
-    "lineNumber": 22,
+    "lineNumber": 20,
     "unknown": [
       {
         "tagName": "@returns",
@@ -575,7 +575,7 @@
     "longname": "src/module.js~Module#getName",
     "access": null,
     "description": "Returns module name.",
-    "lineNumber": 30,
+    "lineNumber": 28,
     "unknown": [
       {
         "tagName": "@returns",
@@ -603,7 +603,7 @@
     "longname": "src/module.js~Module#getDependencies",
     "access": null,
     "description": "Returns a list of module dependencies.",
-    "lineNumber": 38,
+    "lineNumber": 36,
     "unknown": [
       {
         "tagName": "@returns",
@@ -632,7 +632,7 @@
     "longname": "src/module.js~Module#getValue",
     "access": null,
     "description": "Returns initialized module value.",
-    "lineNumber": 47,
+    "lineNumber": 45,
     "unknown": [
       {
         "tagName": "@returns",
@@ -668,7 +668,7 @@
     "longname": "src/module.js~Module#isInitialized",
     "access": null,
     "description": "Returns value that determines whether module is initialized.",
-    "lineNumber": 63,
+    "lineNumber": 57,
     "unknown": [
       {
         "tagName": "@returns",
@@ -696,7 +696,7 @@
     "longname": "src/module.js~Module#initialize",
     "access": null,
     "description": "Initializes module.",
-    "lineNumber": 71,
+    "lineNumber": 65,
     "params": [
       {
         "name": "dependencies",
@@ -725,7 +725,7 @@
     "longname": "src/module.js~Module#_value",
     "access": null,
     "description": null,
-    "lineNumber": 76,
+    "lineNumber": 70,
     "undocument": true,
     "type": {
       "types": [
@@ -743,7 +743,7 @@
     "longname": "src/module.js~Module#_isInitialized",
     "access": null,
     "description": null,
-    "lineNumber": 77,
+    "lineNumber": 71,
     "undocument": true,
     "type": {
       "types": [
@@ -762,7 +762,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {\n    isFunction,\n    create,\n    parseArgs,\n    joinPath\n} from './utils';\nimport Module from './module';\n\n/**\n * Creates a new Namespace.\n * @class\n * @classdesc Represents a module namespace.\n */\nexport default class Namespace {\n\n    /** @constructor\n     * @param {string} separator - Namespace separator.\n     * @param {string} name - Namespace name.\n     * @param {Storage} storage - Global modules storage.\n     */\n    constructor(separator = '/', name = '', storage) {\n        this._separator = separator;\n        this._name = name;\n        this._storage = storage;\n    }\n\n    /**\n     * Returns a namespace name.\n     * @returns {string} Namespace name.\n     */\n    getName() {\n        return this._name;\n    }\n\n    /**\n     * Returns a module namespace.\n     * @param {string} name - Module namespace. Optional.\n     * @returns {Namespace} Module namespace.\n     */\n    namespace(name) {\n        return new Namespace(this._separator, joinPath(this._separator, this._name, name), this._storage);\n    }\n\n    /**\n     * Register a value, such as a string, a number, an array, an object or a function.\n     * @param {string} name - Module name.\n     * @param {(string|number|object|array|function)} definition - Module value.\n     * @returns {function} Value.\n     */\n    const(name, definition) {\n        const args = parseArgs(name, definition);\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize() {\n            return function factory() {\n                return args.definition;\n            };\n        }));\n    }\n\n    /**\n     * Register a value, such as a string, a number, an array, an object or a constructor.\n     * Note: If passed value is function type, it will be treated as constructor\n     * and every time when it's injected, new instance will be created.\n     * @param {string} name - Module name.\n     * @param {array} dependencies - Module dependencies. Optional.\n     * @param {(string|number|object|array|function)} definition - Module value.\n     * @returns {function} Value factory.\n     */\n    value(name, dependencies, definition) {\n        const args = parseArgs(name, dependencies, definition);\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {\n            // instances, simple types\n            if (!isFunction(args.definition)) {\n                return args.definition;\n            }\n\n            return function factory() {\n                return create(args.definition, resolved);\n            };\n        }));\n    }\n\n    /**\n     * Register a service constructor, which will be invoked with `new` to create the service instance.\n     * Any type which was registered as a service is singleton.\n     * @param {string} name - Module name.\n     * @param {array} dependencies - Module dependencies. Optional.\n     * @param {function} definition - Module constructor that will be instantiated.\n     * @returns {function} Value factory.\n     */\n    service(name, dependencies, definition) {\n        const args = parseArgs(name, dependencies, definition);\n\n        if (!isFunction(args.definition)) {\n            throw new Error(`Service supports only constructors.`);\n        }\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {\n            return create(args.definition, resolved);\n        }));\n    }\n\n    /**\n     * Register a service factory, which will be called to return the service instance.\n     * Any function's value will be registered as a singleton.\n     * @param {string} name - Module name.\n     * @param {array} dependencies - Module dependencies. Optional.\n     * @param {function} definition - Module factory.\n     * @returns {function} Value factory.\n     */\n    factory(name, dependencies, definition) {\n        const args = parseArgs(name, dependencies, definition);\n\n        if (!isFunction(args.definition)) {\n            throw new Error(`Factory supports only functions.`);\n        }\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {\n            return args.definition(...resolved);\n        }));\n    }\n}\n"
+    "content": "import {\n    isFunction,\n    create,\n    parseArgs,\n    joinPath\n} from './utils';\nimport Module from './module';\n\n/**\n * Creates a new Namespace.\n * @class\n * @classdesc Represents a module namespace.\n */\nexport default class Namespace {\n\n    /** @constructor\n     * @param {string} separator - Namespace separator.\n     * @param {string} name - Namespace name.\n     * @param {Storage} storage - Global modules storage.\n     */\n    constructor(separator = '/', name = '', storage) {\n        this._separator = separator;\n        this._name = name;\n        this._storage = storage;\n    }\n\n    /**\n     * Returns a namespace name.\n     * @returns {string} Namespace name.\n     */\n    getName() {\n        return this._name;\n    }\n\n    /**\n     * Returns a module namespace.\n     * @param {string} name - Module namespace. Optional.\n     * @returns {Namespace} Module namespace.\n     */\n    namespace(name) {\n        return new Namespace(this._separator, joinPath(this._separator, this._name, name), this._storage);\n    }\n\n    /**\n     * Register a value, such as a string, a number, an array, an object or a function.\n     * @param {string} name - Module name.\n     * @param {(string|number|object|array|function)} definition - Module value.\n     * @returns {function} Value.\n     */\n    const(name, definition) {\n        const args = parseArgs(name, definition);\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize() {\n            return function factory() {\n                return args.definition;\n            };\n        }));\n    }\n\n    /**\n     * Register a value, such as a string, a number, an array, an object or a constructor.\n     * Note: If passed value is function type, it will be treated as constructor\n     * and every time when it's injected, new instance will be created.\n     * @param {string} name - Module name.\n     * @param {array} dependencies - Module dependencies. Optional.\n     * @param {(string|number|object|array|function)} definition - Module value.\n     * @returns {function} Value factory.\n     */\n    value(name, dependencies, definition) {\n        const args = parseArgs(name, dependencies, definition);\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {\n            // instances, simple types\n            if (!isFunction(args.definition)) {\n                return function factory() {\n                    return args.definition;\n                };\n            }\n\n            return function factory() {\n                return create(args.definition, resolved);\n            };\n        }));\n    }\n\n    /**\n     * Register a service constructor, which will be invoked with `new` to create the service instance.\n     * Any type which was registered as a service is singleton.\n     * @param {string} name - Module name.\n     * @param {array} dependencies - Module dependencies. Optional.\n     * @param {function} definition - Module constructor that will be instantiated.\n     * @returns {function} Value factory.\n     */\n    service(name, dependencies, definition) {\n        const args = parseArgs(name, dependencies, definition);\n\n        if (!isFunction(args.definition)) {\n            throw new Error(`Service supports only constructors.`);\n        }\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {\n            const value = create(args.definition, resolved);\n\n            return function factory() {\n                return value;\n            };\n        }));\n    }\n\n    /**\n     * Register a service factory, which will be called to return the service instance.\n     * Any function's value will be registered as a singleton.\n     * @param {string} name - Module name.\n     * @param {array} dependencies - Module dependencies. Optional.\n     * @param {function} definition - Module factory.\n     * @returns {function} Value factory.\n     */\n    factory(name, dependencies, definition) {\n        const args = parseArgs(name, dependencies, definition);\n\n        if (!isFunction(args.definition)) {\n            throw new Error(`Factory supports only functions.`);\n        }\n\n        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {\n            const value = args.definition(...resolved);\n\n            return function factory() {\n                return value;\n            };\n        }));\n    }\n}\n"
   },
   {
     "__docId__": 30,
@@ -1088,7 +1088,7 @@
     "longname": "src/namespace.js~Namespace#service",
     "access": null,
     "description": "Register a service constructor, which will be invoked with `new` to create the service instance.\nAny type which was registered as a service is singleton.",
-    "lineNumber": 92,
+    "lineNumber": 94,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1147,7 +1147,7 @@
     "longname": "src/namespace.js~Namespace#factory",
     "access": null,
     "description": "Register a service factory, which will be called to return the service instance.\nAny function's value will be registered as a singleton.",
-    "lineNumber": 112,
+    "lineNumber": 118,
     "unknown": [
       {
         "tagName": "@returns",
@@ -3485,7 +3485,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "/* eslint-disable no-unused-expressions, func-names */\n\nimport {expect} from 'chai';\nimport {isFunction} from '../../src/utils';\nimport Module from '../../src/module';\n\ndescribe('Module', function() {\n    describe('.getNamespace', function() {\n        it('should return module namespace', function() {\n            const namespace = 'foo';\n            const module = new Module(namespace);\n\n            expect(module.getNamespace).to.not.throw;\n            expect(module.getNamespace()).to.be.equal(namespace);\n        });\n    });\n    describe('.getName', function() {\n        it('should return module name', function() {\n            const namespace = 'foo';\n            const name = 'bar';\n            const module = new Module(namespace, name);\n\n            expect(module.getName).to.not.throw;\n            expect(module.getName()).to.be.equal(name);\n        });\n    });\n    describe('.getDependencies', function() {\n        it('should return module dependencies', function() {\n            const namespace = 'foo';\n            const name = 'bar';\n            const dependencies = ['foo/qaz', 'foo/wsx'];\n            const module = new Module(namespace, name, dependencies);\n\n            expect(module.getDependencies).to.not.throw;\n            expect(module.getDependencies()).to.be.equal(dependencies);\n        });\n    });\n    describe('.getValue', function() {\n        context('when is initialized', function() {\n            it('should return value', function() {\n                const values = [\n                    1,\n                    'string',\n                    {foo: 'bar'},\n                    ['foo', 'bar'],\n                    function() {\n                        return 'function';\n                    }\n                ];\n\n                values.forEach((value) => {\n                    const namespace = 'foo';\n                    const name = 'bar';\n                    const dependencies = [];\n                    const module = new Module(namespace, name, dependencies, () => {\n                        return value;\n                    });\n\n                    module.initialize();\n                    expect(module.getValue).to.not.throw;\n                    expect(module.getValue()).to.be.equal(isFunction(value) ? value() : value);\n                });\n            });\n        });\n        context('when is not initialized', function() {\n            it('should throw an error', function() {\n                const module = new Module('foo', 'bar', []);\n\n                expect(module.getValue).to.throw;\n            });\n        });\n    });\n    describe('.isInitialized', function() {\n        context('when is initialized', function() {\n            it('should return \"true\"', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                module.initialize();\n                expect(module.isInitialized()).to.equal(true);\n            });\n        });\n        context('when is not initialized', function() {\n            it('should return \"false\"', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                expect(module.isInitialized()).to.equal(false);\n            });\n        });\n    });\n    describe('initialize', function() {\n        context('when is initialized', function() {\n            it('should not throw an error', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                expect(module.initialize).to.not.throw;\n            });\n        });\n        context('when is not initialized', function() {\n            it('should throw an error', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                module.initialize();\n                expect(module.initialize).to.throw;\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
+    "content": "/* eslint-disable no-unused-expressions, func-names */\n\nimport {expect} from 'chai';\nimport Module from '../../src/module';\n\ndescribe('Module', function() {\n    describe('.getNamespace', function() {\n        it('should return module namespace', function() {\n            const namespace = 'foo';\n            const module = new Module(namespace);\n\n            expect(module.getNamespace).to.not.throw;\n            expect(module.getNamespace()).to.be.equal(namespace);\n        });\n    });\n    describe('.getName', function() {\n        it('should return module name', function() {\n            const namespace = 'foo';\n            const name = 'bar';\n            const module = new Module(namespace, name);\n\n            expect(module.getName).to.not.throw;\n            expect(module.getName()).to.be.equal(name);\n        });\n    });\n    describe('.getDependencies', function() {\n        it('should return module dependencies', function() {\n            const namespace = 'foo';\n            const name = 'bar';\n            const dependencies = ['foo/qaz', 'foo/wsx'];\n            const module = new Module(namespace, name, dependencies);\n\n            expect(module.getDependencies).to.not.throw;\n            expect(module.getDependencies()).to.be.equal(dependencies);\n        });\n    });\n    describe('.getValue', function() {\n        context('when is initialized', function() {\n            it('should return value', function() {\n                const values = [\n                    1,\n                    'string',\n                    {foo: 'bar'},\n                    ['foo', 'bar'],\n                    function() {\n                        return 'function';\n                    }\n                ];\n\n                values.forEach((value) => {\n                    const namespace = 'foo';\n                    const name = 'bar';\n                    const dependencies = [];\n                    const module = new Module(namespace, name, dependencies, () => {\n                        return () => value;\n                    });\n\n                    module.initialize();\n                    expect(module.getValue).to.not.throw;\n                    expect(module.getValue()).to.be.equal(value);\n                });\n            });\n        });\n        context('when is not initialized', function() {\n            it('should throw an error', function() {\n                const module = new Module('foo', 'bar', []);\n\n                expect(module.getValue).to.throw;\n            });\n        });\n    });\n    describe('.isInitialized', function() {\n        context('when is initialized', function() {\n            it('should return \"true\"', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                module.initialize();\n                expect(module.isInitialized()).to.equal(true);\n            });\n        });\n        context('when is not initialized', function() {\n            it('should return \"false\"', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                expect(module.isInitialized()).to.equal(false);\n            });\n        });\n    });\n    describe('initialize', function() {\n        context('when is initialized', function() {\n            it('should not throw an error', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                expect(module.initialize).to.not.throw;\n            });\n        });\n        context('when is not initialized', function() {\n            it('should throw an error', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                module.initialize();\n                expect(module.initialize).to.throw;\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
   },
   {
     "__docId__": 169,
@@ -3499,7 +3499,7 @@
     "longname": "unit/module.test.js~describe25",
     "access": null,
     "description": "Module",
-    "lineNumber": 7
+    "lineNumber": 6
   },
   {
     "__docId__": 170,
@@ -3513,7 +3513,7 @@
     "longname": "unit/module.test.js~describe25.describe26",
     "access": null,
     "description": ".getNamespace",
-    "lineNumber": 8
+    "lineNumber": 7
   },
   {
     "__docId__": 171,
@@ -3527,7 +3527,7 @@
     "longname": "unit/module.test.js~describe25.describe26.it27",
     "access": null,
     "description": "should return module namespace",
-    "lineNumber": 9
+    "lineNumber": 8
   },
   {
     "__docId__": 172,
@@ -3541,7 +3541,7 @@
     "longname": "unit/module.test.js~describe25.describe28",
     "access": null,
     "description": ".getName",
-    "lineNumber": 17
+    "lineNumber": 16
   },
   {
     "__docId__": 173,
@@ -3555,7 +3555,7 @@
     "longname": "unit/module.test.js~describe25.describe28.it29",
     "access": null,
     "description": "should return module name",
-    "lineNumber": 18
+    "lineNumber": 17
   },
   {
     "__docId__": 174,
@@ -3569,7 +3569,7 @@
     "longname": "unit/module.test.js~describe25.describe30",
     "access": null,
     "description": ".getDependencies",
-    "lineNumber": 27
+    "lineNumber": 26
   },
   {
     "__docId__": 175,
@@ -3583,7 +3583,7 @@
     "longname": "unit/module.test.js~describe25.describe30.it31",
     "access": null,
     "description": "should return module dependencies",
-    "lineNumber": 28
+    "lineNumber": 27
   },
   {
     "__docId__": 176,
@@ -3597,7 +3597,7 @@
     "longname": "unit/module.test.js~describe25.describe32",
     "access": null,
     "description": ".getValue",
-    "lineNumber": 38
+    "lineNumber": 37
   },
   {
     "__docId__": 177,
@@ -3611,7 +3611,7 @@
     "longname": "unit/module.test.js~describe25.describe32.context33",
     "access": null,
     "description": "when is initialized",
-    "lineNumber": 39
+    "lineNumber": 38
   },
   {
     "__docId__": 178,
@@ -3625,7 +3625,7 @@
     "longname": "unit/module.test.js~describe25.describe32.context33.it34",
     "access": null,
     "description": "should return value",
-    "lineNumber": 40
+    "lineNumber": 39
   },
   {
     "__docId__": 179,
@@ -3639,7 +3639,7 @@
     "longname": "unit/module.test.js~describe25.describe32.context35",
     "access": null,
     "description": "when is not initialized",
-    "lineNumber": 65
+    "lineNumber": 64
   },
   {
     "__docId__": 180,
@@ -3653,7 +3653,7 @@
     "longname": "unit/module.test.js~describe25.describe32.context35.it36",
     "access": null,
     "description": "should throw an error",
-    "lineNumber": 66
+    "lineNumber": 65
   },
   {
     "__docId__": 181,
@@ -3667,7 +3667,7 @@
     "longname": "unit/module.test.js~describe25.describe37",
     "access": null,
     "description": ".isInitialized",
-    "lineNumber": 73
+    "lineNumber": 72
   },
   {
     "__docId__": 182,
@@ -3681,7 +3681,7 @@
     "longname": "unit/module.test.js~describe25.describe37.context38",
     "access": null,
     "description": "when is initialized",
-    "lineNumber": 74
+    "lineNumber": 73
   },
   {
     "__docId__": 183,
@@ -3695,7 +3695,7 @@
     "longname": "unit/module.test.js~describe25.describe37.context38.it39",
     "access": null,
     "description": "should return \"true\"",
-    "lineNumber": 75
+    "lineNumber": 74
   },
   {
     "__docId__": 184,
@@ -3709,7 +3709,7 @@
     "longname": "unit/module.test.js~describe25.describe37.context40",
     "access": null,
     "description": "when is not initialized",
-    "lineNumber": 87
+    "lineNumber": 86
   },
   {
     "__docId__": 185,
@@ -3723,7 +3723,7 @@
     "longname": "unit/module.test.js~describe25.describe37.context40.it41",
     "access": null,
     "description": "should return \"false\"",
-    "lineNumber": 88
+    "lineNumber": 87
   },
   {
     "__docId__": 186,
@@ -3737,7 +3737,7 @@
     "longname": "unit/module.test.js~describe25.describe42",
     "access": null,
     "description": "initialize",
-    "lineNumber": 100
+    "lineNumber": 99
   },
   {
     "__docId__": 187,
@@ -3751,7 +3751,7 @@
     "longname": "unit/module.test.js~describe25.describe42.context43",
     "access": null,
     "description": "when is initialized",
-    "lineNumber": 101
+    "lineNumber": 100
   },
   {
     "__docId__": 188,
@@ -3765,7 +3765,7 @@
     "longname": "unit/module.test.js~describe25.describe42.context43.it44",
     "access": null,
     "description": "should not throw an error",
-    "lineNumber": 102
+    "lineNumber": 101
   },
   {
     "__docId__": 189,
@@ -3779,7 +3779,7 @@
     "longname": "unit/module.test.js~describe25.describe42.context45",
     "access": null,
     "description": "when is not initialized",
-    "lineNumber": 113
+    "lineNumber": 112
   },
   {
     "__docId__": 190,
@@ -3793,7 +3793,7 @@
     "longname": "unit/module.test.js~describe25.describe42.context45.it46",
     "access": null,
     "description": "should throw an error",
-    "lineNumber": 114
+    "lineNumber": 113
   },
   {
     "__docId__": 191,
@@ -3806,7 +3806,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport Container from '../../src/container';\n\ndescribe('Resolver', function() {\n    let container = null;\n\n    beforeEach(function() {\n        container = new Container();\n    });\n\n    describe('.resolve', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                const resolve = () => {\n                    container.resolve('foo');\n                };\n\n                expect(resolve).to.throw();\n            });\n        });\n\n        context('custom resolver', () => {\n            it('should return array of dependencies', () => {\n                container.factory('my-service', () => {\n                    return [\n                        'foo',\n                        'bar'\n                    ];\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg1 equals to \"foo\"').to.equal('foo');\n                    expect(arg2, 'arg2 equals to \"bar\"').to.equal('bar');\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return object as single dependency', () => {\n                container.factory('my-service', () => {\n                    return { foo: 'bar' };\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.not.exist;\n                    expect(arg1, 'arg1 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return single value for dependency', () => {\n                container.const('my-val', 'value');\n                container.factory('my-service', [\n                    'my-val',\n                    () => {\n                        return { foo: 'bar' };\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                });\n\n                container.factory('my-service2', [\n                    'my-val',\n                    () => {\n                        return [{ foo: 'bar' }, { qaz: 'wsx'}];\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"[{ foo: \\'bar\\' }, { qaz: \\'wsx\\'}]\"').to.eql([{ foo: 'bar' }, { qaz: 'wsx'}]);\n                });\n\n                container.resolve('my-service');\n                container.resolve('my-service2');\n            });\n        });\n\n        describe('#const', () => {\n            context('plain types', () => {\n                it('should successfully resolve function', () => {\n                    const module = function foo() { return 'bar'; };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                    expect(found).to.eql(found2);\n                    expect(found() === 'bar').to.be.true;\n                });\n\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n        });\n\n        describe('#value', () => {\n            context('plain types', () => {\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n            context('constructor', () => {\n                context('without dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('value', function User() {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                        });\n\n                        const found = container.resolve('value');\n                        const found2 = container.resolve('value');\n                        expect(found).to.exist;\n                        expect(found2).to.exist;\n                        expect(found).to.not.equal(found2);\n                        expect(found.name).to.exist;\n                        expect(found.surname).to.exist;\n                    });\n                });\n                context('with dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('group', function Group() {\n                            this.accounts = [];\n                        });\n                        container.value('user', ['group'], function User(group) {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                            this.group = group;\n                        });\n\n                        const found = container.resolve('user');\n                        expect(found).to.exist;\n                        expect(found.group).to.exist;\n                        expect(found.group.accounts).to.exist;\n                    });\n                });\n            });\n        });\n\n        describe('#service', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.service('http', function HttpService() {\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.service('http', ['http-transport', 'settings'], function HttpService(transport, settings) {\n                        this.settings = settings;\n                        this.transport = transport;\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('#factory', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.factory('http', function HttpServiceFactory() {\n                        return new function HttpService() {\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.factory('http', ['http-transport', 'settings'], function HttpServiceFactory(transport, settings) {\n                        return new function HttpService() {\n                            this.settings = settings;\n                            this.transport = transport;\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('in namespace', () => {\n            describe('#value', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.value('value', 1);\n                        container.namespace('consts').value('value', 2);\n\n                        expect(container.resolve('value')).to.equal(1);\n                        expect(container.resolve('consts/value')).to.equal(2);\n                    });\n                });\n\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('consts').value('value', 1);\n                        container.namespace('models').value('user', ['consts/value'], function User(value) {\n                            this.value = value;\n                        });\n\n                        const user = container.resolve('models/user');\n                        expect(user).to.exist;\n                        expect(user.value).to.equal(1);\n                    });\n                });\n            });\n            describe('#factory', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', function factoryB() {\n                            return {name: 'B'};\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', ['services/api/service'], function factoryB(serviceA) {\n                            return {name: 'B', api: serviceA};\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n            describe('#service', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.service('service', function ServiceA() {\n                        });\n                        container.namespace('services').service('service', function ServiceB() {\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').service('service', function ServiceA() {});\n                        container.namespace('services').service('service', ['services/api/service'], function ServiceB(serviceA) {\n                            this.api = serviceA;\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n        });\n\n        // describe('circular dependency', () => {\n        //    it('should throw during resolving', () => {\n        //        const self = () => {\n        //            container.register().value('value1', ['value1'], 1);\n        //            container.resolve('value1');\n        //        };\n        //        const shallow = () => {\n        //            container.register().value('value1', ['value2'], 1);\n        //            container.register().value('value2', ['value1'], 2);\n        //            container.resolve('value1');\n        //            container.resolve('value2');\n        //        };\n        //        const deep = () => {\n        //            container.register().value('a', ['b', 'd'], 'a');\n        //            container.register().value('b', ['c', 'e'], 'b');\n        //            container.register().value('c', ['e', 'd'], 'c');\n        //            container.register().value('d', ['b'], 'd');\n        //            container.register().value('e', 'e');\n        //\n        //            container.resolve('a');\n        //        };\n        //\n        //        expect(self).to.throw(ReferenceError);\n        //        expect(shallow).to.throw(ReferenceError);\n        //        expect(deep).to.throw(ReferenceError);\n        //    });\n        // });\n    });\n    describe('.resolveAll', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                expect(() => {\n                    container.resolveAll('foo');\n                }).to.throw();\n            });\n        });\n\n        context('not empty container', () => {\n            it('should resolve all modules from particular namespace', () => {\n                const foo = container.namespace('foo');\n                foo.service('A', function() { this.name = 'A'; });\n                foo.service('B', ['foo/A'], function() { this.name = 'B'; });\n                foo.service('C', ['foo/B'], function() { this.name = 'C'; });\n                foo.service('D', ['foo/B', 'foo/C'], function() { this.name = 'D'; });\n\n                const bar = container.namespace('bar');\n                bar.service('E', ['foo/A'], function() { this.name = 'E'; });\n                bar.service('F', ['bar/E', 'foo/C'], function() { this.name = 'F'; });\n\n                const resolved = container.resolveAll('bar');\n                const arr = [];\n\n                for (const name in resolved) {\n                    if (resolved.hasOwnProperty(name)) {\n                        arr.push({\n                            name: name,\n                            value: resolved[name]\n                        });\n                    }\n                }\n\n                expect(arr.length).to.equal(2);\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
+    "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport Container from '../../src/container';\n\ndescribe('Resolver', function() {\n    let container = null;\n\n    beforeEach(function() {\n        container = new Container();\n    });\n\n    describe('.resolve', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                const resolve = () => {\n                    container.resolve('foo');\n                };\n\n                expect(resolve).to.throw();\n            });\n        });\n\n        context('custom resolver', () => {\n            it('should return array of dependencies', (done) => {\n                container.factory('my-service', () => {\n                    return [\n                        'foo',\n                        'bar'\n                    ];\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg1 equals to \"foo\"').to.equal('foo');\n                    expect(arg2, 'arg2 equals to \"bar\"').to.equal('bar');\n                    done();\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return object as single dependency', (done) => {\n                container.factory('my-service', () => {\n                    return { foo: 'bar' };\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.not.exist;\n                    expect(arg1, 'arg1 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                    done();\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return single value for dependency', (done) => {\n                container.const('my-val', 'value');\n                container.factory('my-service', [\n                    'my-val',\n                    () => {\n                        return { foo: 'bar' };\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                    done();\n                });\n\n                container.factory('my-service2', [\n                    'my-val',\n                    () => {\n                        return [{ foo: 'bar' }, { qaz: 'wsx'}];\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"[{ foo: \\'bar\\' }, { qaz: \\'wsx\\'}]\"').to.eql([{ foo: 'bar' }, { qaz: 'wsx'}]);\n                });\n\n                container.resolve('my-service');\n                container.resolve('my-service2');\n            });\n        });\n\n        describe('#const', () => {\n            context('plain types', () => {\n                it('should successfully resolve function', () => {\n                    const module = function foo() { return 'bar'; };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                    expect(found).to.eql(found2);\n                    expect(found() === 'bar').to.be.true;\n                });\n\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n        });\n\n        describe('#value', () => {\n            context('plain types', () => {\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n            context('constructor', () => {\n                context('without dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('value', function User() {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                        });\n\n                        const found = container.resolve('value');\n                        const found2 = container.resolve('value');\n                        expect(found).to.exist;\n                        expect(found2).to.exist;\n                        expect(found).to.not.equal(found2);\n                        expect(found.name).to.exist;\n                        expect(found.surname).to.exist;\n                    });\n                });\n                context('with dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('group', function Group() {\n                            this.accounts = [];\n                        });\n                        container.value('user', ['group'], function User(group) {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                            this.group = group;\n                        });\n\n                        const found = container.resolve('user');\n                        expect(found).to.exist;\n                        expect(found.group).to.exist;\n                        expect(found.group.accounts).to.exist;\n                    });\n                });\n            });\n        });\n\n        describe('#service', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.service('http', function HttpService() {\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.service('http', ['http-transport', 'settings'], function HttpService(transport, settings) {\n                        this.settings = settings;\n                        this.transport = transport;\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('#factory', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.factory('http', function HttpServiceFactory() {\n                        return new function HttpService() {\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.factory('http', ['http-transport', 'settings'], function HttpServiceFactory(transport, settings) {\n                        return new function HttpService() {\n                            this.settings = settings;\n                            this.transport = transport;\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('in namespace', () => {\n            describe('#value', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.value('value', 1);\n                        container.namespace('consts').value('value', 2);\n\n                        expect(container.resolve('value')).to.equal(1);\n                        expect(container.resolve('consts/value')).to.equal(2);\n                    });\n                });\n\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('consts').value('value', 1);\n                        container.namespace('models').value('user', ['consts/value'], function User(value) {\n                            this.value = value;\n                        });\n\n                        const user = container.resolve('models/user');\n                        expect(user).to.exist;\n                        expect(user.value).to.equal(1);\n                    });\n                });\n            });\n            describe('#factory', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', function factoryB() {\n                            return {name: 'B'};\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', ['services/api/service'], function factoryB(serviceA) {\n                            return {name: 'B', api: serviceA};\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n            describe('#service', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.service('service', function ServiceA() {\n                        });\n                        container.namespace('services').service('service', function ServiceB() {\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').service('service', function ServiceA() {});\n                        container.namespace('services').service('service', ['services/api/service'], function ServiceB(serviceA) {\n                            this.api = serviceA;\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n        });\n\n        // describe('circular dependency', () => {\n        //    it('should throw during resolving', () => {\n        //        const self = () => {\n        //            container.register().value('value1', ['value1'], 1);\n        //            container.resolve('value1');\n        //        };\n        //        const shallow = () => {\n        //            container.register().value('value1', ['value2'], 1);\n        //            container.register().value('value2', ['value1'], 2);\n        //            container.resolve('value1');\n        //            container.resolve('value2');\n        //        };\n        //        const deep = () => {\n        //            container.register().value('a', ['b', 'd'], 'a');\n        //            container.register().value('b', ['c', 'e'], 'b');\n        //            container.register().value('c', ['e', 'd'], 'c');\n        //            container.register().value('d', ['b'], 'd');\n        //            container.register().value('e', 'e');\n        //\n        //            container.resolve('a');\n        //        };\n        //\n        //        expect(self).to.throw(ReferenceError);\n        //        expect(shallow).to.throw(ReferenceError);\n        //        expect(deep).to.throw(ReferenceError);\n        //    });\n        // });\n    });\n    describe('.resolveAll', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                expect(() => {\n                    container.resolveAll('foo');\n                }).to.throw();\n            });\n        });\n\n        context('not empty container', () => {\n            it('should resolve all modules from particular namespace', () => {\n                const foo = container.namespace('foo');\n                foo.service('A', function() { this.name = 'A'; });\n                foo.service('B', ['foo/A'], function() { this.name = 'B'; });\n                foo.service('C', ['foo/B'], function() { this.name = 'C'; });\n                foo.service('D', ['foo/B', 'foo/C'], function() { this.name = 'D'; });\n\n                const bar = container.namespace('bar');\n                bar.service('E', ['foo/A'], function() { this.name = 'E'; });\n                bar.service('F', ['bar/E', 'foo/C'], function() { this.name = 'F'; });\n\n                const resolved = container.resolveAll('bar');\n                const arr = [];\n\n                for (const name in resolved) {\n                    if (resolved.hasOwnProperty(name)) {\n                        arr.push({\n                            name: name,\n                            value: resolved[name]\n                        });\n                    }\n                }\n\n                expect(arr.length).to.equal(2);\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
   },
   {
     "__docId__": 192,
@@ -3904,7 +3904,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.context51.it53",
     "access": null,
     "description": "should return object as single dependency",
-    "lineNumber": 41
+    "lineNumber": 42
   },
   {
     "__docId__": 199,
@@ -3918,7 +3918,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.context51.it54",
     "access": null,
     "description": "should return single value for dependency",
-    "lineNumber": 53
+    "lineNumber": 55
   },
   {
     "__docId__": 200,
@@ -3932,7 +3932,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55",
     "access": null,
     "description": "#const",
-    "lineNumber": 84
+    "lineNumber": 87
   },
   {
     "__docId__": 201,
@@ -3946,7 +3946,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56",
     "access": null,
     "description": "plain types",
-    "lineNumber": 85
+    "lineNumber": 88
   },
   {
     "__docId__": 202,
@@ -3960,7 +3960,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56.it57",
     "access": null,
     "description": "should successfully resolve function",
-    "lineNumber": 86
+    "lineNumber": 89
   },
   {
     "__docId__": 203,
@@ -3974,7 +3974,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56.it58",
     "access": null,
     "description": "should successfully resolve object",
-    "lineNumber": 97
+    "lineNumber": 100
   },
   {
     "__docId__": 204,
@@ -3988,7 +3988,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56.it59",
     "access": null,
     "description": "should successfully resolve number",
-    "lineNumber": 106
+    "lineNumber": 109
   },
   {
     "__docId__": 205,
@@ -4002,7 +4002,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56.it60",
     "access": null,
     "description": "should successfully resolve string",
-    "lineNumber": 115
+    "lineNumber": 118
   },
   {
     "__docId__": 206,
@@ -4016,7 +4016,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe55.context56.it61",
     "access": null,
     "description": "should successfully resolve array",
-    "lineNumber": 124
+    "lineNumber": 127
   },
   {
     "__docId__": 207,
@@ -4030,7 +4030,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62",
     "access": null,
     "description": "#value",
-    "lineNumber": 135
+    "lineNumber": 138
   },
   {
     "__docId__": 208,
@@ -4044,7 +4044,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context63",
     "access": null,
     "description": "plain types",
-    "lineNumber": 136
+    "lineNumber": 139
   },
   {
     "__docId__": 209,
@@ -4058,7 +4058,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context63.it64",
     "access": null,
     "description": "should successfully resolve object",
-    "lineNumber": 137
+    "lineNumber": 140
   },
   {
     "__docId__": 210,
@@ -4072,7 +4072,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context63.it65",
     "access": null,
     "description": "should successfully resolve number",
-    "lineNumber": 146
+    "lineNumber": 149
   },
   {
     "__docId__": 211,
@@ -4086,7 +4086,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context63.it66",
     "access": null,
     "description": "should successfully resolve string",
-    "lineNumber": 155
+    "lineNumber": 158
   },
   {
     "__docId__": 212,
@@ -4100,7 +4100,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context63.it67",
     "access": null,
     "description": "should successfully resolve array",
-    "lineNumber": 164
+    "lineNumber": 167
   },
   {
     "__docId__": 213,
@@ -4114,7 +4114,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context68",
     "access": null,
     "description": "constructor",
-    "lineNumber": 173
+    "lineNumber": 176
   },
   {
     "__docId__": 214,
@@ -4128,7 +4128,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context68.context69",
     "access": null,
     "description": "without dependencies",
-    "lineNumber": 174
+    "lineNumber": 177
   },
   {
     "__docId__": 215,
@@ -4142,7 +4142,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context68.context69.it70",
     "access": null,
     "description": "should successfully resolved",
-    "lineNumber": 175
+    "lineNumber": 178
   },
   {
     "__docId__": 216,
@@ -4156,7 +4156,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context68.context71",
     "access": null,
     "description": "with dependencies",
-    "lineNumber": 192
+    "lineNumber": 195
   },
   {
     "__docId__": 217,
@@ -4170,7 +4170,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe62.context68.context71.it72",
     "access": null,
     "description": "should successfully resolved",
-    "lineNumber": 193
+    "lineNumber": 196
   },
   {
     "__docId__": 218,
@@ -4184,7 +4184,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe73",
     "access": null,
     "description": "#service",
-    "lineNumber": 214
+    "lineNumber": 217
   },
   {
     "__docId__": 219,
@@ -4198,7 +4198,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe73.context74",
     "access": null,
     "description": "without dependencies",
-    "lineNumber": 215
+    "lineNumber": 218
   },
   {
     "__docId__": 220,
@@ -4212,7 +4212,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe73.context74.it75",
     "access": null,
     "description": "should resolve single service",
-    "lineNumber": 216
+    "lineNumber": 219
   },
   {
     "__docId__": 221,
@@ -4226,7 +4226,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe73.context76",
     "access": null,
     "description": "with dependencies",
-    "lineNumber": 229
+    "lineNumber": 232
   },
   {
     "__docId__": 222,
@@ -4240,7 +4240,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe73.context76.it77",
     "access": null,
     "description": "should resolve single service",
-    "lineNumber": 230
+    "lineNumber": 233
   },
   {
     "__docId__": 223,
@@ -4254,7 +4254,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe78",
     "access": null,
     "description": "#factory",
-    "lineNumber": 253
+    "lineNumber": 256
   },
   {
     "__docId__": 224,
@@ -4268,7 +4268,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe78.context79",
     "access": null,
     "description": "without dependencies",
-    "lineNumber": 254
+    "lineNumber": 257
   },
   {
     "__docId__": 225,
@@ -4282,7 +4282,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe78.context79.it80",
     "access": null,
     "description": "should resolve single service",
-    "lineNumber": 255
+    "lineNumber": 258
   },
   {
     "__docId__": 226,
@@ -4296,7 +4296,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe78.context81",
     "access": null,
     "description": "with dependencies",
-    "lineNumber": 270
+    "lineNumber": 273
   },
   {
     "__docId__": 227,
@@ -4310,7 +4310,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe78.context81.it82",
     "access": null,
     "description": "should resolve single service",
-    "lineNumber": 271
+    "lineNumber": 274
   },
   {
     "__docId__": 228,
@@ -4324,7 +4324,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83",
     "access": null,
     "description": "in namespace",
-    "lineNumber": 296
+    "lineNumber": 299
   },
   {
     "__docId__": 229,
@@ -4338,7 +4338,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe84",
     "access": null,
     "description": "#value",
-    "lineNumber": 297
+    "lineNumber": 300
   },
   {
     "__docId__": 230,
@@ -4352,7 +4352,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe84.context85",
     "access": null,
     "description": "same name",
-    "lineNumber": 298
+    "lineNumber": 301
   },
   {
     "__docId__": 231,
@@ -4366,7 +4366,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe84.context85.it86",
     "access": null,
     "description": "should resolve from different namespaces",
-    "lineNumber": 299
+    "lineNumber": 302
   },
   {
     "__docId__": 232,
@@ -4380,7 +4380,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe84.context87",
     "access": null,
     "description": "as dependency",
-    "lineNumber": 308
+    "lineNumber": 311
   },
   {
     "__docId__": 233,
@@ -4394,7 +4394,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe84.context87.it88",
     "access": null,
     "description": "should resolve",
-    "lineNumber": 309
+    "lineNumber": 312
   },
   {
     "__docId__": 234,
@@ -4408,7 +4408,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe89",
     "access": null,
     "description": "#factory",
-    "lineNumber": 321
+    "lineNumber": 324
   },
   {
     "__docId__": 235,
@@ -4422,7 +4422,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe89.context90",
     "access": null,
     "description": "same name",
-    "lineNumber": 322
+    "lineNumber": 325
   },
   {
     "__docId__": 236,
@@ -4436,7 +4436,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe89.context90.it91",
     "access": null,
     "description": "should resolve from different namespaces",
-    "lineNumber": 323
+    "lineNumber": 326
   },
   {
     "__docId__": 237,
@@ -4450,7 +4450,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe89.context92",
     "access": null,
     "description": "as dependency",
-    "lineNumber": 338
+    "lineNumber": 341
   },
   {
     "__docId__": 238,
@@ -4464,7 +4464,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe89.context92.it93",
     "access": null,
     "description": "should resolve",
-    "lineNumber": 339
+    "lineNumber": 342
   },
   {
     "__docId__": 239,
@@ -4478,7 +4478,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe94",
     "access": null,
     "description": "#service",
-    "lineNumber": 355
+    "lineNumber": 358
   },
   {
     "__docId__": 240,
@@ -4492,7 +4492,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe94.context95",
     "access": null,
     "description": "same name",
-    "lineNumber": 356
+    "lineNumber": 359
   },
   {
     "__docId__": 241,
@@ -4506,7 +4506,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe94.context95.it96",
     "access": null,
     "description": "should resolve from different namespaces",
-    "lineNumber": 357
+    "lineNumber": 360
   },
   {
     "__docId__": 242,
@@ -4520,7 +4520,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe94.context97",
     "access": null,
     "description": "as dependency",
-    "lineNumber": 370
+    "lineNumber": 373
   },
   {
     "__docId__": 243,
@@ -4534,7 +4534,7 @@
     "longname": "unit/resolver.test.js~describe47.describe48.describe83.describe94.context97.it98",
     "access": null,
     "description": "should resolve",
-    "lineNumber": 371
+    "lineNumber": 374
   },
   {
     "__docId__": 244,
@@ -4548,7 +4548,7 @@
     "longname": "unit/resolver.test.js~describe47.describe99",
     "access": null,
     "description": ".resolveAll",
-    "lineNumber": 415
+    "lineNumber": 418
   },
   {
     "__docId__": 245,
@@ -4562,7 +4562,7 @@
     "longname": "unit/resolver.test.js~describe47.describe99.context100",
     "access": null,
     "description": "empty container",
-    "lineNumber": 416
+    "lineNumber": 419
   },
   {
     "__docId__": 246,
@@ -4576,7 +4576,7 @@
     "longname": "unit/resolver.test.js~describe47.describe99.context100.it101",
     "access": null,
     "description": "should throw error",
-    "lineNumber": 417
+    "lineNumber": 420
   },
   {
     "__docId__": 247,
@@ -4590,7 +4590,7 @@
     "longname": "unit/resolver.test.js~describe47.describe99.context102",
     "access": null,
     "description": "not empty container",
-    "lineNumber": 424
+    "lineNumber": 427
   },
   {
     "__docId__": 248,
@@ -4604,7 +4604,7 @@
     "longname": "unit/resolver.test.js~describe47.describe99.context102.it103",
     "access": null,
     "description": "should resolve all modules from particular namespace",
-    "lineNumber": 425
+    "lineNumber": 428
   },
   {
     "__docId__": 249,
