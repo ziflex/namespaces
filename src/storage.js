@@ -71,7 +71,7 @@ export default class Storage {
             this._namespaces[namespace] = registry;
         }
 
-        if (registry[name]) {
+        if (registry.hasOwnProperty(name)) {
             throw new Error(`${name} is already registered.`);
         }
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.1
+
+### Fixed
+* Error when used names from ``Object.prototype``
+
 ## 0.5.0
 ### Added
 * Custom resolver for modules

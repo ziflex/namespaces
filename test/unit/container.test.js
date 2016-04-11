@@ -24,6 +24,19 @@ describe('Container', () => {
 
                 expect(register).to.not.throw();
             });
+
+            it('should register object with predefines names', () => {
+                const register = () => {
+                    container.factory('toString', function toStringConverter() {
+                        return () => 'foobar';
+                    });
+                };
+
+                expect(register).to.not.throw();
+                const toStringConverter = container.resolve('toString');
+
+                expect(toStringConverter()).to.equal('foobar');
+            });
         });
 
         context('not empty container', () => {
