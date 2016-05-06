@@ -20,6 +20,10 @@ export function isString(value) {
     return typeof value === 'string';
 }
 
+export function isNumber(value) {
+    return value !== null && !isNaN(value) && typeof value === 'number';
+}
+
 export function isFunction(value) {
     return typeof value === 'function';
 }
@@ -107,12 +111,16 @@ export function splitPath(separator = '/', path) {
 export function forEach(collection, iteratee, context = this) {
     if (isArray(collection)) {
         for (let i = 0; i < collection.length; i += 1) {
-            iteratee.call(context, collection[i], i);
+            if (iteratee.call(context, collection[i], i) === false) {
+                break;
+            }
         }
     } else if (isObject(collection)) {
         for (const prop in collection) {
             if (collection.hasOwnProperty(prop)) {
-                iteratee.call(context, collection[prop], prop);
+                if (iteratee.call(context, collection[prop], prop) === false) {
+                    break;
+                }
             }
         }
     }
@@ -136,4 +144,62 @@ export function reduce(collection, iteratee, initialValue, context = this) {
     }, context);
 
     return result;
+}
+
+export function setIn(target, path, value) {
+    if (!isArray(path)) {
+        return target;
+    }
+
+    const result = target || {};
+    const endIndex = path.length - 1;
+    reduce(path, (obj, pathPart, index) => {
+        let prop = obj;
+
+        if (index === endIndex) {
+            prop[pathPart] = value;
+        } else {
+            prop = obj[pathPart];
+
+            if (!prop) {
+                prop = {};
+                obj[pathPart] = prop;
+            }
+        }
+
+        return prop;
+    }, result);
+
+    return result;
+}
+
+export function getIn(target, path) {
+    let result = null;
+
+    if (!isArray(path)) {
+        return result;
+    }
+
+
+    const endIndex = path.length - 1;
+    let prop = target;
+
+    forEach(path, (pathPart, index) => {
+        if (endIndex === index) {
+            result = prop[pathPart];
+            return false;
+        }
+
+        prop = prop[pathPart];
+
+        if (!prop) {
+            return false;
+        }
+    });
+
+    return result;
+}
+
+export function hasIn(target, path) {
+    return getIn(target, path) !== null;
 }

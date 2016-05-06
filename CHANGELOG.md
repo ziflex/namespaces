@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.2
+### Fixed
+* ````Container.map```` did not handle properly array as input.
+
+### Fixed
+* Error when used names from ``Object.prototype``
+
 ## 0.5.1
 
 ### Fixed

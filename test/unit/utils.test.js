@@ -4,9 +4,12 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import {
     isFunction,
+    isNumber,
     joinPath,
     splitPath,
-    forEach
+    forEach,
+    setIn,
+    getIn
 } from '../../src/utils';
 
 describe('Utils', function() {
@@ -43,6 +46,40 @@ describe('Utils', function() {
 
         it('should return false when "NaN" is passed', () => {
             expect(isFunction(NaN)).to.be.false;
+        });
+    });
+
+    describe('isNumber', () => {
+        it('should return true when "Number" is passed', () => {
+            expect(isNumber(1)).to.be.true;
+        });
+
+        it('should return false when "Function" is passed', () => {
+            expect(isNumber(function() {})).to.be.false;
+        });
+
+        it('should return false when "String" is passed', () => {
+            expect(isNumber('')).to.be.false;
+        });
+
+        it('should return false when "Object" is passed', () => {
+            expect(isNumber({})).to.be.false;
+        });
+
+        it('should return false when "Array" is passed', () => {
+            expect(isNumber([])).to.be.false;
+        });
+
+        it('should return false when "null" is passed', () => {
+            expect(isNumber(null)).to.be.false;
+        });
+
+        it('should return false when "undefined" is passed', () => {
+            expect(isNumber(undefined)).to.be.false;
+        });
+
+        it('should return false when "NaN" is passed', () => {
+            expect(isNumber(NaN)).to.be.false;
         });
     });
 
@@ -150,6 +187,53 @@ describe('Utils', function() {
             forEach(arr2, spy);
 
             expect(spy.callCount).to.equal(3);
+        });
+    });
+
+    describe('setIn', () => {
+        it('should set value with short path', () => {
+            const path = ['foo'];
+            const result = setIn({}, path, 'bar');
+
+            expect(result, 'result').to.exist;
+            expect(result.foo, 'result.foo').to.eql('bar');
+        });
+
+        it('should set value with long path', () => {
+            const path = ['foo', 'bar', 'qaz'];
+            const result = setIn({}, path, 'rfv');
+
+            expect(result, 'result').to.exist;
+            expect(result.foo, 'result.foo').to.exist;
+            expect(result.foo.bar, 'result.foo.bar').to.exist;
+            expect(result.foo.bar.qaz, 'result.foo.bar.qaz').to.exist;
+            expect(result.foo.bar.qaz, 'result.foo.bar.qaz').to.eql('rfv');
+        });
+    });
+
+    describe('getIn', () => {
+        it('should get value with short path', () => {
+            const target = { foo: 'bar' };
+            const path = ['foo'];
+            const result = getIn(target, path);
+
+            expect(result, 'result').to.eql('bar');
+        });
+
+        it('should get value with long path', () => {
+            const target = { foo: { bar: { 'qaz': 'rfv' }}};
+            const path = ['foo', 'bar', 'qaz'];
+            const result = getIn(target, path);
+
+            expect(result, 'result').to.eql('rfv');
+        });
+
+        it('should return null when there is no value', () => {
+            const target = { foo: {}};
+            const path = ['foo', 'bar', 'qaz'];
+            const result = getIn(target, path);
+
+            expect(result, 'result').to.be.null;
         });
     });
 });

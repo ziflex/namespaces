@@ -15,6 +15,7 @@ describe('map-path', function() {
                 components: [
                     'actions',
                     'dispatcher',
+                    ['helpers'],
                     { 'stores': ['user', {'users': ['joe'] }] }
                 ],
                 domain: 'domain',
@@ -49,6 +50,10 @@ describe('map-path', function() {
         expect(result.services.components.dispatcher(), '"result.services.components.dispatcher()"').to.eql('services/components/dispatcher');
         expect(result.services.components.dispatcher('foo'), '"result.services.components.dispatcher(`foo`)"').to.eql('services/components/dispatcher/foo');
 
+        expect(isFunction(result.services.components.helpers), '"result.services.components.helpers" must be a function').to.be.true;
+        expect(result.services.components.helpers(), '"result.services.components.helpers()"').to.eql('services/components/helpers');
+        expect(result.services.components.helpers('foo'), '"result.services.components.helpers(`foo`)"').to.eql('services/components/helpers/foo');
+
         expect(isFunction(result.services.components.stores), '"result.services.components.stores" must be a function').to.be.true;
         expect(result.services.components.stores(), '"result.services.components.stores()"').to.eql('services/components/stores');
         expect(result.services.components.stores('foo'), '"result.services.components.stores(`foo`)"').to.eql('services/components/stores/foo');
@@ -76,6 +81,26 @@ describe('map-path', function() {
         expect(isFunction(result.services.core.database)).to.be.true;
         expect(result.services.core.database()).to.eql('services/core/database');
         expect(result.services.core.database('foo')).to.eql('services/core/database/foo');
+    });
+
+    it('should map array based paths', () => {
+        const result = map([
+            'foo',
+            'bar',
+            {
+                qaz: 'wsx'
+            },
+            [
+                'edc'
+            ]
+        ]);
+
+        expect(isFunction(result.foo), 'result.foo').to.be.true;
+        expect(result.foo(), 'result.foo()').to.eql('foo');
+        expect(isFunction(result.wsx), 'result.wsx').to.be.true;
+        expect(result.wsx(), 'result.wsx()').to.eql('wsx');
+        expect(isFunction(result.edc), 'result.edc').to.be.true;
+        expect(result.edc(), 'result.edc()').to.eql('edc');
     });
 
     it('should resolve array of paths', () => {

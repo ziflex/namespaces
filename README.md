@@ -158,6 +158,30 @@ Also, you can define custom namespace separator:
 
 ````
 
+#### Multiple paths   
+````js
+    const namespaces = Container.map({
+        core: {
+            infrastructure: [
+                'item1',
+                'item2'
+            ],
+            domain: 'foo'
+        },
+        system: [
+            'component1',
+            'component2'
+        ]
+    });
+
+    const paths = result.system([
+        'component1',
+        'component2'
+    ]);
+
+    // ['system/component1', 'system/component2']
+````
+
 ## API
 
 ### new Container([namespaceSeparator: string = '/'])

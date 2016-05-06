@@ -1,47 +1,54 @@
 import {
   isArray,
-  isObject,
   isString,
+  isNumber,
   forEach,
   map,
-  joinPath
+  joinPath,
+  isObject,
+  setIn
 } from './utils';
 
-function create(separator, parentPath, current) {
+function create(separator, current) {
+    const currentPath = isArray(current) ? joinPath(separator, ...current) : current;
     return function path(name) {
         if (isArray(name)) {
             return map(name, path);
         }
 
-        return joinPath(separator, parentPath, current, name);
+        return joinPath(separator, currentPath, name);
     };
 }
 
-function transform(separator, parent, current) {
-    forEach(current, (val, key) => {
-        if (isString(val)) {
-            parent[key] = create(separator, parent(), val);
-        } else if (isArray(val)) {
-            parent[key] = create(separator, parent(), key);
+function traverse(node, parentPath = [], callback) {
+    forEach(node, (value, keyOrIndex) => {
+        if (isString(value) || isNumber(value)) {
+            callback(node, [...parentPath, value], parentPath);
+            return;
+        }
 
-            forEach(val, i => {
-                let value = null;
-                if (isString(i)) {
-                    value = create(separator, parent[key](), i);
-                } else if (isObject(i)) {
-                    value = transform(separator, parent[key], i);
-                }
-                parent[key][i] = value;
-            });
-        } else if (isObject(val)) {
-            parent[key] = create(separator, parent(), key);
-            transform(separator, parent[key], val);
+        let newPath = parentPath;
+
+        if (isArray(node)) {
+            if (isObject(value)) {
+                traverse(value, newPath, callback);
+            } else {
+                traverse(value, newPath.slice().pop(), callback);
+            }
+        } else {
+            newPath = [...parentPath, keyOrIndex];
+            callback(node, newPath, parentPath);
+            traverse(value, newPath, callback);
         }
     });
-
-    return parent;
 }
 
 export default function createPathMap(target, separator = '/') {
-    return transform(separator, create(separator), target);
+    const result = create(separator);
+
+    traverse(target, [], (value, path) => {
+        setIn(result, path, create(separator, path));
+    });
+
+    return result;
 }
