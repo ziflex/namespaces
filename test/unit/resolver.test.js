@@ -411,9 +411,20 @@ describe('Resolver', function() {
                     expect(c.resolve('a')).to.exist;
                 };
 
+                const deep2 = () => {
+                    const c = new Container();
+                    c.value('a', ['b', 'd'], 'a');
+                    c.value('b', ['c', 'e'], 'b');
+                    c.value('c', ['e', 'd'], 'c');
+                    c.value('d', ['a'], 'd');
+                    c.value('e', 'e');
+                    expect(c.resolve('a')).to.exist;
+                };
+
                 expect(self).to.throw(ReferenceError);
                 expect(shallow).to.throw(ReferenceError);
                 expect(deep).to.throw(ReferenceError);
+                expect(deep2).to.throw(ReferenceError);
             });
         });
     });

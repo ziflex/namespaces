@@ -40,10 +40,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getIn">getIn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasIn">hasIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFunction">isFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNullOrUndefined">isNullOrUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNumber">isNumber</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObject">isObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
@@ -52,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-map">map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-reduce">reduce</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setIn">setIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
 </ul>
 </div>
@@ -78,6 +82,10 @@ export function isObject(value) {
 
 export function isString(value) {
     return typeof value === &apos;string&apos;;
+}
+
+export function isNumber(value) {
+    return value !== null &amp;&amp; !isNaN(value) &amp;&amp; typeof value === &apos;number&apos;;
 }
 
 export function isFunction(value) {
@@ -167,12 +175,16 @@ export function splitPath(separator = &apos;/&apos;, path) {
 export function forEach(collection, iteratee, context = this) {
     if (isArray(collection)) {
         for (let i = 0; i &lt; collection.length; i += 1) {
-            iteratee.call(context, collection[i], i);
+            if (iteratee.call(context, collection[i], i) === false) {
+                break;
+            }
         }
     } else if (isObject(collection)) {
         for (const prop in collection) {
             if (collection.hasOwnProperty(prop)) {
-                iteratee.call(context, collection[prop], prop);
+                if (iteratee.call(context, collection[prop], prop) === false) {
+                    break;
+                }
             }
         }
     }
@@ -196,6 +208,64 @@ export function reduce(collection, iteratee, initialValue, context = this) {
     }, context);
 
     return result;
+}
+
+export function setIn(target, path, value) {
+    if (!isArray(path)) {
+        return target;
+    }
+
+    const result = target || {};
+    const endIndex = path.length - 1;
+    reduce(path, (obj, pathPart, index) =&gt; {
+        let prop = obj;
+
+        if (index === endIndex) {
+            prop[pathPart] = value;
+        } else {
+            prop = obj[pathPart];
+
+            if (!prop) {
+                prop = {};
+                obj[pathPart] = prop;
+            }
+        }
+
+        return prop;
+    }, result);
+
+    return result;
+}
+
+export function getIn(target, path) {
+    let result = null;
+
+    if (!isArray(path)) {
+        return result;
+    }
+
+
+    const endIndex = path.length - 1;
+    let prop = target;
+
+    forEach(path, (pathPart, index) =&gt; {
+        if (endIndex === index) {
+            result = prop[pathPart];
+            return false;
+        }
+
+        prop = prop[pathPart];
+
+        if (!prop) {
+            return false;
+        }
+    });
+
+    return result;
+}
+
+export function hasIn(target, path) {
+    return getIn(target, path) !== null;
 }
 </code></pre>
 

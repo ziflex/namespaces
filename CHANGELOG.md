@@ -1,6 +1,9 @@
 # Changelog
 
 ## 0.5.2
+### Added
+* Circular dependency check
+
 ### Fixed
 * ````Container.map```` did not handle properly array as input.
 

@@ -48,6 +48,18 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "namespaces-js/src/utils.js~getin",
+    "function/index.html#static-function-getIn",
+    "<span>getIn</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
+    "function"
+  ],
+  [
+    "namespaces-js/src/utils.js~hasin",
+    "function/index.html#static-function-hasIn",
+    "<span>hasIn</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
+    "function"
+  ],
+  [
     "namespaces-js/src/utils.js~isarray",
     "function/index.html#static-function-isArray",
     "<span>isArray</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
@@ -69,6 +81,12 @@ window.esdocSearchIndex = [
     "namespaces-js/src/utils.js~isnullorundefined",
     "function/index.html#static-function-isNullOrUndefined",
     "<span>isNullOrUndefined</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
+    "function"
+  ],
+  [
+    "namespaces-js/src/utils.js~isnumber",
+    "function/index.html#static-function-isNumber",
+    "<span>isNumber</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
     "function"
   ],
   [
@@ -117,6 +135,12 @@ window.esdocSearchIndex = [
     "namespaces-js/src/utils.js~reduce",
     "function/index.html#static-function-reduce",
     "<span>reduce</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
+    "function"
+  ],
+  [
+    "namespaces-js/src/utils.js~setin",
+    "function/index.html#static-function-setIn",
+    "<span>setIn</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
     "function"
   ],
   [
@@ -469,43 +493,43 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber118",
+    "test-file/unit/container.test.js.html#lineNumber131",
     "Container registration #map",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber119",
+    "test-file/unit/container.test.js.html#lineNumber132",
     "Container registration #map should exist",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber85",
+    "test-file/unit/container.test.js.html#lineNumber98",
     "Container registration .namespace",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber97",
+    "test-file/unit/container.test.js.html#lineNumber110",
     "Container registration .namespace same name",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber107",
+    "test-file/unit/container.test.js.html#lineNumber120",
     "Container registration .namespace same name should not register in same namespace",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber98",
+    "test-file/unit/container.test.js.html#lineNumber111",
     "Container registration .namespace same name should register in different namespaces",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber86",
+    "test-file/unit/container.test.js.html#lineNumber99",
     "Container registration .namespace should support chain",
     "test"
   ],
@@ -517,73 +541,79 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/unit/container.test.js.html#lineNumber28",
+    "Container registration empty container should register object with predefines names",
+    "test"
+  ],
+  [
+    "",
     "test-file/unit/container.test.js.html#lineNumber14",
     "Container registration empty container should successfully register modules",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber29",
+    "test-file/unit/container.test.js.html#lineNumber42",
     "Container registration not empty container",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber30",
+    "test-file/unit/container.test.js.html#lineNumber43",
     "Container registration not empty container should throw error when register module twice",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber40",
+    "test-file/unit/container.test.js.html#lineNumber53",
     "Container registration register twice using namespace instance",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber63",
+    "test-file/unit/container.test.js.html#lineNumber76",
     "Container registration register twice using namespace instance different type and name of module",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber64",
+    "test-file/unit/container.test.js.html#lineNumber77",
     "Container registration register twice using namespace instance different type and name of module should not throw error",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber52",
+    "test-file/unit/container.test.js.html#lineNumber65",
     "Container registration register twice using namespace instance different type of module",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber53",
+    "test-file/unit/container.test.js.html#lineNumber66",
     "Container registration register twice using namespace instance different type of module should throw error",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber74",
+    "test-file/unit/container.test.js.html#lineNumber87",
     "Container registration register twice using namespace instance module name with separator",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber75",
+    "test-file/unit/container.test.js.html#lineNumber88",
     "Container registration register twice using namespace instance module name with separator should throw error",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber41",
+    "test-file/unit/container.test.js.html#lineNumber54",
     "Container registration register twice using namespace instance same type of module",
     "test"
   ],
   [
     "",
-    "test-file/unit/container.test.js.html#lineNumber42",
+    "test-file/unit/container.test.js.html#lineNumber55",
     "Container registration register twice using namespace instance same type of module should throw error",
     "test"
   ],
@@ -901,6 +931,18 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/unit/resolver.test.js.html#lineNumber390",
+    "Resolver .resolve circular dependency",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/resolver.test.js.html#lineNumber391",
+    "Resolver .resolve circular dependency should throw during resolving",
+    "test"
+  ],
+  [
+    "",
     "test-file/unit/resolver.test.js.html#lineNumber24",
     "Resolver .resolve custom resolver",
     "test"
@@ -1033,31 +1075,31 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber418",
+    "test-file/unit/resolver.test.js.html#lineNumber431",
     "Resolver .resolveAll",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber419",
+    "test-file/unit/resolver.test.js.html#lineNumber432",
     "Resolver .resolveAll empty container",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber420",
+    "test-file/unit/resolver.test.js.html#lineNumber433",
     "Resolver .resolveAll empty container should throw error",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber427",
+    "test-file/unit/resolver.test.js.html#lineNumber440",
     "Resolver .resolveAll not empty container",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber428",
+    "test-file/unit/resolver.test.js.html#lineNumber441",
     "Resolver .resolveAll not empty container should resolve all modules from particular namespace",
     "test"
   ],
@@ -1255,169 +1297,265 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber12",
+    "test-file/unit/utils.test.js.html#lineNumber15",
     "Utils",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber105",
+    "test-file/unit/utils.test.js.html#lineNumber142",
     "Utils forEach",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber132",
+    "test-file/unit/utils.test.js.html#lineNumber169",
     "Utils forEach should iterate over an array",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber106",
+    "test-file/unit/utils.test.js.html#lineNumber143",
     "Utils forEach should iterate over an object",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber15",
+    "test-file/unit/utils.test.js.html#lineNumber214",
+    "Utils getIn",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber223",
+    "Utils getIn should get value with long path",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber215",
+    "Utils getIn should get value with short path",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber231",
+    "Utils getIn should return null when there is no value",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber18",
     "Utils isFunction",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber32",
+    "test-file/unit/utils.test.js.html#lineNumber35",
     "Utils isFunction should return false when \"Array\" is passed",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber44",
+    "test-file/unit/utils.test.js.html#lineNumber47",
     "Utils isFunction should return false when \"NaN\" is passed",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber24",
+    "test-file/unit/utils.test.js.html#lineNumber27",
     "Utils isFunction should return false when \"Number\" is passed",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber28",
+    "test-file/unit/utils.test.js.html#lineNumber31",
     "Utils isFunction should return false when \"Object\" is passed",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber20",
+    "test-file/unit/utils.test.js.html#lineNumber23",
     "Utils isFunction should return false when \"String\" is passed",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber36",
+    "test-file/unit/utils.test.js.html#lineNumber39",
     "Utils isFunction should return false when \"null\" is passed",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber40",
+    "test-file/unit/utils.test.js.html#lineNumber43",
     "Utils isFunction should return false when \"undefined\" is passed",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber16",
+    "test-file/unit/utils.test.js.html#lineNumber19",
     "Utils isFunction should return true when \"Function\" is passed",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber49",
+    "test-file/unit/utils.test.js.html#lineNumber52",
+    "Utils isNumber",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber69",
+    "Utils isNumber should return false when \"Array\" is passed",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber57",
+    "Utils isNumber should return false when \"Function\" is passed",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber81",
+    "Utils isNumber should return false when \"NaN\" is passed",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber65",
+    "Utils isNumber should return false when \"Object\" is passed",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber61",
+    "Utils isNumber should return false when \"String\" is passed",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber73",
+    "Utils isNumber should return false when \"null\" is passed",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber77",
+    "Utils isNumber should return false when \"undefined\" is passed",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber53",
+    "Utils isNumber should return true when \"Number\" is passed",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber86",
     "Utils joinPath",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber58",
+    "test-file/unit/utils.test.js.html#lineNumber95",
     "Utils joinPath should join \"/, /, foo\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber54",
+    "test-file/unit/utils.test.js.html#lineNumber91",
     "Utils joinPath should join \"/, foo\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber66",
+    "test-file/unit/utils.test.js.html#lineNumber103",
     "Utils joinPath should join \"/, foo, bar\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber70",
+    "test-file/unit/utils.test.js.html#lineNumber107",
     "Utils joinPath should join \"/, foo, bar, \"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber74",
+    "test-file/unit/utils.test.js.html#lineNumber111",
     "Utils joinPath should join \"/, foo, bar, /\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber78",
+    "test-file/unit/utils.test.js.html#lineNumber115",
     "Utils joinPath should join \"/, undefined, null, 1, [], {}\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber50",
+    "test-file/unit/utils.test.js.html#lineNumber87",
     "Utils joinPath should join \"foo\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber62",
+    "test-file/unit/utils.test.js.html#lineNumber99",
     "Utils joinPath should join \"foo, bar\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber83",
+    "test-file/unit/utils.test.js.html#lineNumber193",
+    "Utils setIn",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber202",
+    "Utils setIn should set value with long path",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber194",
+    "Utils setIn should set value with short path",
+    "test"
+  ],
+  [
+    "",
+    "test-file/unit/utils.test.js.html#lineNumber120",
     "Utils splitPath",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber84",
+    "test-file/unit/utils.test.js.html#lineNumber121",
     "Utils splitPath should split \"/\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber92",
+    "test-file/unit/utils.test.js.html#lineNumber129",
     "Utils splitPath should split \"/foo\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber96",
+    "test-file/unit/utils.test.js.html#lineNumber133",
     "Utils splitPath should split \"/foo/bar\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber100",
+    "test-file/unit/utils.test.js.html#lineNumber137",
     "Utils splitPath should split \"/foo/bar/\"",
     "test"
   ],
   [
     "",
-    "test-file/unit/utils.test.js.html#lineNumber88",
+    "test-file/unit/utils.test.js.html#lineNumber125",
     "Utils splitPath should split \"foo\"",
     "test"
   ],
@@ -1429,13 +1567,19 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/unit/map-path.test.js.html#lineNumber86",
+    "map-path should map array based paths",
+    "test"
+  ],
+  [
+    "",
     "test-file/unit/map-path.test.js.html#lineNumber11",
     "map-path should map paths",
     "test"
   ],
   [
     "",
-    "test-file/unit/map-path.test.js.html#lineNumber81",
+    "test-file/unit/map-path.test.js.html#lineNumber106",
     "map-path should resolve array of paths",
     "test"
   ],

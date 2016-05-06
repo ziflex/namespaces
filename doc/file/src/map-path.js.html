@@ -40,10 +40,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getIn">getIn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasIn">hasIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFunction">isFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNullOrUndefined">isNullOrUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNumber">isNumber</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObject">isObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
@@ -52,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-map">map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-reduce">reduce</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setIn">setIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
 </ul>
 </div>
@@ -60,50 +64,57 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/map-path.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
   isArray,
-  isObject,
   isString,
+  isNumber,
   forEach,
   map,
-  joinPath
+  joinPath,
+  isObject,
+  setIn
 } from &apos;./utils&apos;;
 
-function create(separator, parentPath, current) {
+function create(separator, current) {
+    const currentPath = isArray(current) ? joinPath(separator, ...current) : current;
     return function path(name) {
         if (isArray(name)) {
             return map(name, path);
         }
 
-        return joinPath(separator, parentPath, current, name);
+        return joinPath(separator, currentPath, name);
     };
 }
 
-function transform(separator, parent, current) {
-    forEach(current, (val, key) =&gt; {
-        if (isString(val)) {
-            parent[key] = create(separator, parent(), val);
-        } else if (isArray(val)) {
-            parent[key] = create(separator, parent(), key);
+function traverse(node, parentPath = [], callback) {
+    forEach(node, (value, keyOrIndex) =&gt; {
+        if (isString(value) || isNumber(value)) {
+            callback(node, [...parentPath, value], parentPath);
+            return;
+        }
 
-            forEach(val, i =&gt; {
-                let value = null;
-                if (isString(i)) {
-                    value = create(separator, parent[key](), i);
-                } else if (isObject(i)) {
-                    value = transform(separator, parent[key], i);
-                }
-                parent[key][i] = value;
-            });
-        } else if (isObject(val)) {
-            parent[key] = create(separator, parent(), key);
-            transform(separator, parent[key], val);
+        let newPath = parentPath;
+
+        if (isArray(node)) {
+            if (isObject(value)) {
+                traverse(value, newPath, callback);
+            } else {
+                traverse(value, newPath.slice().pop(), callback);
+            }
+        } else {
+            newPath = [...parentPath, keyOrIndex];
+            callback(node, newPath, parentPath);
+            traverse(value, newPath, callback);
         }
     });
-
-    return parent;
 }
 
 export default function createPathMap(target, separator = &apos;/&apos;) {
-    return transform(separator, create(separator), target);
+    const result = create(separator);
+
+    traverse(target, [], (value, path) =&gt; {
+        setIn(result, path, create(separator, path));
+    });
+
+    return result;
 }
 </code></pre>
 

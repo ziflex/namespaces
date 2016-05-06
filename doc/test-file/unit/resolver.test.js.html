@@ -40,10 +40,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getIn">getIn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasIn">hasIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFunction">isFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNullOrUndefined">isNullOrUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNumber">isNumber</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObject">isObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
@@ -52,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-map">map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-reduce">reduce</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setIn">setIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
 </ul>
 </div>
@@ -447,33 +451,46 @@ describe(&apos;Resolver&apos;, function() {
             });
         });
 
-        // describe(&apos;circular dependency&apos;, () =&gt; {
-        //    it(&apos;should throw during resolving&apos;, () =&gt; {
-        //        const self = () =&gt; {
-        //            container.register().value(&apos;value1&apos;, [&apos;value1&apos;], 1);
-        //            container.resolve(&apos;value1&apos;);
-        //        };
-        //        const shallow = () =&gt; {
-        //            container.register().value(&apos;value1&apos;, [&apos;value2&apos;], 1);
-        //            container.register().value(&apos;value2&apos;, [&apos;value1&apos;], 2);
-        //            container.resolve(&apos;value1&apos;);
-        //            container.resolve(&apos;value2&apos;);
-        //        };
-        //        const deep = () =&gt; {
-        //            container.register().value(&apos;a&apos;, [&apos;b&apos;, &apos;d&apos;], &apos;a&apos;);
-        //            container.register().value(&apos;b&apos;, [&apos;c&apos;, &apos;e&apos;], &apos;b&apos;);
-        //            container.register().value(&apos;c&apos;, [&apos;e&apos;, &apos;d&apos;], &apos;c&apos;);
-        //            container.register().value(&apos;d&apos;, [&apos;b&apos;], &apos;d&apos;);
-        //            container.register().value(&apos;e&apos;, &apos;e&apos;);
-        //
-        //            container.resolve(&apos;a&apos;);
-        //        };
-        //
-        //        expect(self).to.throw(ReferenceError);
-        //        expect(shallow).to.throw(ReferenceError);
-        //        expect(deep).to.throw(ReferenceError);
-        //    });
-        // });
+        describe(&apos;circular dependency&apos;, () =&gt; {
+            it(&apos;should throw during resolving&apos;, () =&gt; {
+                const self = () =&gt; {
+                    const c = new Container();
+                    c.value(&apos;value1&apos;, [&apos;value1&apos;], 1);
+                    expect(c.resolve(&apos;value1&apos;)).to.exist;
+                };
+                const shallow = () =&gt; {
+                    const c = new Container();
+                    c.value(&apos;value1&apos;, [&apos;value2&apos;], 1);
+                    c.value(&apos;value2&apos;, [&apos;value1&apos;], 2);
+                    expect(c.resolve(&apos;value1&apos;)).to.exist;
+                    expect(c.resolve(&apos;value2&apos;)).to.exist;
+                };
+                const deep = () =&gt; {
+                    const c = new Container();
+                    c.value(&apos;a&apos;, [&apos;b&apos;, &apos;d&apos;], &apos;a&apos;);
+                    c.value(&apos;b&apos;, [&apos;c&apos;, &apos;e&apos;], &apos;b&apos;);
+                    c.value(&apos;c&apos;, [&apos;e&apos;, &apos;d&apos;], &apos;c&apos;);
+                    c.value(&apos;d&apos;, [&apos;b&apos;], &apos;d&apos;);
+                    c.value(&apos;e&apos;, &apos;e&apos;);
+                    expect(c.resolve(&apos;a&apos;)).to.exist;
+                };
+
+                const deep2 = () =&gt; {
+                    const c = new Container();
+                    c.value(&apos;a&apos;, [&apos;b&apos;, &apos;d&apos;], &apos;a&apos;);
+                    c.value(&apos;b&apos;, [&apos;c&apos;, &apos;e&apos;], &apos;b&apos;);
+                    c.value(&apos;c&apos;, [&apos;e&apos;, &apos;d&apos;], &apos;c&apos;);
+                    c.value(&apos;d&apos;, [&apos;a&apos;], &apos;d&apos;);
+                    c.value(&apos;e&apos;, &apos;e&apos;);
+                    expect(c.resolve(&apos;a&apos;)).to.exist;
+                };
+
+                expect(self).to.throw(ReferenceError);
+                expect(shallow).to.throw(ReferenceError);
+                expect(deep).to.throw(ReferenceError);
+                expect(deep2).to.throw(ReferenceError);
+            });
+        });
     });
     describe(&apos;.resolveAll&apos;, () =&gt; {
         context(&apos;empty container&apos;, () =&gt; {

@@ -40,10 +40,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getIn">getIn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasIn">hasIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFunction">isFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNullOrUndefined">isNullOrUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNumber">isNumber</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObject">isObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
@@ -52,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-map">map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-reduce">reduce</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setIn">setIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
 </ul>
 </div>
@@ -72,7 +76,7 @@
   <td data-ice="testDescription" style="padding-left: 10px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber5"><p>Container</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
-  <td data-ice="testCount">10</td>
+  <td data-ice="testCount">11</td>
 </tr>
 
 
@@ -81,7 +85,7 @@
   <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber12"><p>registration</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
-  <td data-ice="testCount">10</td>
+  <td data-ice="testCount">11</td>
 </tr>
 
 
@@ -90,7 +94,7 @@
   <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber13"><p>empty container</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
-  <td data-ice="testCount">1</td>
+  <td data-ice="testCount">2</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="3">
@@ -99,17 +103,8 @@
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
-
-
-<tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber29"><p>not empty container</p>
-</a></span></td>
-  <td data-ice="testTarget" class="test-target">-</td>
-  <td data-ice="testCount">1</td>
-</tr>
-
 <tr data-ice="testIt" style="display: none;" data-test-depth="3">
-  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/container.test.js.html#lineNumber30"><p>should throw error when register module twice</p>
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/container.test.js.html#lineNumber28"><p>should register object with predefines names</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -117,7 +112,22 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber40"><p>register twice using namespace instance</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber42"><p>not empty container</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td data-ice="testCount">1</td>
+</tr>
+
+<tr data-ice="testIt" style="display: none;" data-test-depth="3">
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/container.test.js.html#lineNumber43"><p>should throw error when register module twice</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+
+
+<tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber53"><p>register twice using namespace instance</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">4</td>
@@ -126,14 +136,14 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="3">
-  <td data-ice="testDescription" style="padding-left: 40px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber41"><p>same type of module</p>
+  <td data-ice="testDescription" style="padding-left: 40px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber54"><p>same type of module</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">1</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="4">
-  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber42"><p>should throw error</p>
+  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber55"><p>should throw error</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -141,14 +151,14 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="3">
-  <td data-ice="testDescription" style="padding-left: 40px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber52"><p>different type of module</p>
+  <td data-ice="testDescription" style="padding-left: 40px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber65"><p>different type of module</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">1</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="4">
-  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber53"><p>should throw error</p>
+  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber66"><p>should throw error</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -156,14 +166,14 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="3">
-  <td data-ice="testDescription" style="padding-left: 40px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber63"><p>different type and name of module</p>
+  <td data-ice="testDescription" style="padding-left: 40px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber76"><p>different type and name of module</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">1</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="4">
-  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber64"><p>should not throw error</p>
+  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber77"><p>should not throw error</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -171,14 +181,14 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="3">
-  <td data-ice="testDescription" style="padding-left: 40px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber74"><p>module name with separator</p>
+  <td data-ice="testDescription" style="padding-left: 40px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber87"><p>module name with separator</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">1</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="4">
-  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber75"><p>should throw error</p>
+  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber88"><p>should throw error</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -186,14 +196,14 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber85"><p>.namespace</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber98"><p>.namespace</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">3</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="3">
-  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/container.test.js.html#lineNumber86"><p>should support chain</p>
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/container.test.js.html#lineNumber99"><p>should support chain</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -201,20 +211,20 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="3">
-  <td data-ice="testDescription" style="padding-left: 40px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber97"><p>same name</p>
+  <td data-ice="testDescription" style="padding-left: 40px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber110"><p>same name</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">2</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="4">
-  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber98"><p>should register in different namespaces</p>
+  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber111"><p>should register in different namespaces</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="4">
-  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber107"><p>should not register in same namespace</p>
+  <td data-ice="testDescription" style="padding-left: 50px"><span><a href="test-file/unit/container.test.js.html#lineNumber120"><p>should not register in same namespace</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -222,14 +232,14 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber118"><p>#map</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/container.test.js.html#lineNumber131"><p>#map</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">1</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="3">
-  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/container.test.js.html#lineNumber119"><p>should exist</p>
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/container.test.js.html#lineNumber132"><p>should exist</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -240,7 +250,7 @@
   <td data-ice="testDescription" style="padding-left: 10px"><span class="toggle closed"></span><span><a href="test-file/unit/map-path.test.js.html#lineNumber10"><p>map-path</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
-  <td data-ice="testCount">2</td>
+  <td data-ice="testCount">3</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="1">
@@ -250,7 +260,13 @@
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/unit/map-path.test.js.html#lineNumber81"><p>should resolve array of paths</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/unit/map-path.test.js.html#lineNumber86"><p>should map array based paths</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span><a href="test-file/unit/map-path.test.js.html#lineNumber106"><p>should resolve array of paths</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -432,7 +448,7 @@
   <td data-ice="testDescription" style="padding-left: 10px"><span class="toggle closed"></span><span><a href="test-file/unit/resolver.test.js.html#lineNumber6"><p>Resolver</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
-  <td data-ice="testCount">27</td>
+  <td data-ice="testCount">28</td>
 </tr>
 
 
@@ -441,7 +457,7 @@
   <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/resolver.test.js.html#lineNumber13"><p>.resolve</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
-  <td data-ice="testCount">25</td>
+  <td data-ice="testCount">26</td>
 </tr>
 
 
@@ -821,8 +837,23 @@
 </tr>
 
 
+<tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/resolver.test.js.html#lineNumber390"><p>circular dependency</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td data-ice="testCount">1</td>
+</tr>
+
+<tr data-ice="testIt" style="display: none;" data-test-depth="3">
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/resolver.test.js.html#lineNumber391"><p>should throw during resolving</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+
+
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/resolver.test.js.html#lineNumber418"><p>.resolveAll</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/resolver.test.js.html#lineNumber431"><p>.resolveAll</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">2</td>
@@ -831,14 +862,14 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/resolver.test.js.html#lineNumber419"><p>empty container</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/resolver.test.js.html#lineNumber432"><p>empty container</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">1</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="3">
-  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/resolver.test.js.html#lineNumber420"><p>should throw error</p>
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/resolver.test.js.html#lineNumber433"><p>should throw error</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -846,14 +877,14 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/resolver.test.js.html#lineNumber427"><p>not empty container</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span class="toggle closed"></span><span><a href="test-file/unit/resolver.test.js.html#lineNumber440"><p>not empty container</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">1</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="3">
-  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/resolver.test.js.html#lineNumber428"><p>should resolve all modules from particular namespace</p>
+  <td data-ice="testDescription" style="padding-left: 40px"><span><a href="test-file/unit/resolver.test.js.html#lineNumber441"><p>should resolve all modules from particular namespace</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -1092,65 +1123,65 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="0">
-  <td data-ice="testDescription" style="padding-left: 10px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber12"><p>Utils</p>
+  <td data-ice="testDescription" style="padding-left: 10px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber15"><p>Utils</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
-  <td data-ice="testCount">23</td>
+  <td data-ice="testCount">36</td>
 </tr>
 
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber15"><p>isFunction</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber18"><p>isFunction</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">8</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber16"><p>should return true when &quot;Function&quot; is passed</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber19"><p>should return true when &quot;Function&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber20"><p>should return false when &quot;String&quot; is passed</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber23"><p>should return false when &quot;String&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber24"><p>should return false when &quot;Number&quot; is passed</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber27"><p>should return false when &quot;Number&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber28"><p>should return false when &quot;Object&quot; is passed</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber31"><p>should return false when &quot;Object&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber32"><p>should return false when &quot;Array&quot; is passed</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber35"><p>should return false when &quot;Array&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber36"><p>should return false when &quot;null&quot; is passed</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber39"><p>should return false when &quot;null&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber40"><p>should return false when &quot;undefined&quot; is passed</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber43"><p>should return false when &quot;undefined&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber44"><p>should return false when &quot;NaN&quot; is passed</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber47"><p>should return false when &quot;NaN&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -1158,56 +1189,56 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber49"><p>joinPath</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber52"><p>isNumber</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">8</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber50"><p>should join &quot;foo&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber53"><p>should return true when &quot;Number&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber54"><p>should join &quot;/, foo&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber57"><p>should return false when &quot;Function&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber58"><p>should join &quot;/, /, foo&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber61"><p>should return false when &quot;String&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber62"><p>should join &quot;foo, bar&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber65"><p>should return false when &quot;Object&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber66"><p>should join &quot;/, foo, bar&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber69"><p>should return false when &quot;Array&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber70"><p>should join &quot;/, foo, bar, &quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber73"><p>should return false when &quot;null&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber74"><p>should join &quot;/, foo, bar, /&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber77"><p>should return false when &quot;undefined&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber78"><p>should join &quot;/, undefined, null, 1, [], {}&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber81"><p>should return false when &quot;NaN&quot; is passed</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -1215,38 +1246,95 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber83"><p>splitPath</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber86"><p>joinPath</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td data-ice="testCount">8</td>
+</tr>
+
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber87"><p>should join &quot;foo&quot;</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber91"><p>should join &quot;/, foo&quot;</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber95"><p>should join &quot;/, /, foo&quot;</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber99"><p>should join &quot;foo, bar&quot;</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber103"><p>should join &quot;/, foo, bar&quot;</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber107"><p>should join &quot;/, foo, bar, &quot;</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber111"><p>should join &quot;/, foo, bar, /&quot;</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber115"><p>should join &quot;/, undefined, null, 1, [], {}&quot;</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+
+
+<tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber120"><p>splitPath</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">5</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber84"><p>should split &quot;/&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber121"><p>should split &quot;/&quot;</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber88"><p>should split &quot;foo&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber125"><p>should split &quot;foo&quot;</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber92"><p>should split &quot;/foo&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber129"><p>should split &quot;/foo&quot;</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber96"><p>should split &quot;/foo/bar&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber133"><p>should split &quot;/foo/bar&quot;</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber100"><p>should split &quot;/foo/bar/&quot;</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber137"><p>should split &quot;/foo/bar/&quot;</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
@@ -1254,20 +1342,68 @@
 
 
 <tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="1">
-  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber105"><p>forEach</p>
+  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber142"><p>forEach</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td data-ice="testCount">2</td>
 </tr>
 
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber106"><p>should iterate over an object</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber143"><p>should iterate over an object</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>
 </tr>
 <tr data-ice="testIt" style="display: none;" data-test-depth="2">
-  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber132"><p>should iterate over an array</p>
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber169"><p>should iterate over an array</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+
+
+<tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber193"><p>setIn</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td data-ice="testCount">2</td>
+</tr>
+
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber194"><p>should set value with short path</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber202"><p>should set value with long path</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+
+
+<tr class="test-describe" data-ice="testDescribe" style="display: none;" data-test-depth="1">
+  <td data-ice="testDescription" style="padding-left: 20px"><span class="toggle closed"></span><span><a href="test-file/unit/utils.test.js.html#lineNumber214"><p>getIn</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td data-ice="testCount">3</td>
+</tr>
+
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber215"><p>should get value with short path</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber223"><p>should get value with long path</p>
+</a></span></td>
+  <td data-ice="testTarget" class="test-target">-</td>
+  <td></td>
+</tr>
+<tr data-ice="testIt" style="display: none;" data-test-depth="2">
+  <td data-ice="testDescription" style="padding-left: 30px"><span><a href="test-file/unit/utils.test.js.html#lineNumber231"><p>should return null when there is no value</p>
 </a></span></td>
   <td data-ice="testTarget" class="test-target">-</td>
   <td></td>

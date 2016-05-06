@@ -129,45 +129,55 @@ exports.default = createPathMap;
 
 var _utils = require('./utils');
 
-function create(separator, parentPath, current) {
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function create(separator, current) {
+    var currentPath = (0, _utils.isArray)(current) ? _utils.joinPath.apply(undefined, [separator].concat(_toConsumableArray(current))) : current;
     return function path(name) {
         if ((0, _utils.isArray)(name)) {
             return (0, _utils.map)(name, path);
         }
 
-        return (0, _utils.joinPath)(separator, parentPath, current, name);
+        return (0, _utils.joinPath)(separator, currentPath, name);
     };
 }
 
-function transform(separator, parent, current) {
-    (0, _utils.forEach)(current, function (val, key) {
-        if ((0, _utils.isString)(val)) {
-            parent[key] = create(separator, parent(), val);
-        } else if ((0, _utils.isArray)(val)) {
-            parent[key] = create(separator, parent(), key);
+function traverse(node) {
+    var parentPath = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+    var callback = arguments[2];
 
-            (0, _utils.forEach)(val, function (i) {
-                var value = null;
-                if ((0, _utils.isString)(i)) {
-                    value = create(separator, parent[key](), i);
-                } else if ((0, _utils.isObject)(i)) {
-                    value = transform(separator, parent[key], i);
-                }
-                parent[key][i] = value;
-            });
-        } else if ((0, _utils.isObject)(val)) {
-            parent[key] = create(separator, parent(), key);
-            transform(separator, parent[key], val);
+    (0, _utils.forEach)(node, function (value, keyOrIndex) {
+        if ((0, _utils.isString)(value) || (0, _utils.isNumber)(value)) {
+            callback(node, [].concat(_toConsumableArray(parentPath), [value]), parentPath);
+            return;
+        }
+
+        var newPath = parentPath;
+
+        if ((0, _utils.isArray)(node)) {
+            if ((0, _utils.isObject)(value)) {
+                traverse(value, newPath, callback);
+            } else {
+                traverse(value, newPath.slice().pop(), callback);
+            }
+        } else {
+            newPath = [].concat(_toConsumableArray(parentPath), [keyOrIndex]);
+            callback(node, newPath, parentPath);
+            traverse(value, newPath, callback);
         }
     });
-
-    return parent;
 }
 
 function createPathMap(target) {
     var separator = arguments.length <= 1 || arguments[1] === undefined ? '/' : arguments[1];
 
-    return transform(separator, create(separator), target);
+    var result = create(separator);
+
+    traverse(target, [], function (value, path) {
+        (0, _utils.setIn)(result, path, create(separator, path));
+    });
+
+    return result;
 }
 
 },{"./utils":8}],4:[function(require,module,exports){
@@ -505,6 +515,16 @@ var Resolver = function () {
         value: function resolve(path) {
             var _this = this;
 
+            var chain = [];
+            var checkCircularDependency = function checkCircularDependency(parent, current) {
+                if (current === parent) {
+                    throw new ReferenceError('Circular dependency: ' + parent + ' -> ' + current);
+                }
+
+                if (chain.indexOf(current) > -1) {
+                    throw new ReferenceError('Circular dependency: ' + parent + ' -> ' + chain.join(' -> '));
+                }
+            };
             var resolveModule = function resolveModule(targetPath) {
                 var module = _this._storage.getItem(targetPath);
 
@@ -516,6 +536,8 @@ var Resolver = function () {
                     if ((0, _utils.isArray)(dependencies)) {
                         return (0, _utils.map)(dependencies, function (currentPath) {
                             if ((0, _utils.isString)(currentPath)) {
+                                checkCircularDependency(targetPath, currentPath);
+                                chain.push(currentPath);
                                 return resolveModule(currentPath);
                             } else if ((0, _utils.isFunction)(currentPath)) {
                                 return currentPath();
@@ -771,6 +793,7 @@ exports.isNull = isNull;
 exports.isNullOrUndefined = isNullOrUndefined;
 exports.isObject = isObject;
 exports.isString = isString;
+exports.isNumber = isNumber;
 exports.isFunction = isFunction;
 exports.isArray = isArray;
 exports.create = create;
@@ -781,6 +804,9 @@ exports.splitPath = splitPath;
 exports.forEach = forEach;
 exports.map = map;
 exports.reduce = reduce;
+exports.setIn = setIn;
+exports.getIn = getIn;
+exports.hasIn = hasIn;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -804,6 +830,10 @@ function isObject(value) {
 
 function isString(value) {
     return typeof value === 'string';
+}
+
+function isNumber(value) {
+    return value !== null && !isNaN(value) && typeof value === 'number';
 }
 
 function isFunction(value) {
@@ -903,12 +933,16 @@ function forEach(collection, iteratee) {
 
     if (isArray(collection)) {
         for (var i = 0; i < collection.length; i += 1) {
-            iteratee.call(context, collection[i], i);
+            if (iteratee.call(context, collection[i], i) === false) {
+                break;
+            }
         }
     } else if (isObject(collection)) {
         for (var prop in collection) {
             if (collection.hasOwnProperty(prop)) {
-                iteratee.call(context, collection[prop], prop);
+                if (iteratee.call(context, collection[prop], prop) === false) {
+                    break;
+                }
             }
         }
     }
@@ -938,6 +972,63 @@ function reduce(collection, iteratee, initialValue) {
     }, context);
 
     return result;
+}
+
+function setIn(target, path, value) {
+    if (!isArray(path)) {
+        return target;
+    }
+
+    var result = target || {};
+    var endIndex = path.length - 1;
+    reduce(path, function (obj, pathPart, index) {
+        var prop = obj;
+
+        if (index === endIndex) {
+            prop[pathPart] = value;
+        } else {
+            prop = obj[pathPart];
+
+            if (!prop) {
+                prop = {};
+                obj[pathPart] = prop;
+            }
+        }
+
+        return prop;
+    }, result);
+
+    return result;
+}
+
+function getIn(target, path) {
+    var result = null;
+
+    if (!isArray(path)) {
+        return result;
+    }
+
+    var endIndex = path.length - 1;
+    var prop = target;
+
+    forEach(path, function (pathPart, index) {
+        if (endIndex === index) {
+            result = prop[pathPart];
+            return false;
+        }
+
+        prop = prop[pathPart];
+
+        if (!prop) {
+            return false;
+        }
+    });
+
+    return result;
+}
+
+function hasIn(target, path) {
+    return getIn(target, path) !== null;
 }
 
 },{}]},{},[2])(2)

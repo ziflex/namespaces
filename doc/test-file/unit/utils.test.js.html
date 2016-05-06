@@ -40,10 +40,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getIn">getIn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasIn">hasIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFunction">isFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNullOrUndefined">isNullOrUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNumber">isNumber</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObject">isObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
@@ -52,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-map">map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-reduce">reduce</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setIn">setIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
 </ul>
 </div>
@@ -64,9 +68,12 @@ import { expect } from &apos;chai&apos;;
 import sinon from &apos;sinon&apos;;
 import {
     isFunction,
+    isNumber,
     joinPath,
     splitPath,
-    forEach
+    forEach,
+    setIn,
+    getIn
 } from &apos;../../src/utils&apos;;
 
 describe(&apos;Utils&apos;, function() {
@@ -103,6 +110,40 @@ describe(&apos;Utils&apos;, function() {
 
         it(&apos;should return false when &quot;NaN&quot; is passed&apos;, () =&gt; {
             expect(isFunction(NaN)).to.be.false;
+        });
+    });
+
+    describe(&apos;isNumber&apos;, () =&gt; {
+        it(&apos;should return true when &quot;Number&quot; is passed&apos;, () =&gt; {
+            expect(isNumber(1)).to.be.true;
+        });
+
+        it(&apos;should return false when &quot;Function&quot; is passed&apos;, () =&gt; {
+            expect(isNumber(function() {})).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;String&quot; is passed&apos;, () =&gt; {
+            expect(isNumber(&apos;&apos;)).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;Object&quot; is passed&apos;, () =&gt; {
+            expect(isNumber({})).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;Array&quot; is passed&apos;, () =&gt; {
+            expect(isNumber([])).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;null&quot; is passed&apos;, () =&gt; {
+            expect(isNumber(null)).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;undefined&quot; is passed&apos;, () =&gt; {
+            expect(isNumber(undefined)).to.be.false;
+        });
+
+        it(&apos;should return false when &quot;NaN&quot; is passed&apos;, () =&gt; {
+            expect(isNumber(NaN)).to.be.false;
         });
     });
 
@@ -210,6 +251,53 @@ describe(&apos;Utils&apos;, function() {
             forEach(arr2, spy);
 
             expect(spy.callCount).to.equal(3);
+        });
+    });
+
+    describe(&apos;setIn&apos;, () =&gt; {
+        it(&apos;should set value with short path&apos;, () =&gt; {
+            const path = [&apos;foo&apos;];
+            const result = setIn({}, path, &apos;bar&apos;);
+
+            expect(result, &apos;result&apos;).to.exist;
+            expect(result.foo, &apos;result.foo&apos;).to.eql(&apos;bar&apos;);
+        });
+
+        it(&apos;should set value with long path&apos;, () =&gt; {
+            const path = [&apos;foo&apos;, &apos;bar&apos;, &apos;qaz&apos;];
+            const result = setIn({}, path, &apos;rfv&apos;);
+
+            expect(result, &apos;result&apos;).to.exist;
+            expect(result.foo, &apos;result.foo&apos;).to.exist;
+            expect(result.foo.bar, &apos;result.foo.bar&apos;).to.exist;
+            expect(result.foo.bar.qaz, &apos;result.foo.bar.qaz&apos;).to.exist;
+            expect(result.foo.bar.qaz, &apos;result.foo.bar.qaz&apos;).to.eql(&apos;rfv&apos;);
+        });
+    });
+
+    describe(&apos;getIn&apos;, () =&gt; {
+        it(&apos;should get value with short path&apos;, () =&gt; {
+            const target = { foo: &apos;bar&apos; };
+            const path = [&apos;foo&apos;];
+            const result = getIn(target, path);
+
+            expect(result, &apos;result&apos;).to.eql(&apos;bar&apos;);
+        });
+
+        it(&apos;should get value with long path&apos;, () =&gt; {
+            const target = { foo: { bar: { &apos;qaz&apos;: &apos;rfv&apos; }}};
+            const path = [&apos;foo&apos;, &apos;bar&apos;, &apos;qaz&apos;];
+            const result = getIn(target, path);
+
+            expect(result, &apos;result&apos;).to.eql(&apos;rfv&apos;);
+        });
+
+        it(&apos;should return null when there is no value&apos;, () =&gt; {
+            const target = { foo: {}};
+            const path = [&apos;foo&apos;, &apos;bar&apos;, &apos;qaz&apos;];
+            const result = getIn(target, path);
+
+            expect(result, &apos;result&apos;).to.be.null;
         });
     });
 });

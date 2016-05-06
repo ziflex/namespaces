@@ -1,6 +1,6 @@
 {
   "name": "namespaces-js",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "description": "Angular-flavored DI container.",
   "main": "lib/index.js",
   "directories": {

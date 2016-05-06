@@ -40,10 +40,13 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getIn">getIn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasIn">hasIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isArray">isArray</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isFunction">isFunction</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNull">isNull</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNullOrUndefined">isNullOrUndefined</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isNumber">isNumber</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isObject">isObject</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isString">isString</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-isUndefined">isUndefined</a></span></span></li>
@@ -52,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-map">map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-parseArgs">parseArgs</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-reduce">reduce</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setIn">setIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-splitPath">splitPath</a></span></span></li>
 </ul>
 </div>
@@ -75,6 +79,7 @@ describe(&apos;map-path&apos;, function() {
                 components: [
                     &apos;actions&apos;,
                     &apos;dispatcher&apos;,
+                    [&apos;helpers&apos;],
                     { &apos;stores&apos;: [&apos;user&apos;, {&apos;users&apos;: [&apos;joe&apos;] }] }
                 ],
                 domain: &apos;domain&apos;,
@@ -109,6 +114,10 @@ describe(&apos;map-path&apos;, function() {
         expect(result.services.components.dispatcher(), &apos;&quot;result.services.components.dispatcher()&quot;&apos;).to.eql(&apos;services/components/dispatcher&apos;);
         expect(result.services.components.dispatcher(&apos;foo&apos;), &apos;&quot;result.services.components.dispatcher(`foo`)&quot;&apos;).to.eql(&apos;services/components/dispatcher/foo&apos;);
 
+        expect(isFunction(result.services.components.helpers), &apos;&quot;result.services.components.helpers&quot; must be a function&apos;).to.be.true;
+        expect(result.services.components.helpers(), &apos;&quot;result.services.components.helpers()&quot;&apos;).to.eql(&apos;services/components/helpers&apos;);
+        expect(result.services.components.helpers(&apos;foo&apos;), &apos;&quot;result.services.components.helpers(`foo`)&quot;&apos;).to.eql(&apos;services/components/helpers/foo&apos;);
+
         expect(isFunction(result.services.components.stores), &apos;&quot;result.services.components.stores&quot; must be a function&apos;).to.be.true;
         expect(result.services.components.stores(), &apos;&quot;result.services.components.stores()&quot;&apos;).to.eql(&apos;services/components/stores&apos;);
         expect(result.services.components.stores(&apos;foo&apos;), &apos;&quot;result.services.components.stores(`foo`)&quot;&apos;).to.eql(&apos;services/components/stores/foo&apos;);
@@ -136,6 +145,26 @@ describe(&apos;map-path&apos;, function() {
         expect(isFunction(result.services.core.database)).to.be.true;
         expect(result.services.core.database()).to.eql(&apos;services/core/database&apos;);
         expect(result.services.core.database(&apos;foo&apos;)).to.eql(&apos;services/core/database/foo&apos;);
+    });
+
+    it(&apos;should map array based paths&apos;, () =&gt; {
+        const result = map([
+            &apos;foo&apos;,
+            &apos;bar&apos;,
+            {
+                qaz: &apos;wsx&apos;
+            },
+            [
+                &apos;edc&apos;
+            ]
+        ]);
+
+        expect(isFunction(result.foo), &apos;result.foo&apos;).to.be.true;
+        expect(result.foo(), &apos;result.foo()&apos;).to.eql(&apos;foo&apos;);
+        expect(isFunction(result.wsx), &apos;result.wsx&apos;).to.be.true;
+        expect(result.wsx(), &apos;result.wsx()&apos;).to.eql(&apos;wsx&apos;);
+        expect(isFunction(result.edc), &apos;result.edc&apos;).to.be.true;
+        expect(result.edc(), &apos;result.edc()&apos;).to.eql(&apos;edc&apos;);
     });
 
     it(&apos;should resolve array of paths&apos;, () =&gt; {
