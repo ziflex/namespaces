@@ -26,6 +26,16 @@ export default class Resolver {
      * @returns {any} Module's value.
      */
     resolve(path) {
+        const chain = [];
+        const checkCircularDependency = (parent, current) => {
+            if (current === parent) {
+                throw new ReferenceError(`Circular dependency: ${parent} -> ${current}`);
+            }
+
+            if (chain.indexOf(current) > -1) {
+                throw new ReferenceError(`Circular dependency: ${parent} -> ${chain.join(' -> ')}`);
+            }
+        };
         const resolveModule = (targetPath) => {
             const module = this._storage.getItem(targetPath);
 
@@ -37,6 +47,8 @@ export default class Resolver {
                 if (isArray(dependencies)) {
                     return map(dependencies, (currentPath) => {
                         if (isString(currentPath)) {
+                            checkCircularDependency(targetPath, currentPath);
+                            chain.push(currentPath);
                             return resolveModule(currentPath);
                         } else if (isFunction(currentPath)) {
                             return currentPath();

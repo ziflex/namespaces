@@ -387,33 +387,35 @@ describe('Resolver', function() {
             });
         });
 
-        // describe('circular dependency', () => {
-        //    it('should throw during resolving', () => {
-        //        const self = () => {
-        //            container.register().value('value1', ['value1'], 1);
-        //            container.resolve('value1');
-        //        };
-        //        const shallow = () => {
-        //            container.register().value('value1', ['value2'], 1);
-        //            container.register().value('value2', ['value1'], 2);
-        //            container.resolve('value1');
-        //            container.resolve('value2');
-        //        };
-        //        const deep = () => {
-        //            container.register().value('a', ['b', 'd'], 'a');
-        //            container.register().value('b', ['c', 'e'], 'b');
-        //            container.register().value('c', ['e', 'd'], 'c');
-        //            container.register().value('d', ['b'], 'd');
-        //            container.register().value('e', 'e');
-        //
-        //            container.resolve('a');
-        //        };
-        //
-        //        expect(self).to.throw(ReferenceError);
-        //        expect(shallow).to.throw(ReferenceError);
-        //        expect(deep).to.throw(ReferenceError);
-        //    });
-        // });
+        describe('circular dependency', () => {
+            it('should throw during resolving', () => {
+                const self = () => {
+                    const c = new Container();
+                    c.value('value1', ['value1'], 1);
+                    expect(c.resolve('value1')).to.exist;
+                };
+                const shallow = () => {
+                    const c = new Container();
+                    c.value('value1', ['value2'], 1);
+                    c.value('value2', ['value1'], 2);
+                    expect(c.resolve('value1')).to.exist;
+                    expect(c.resolve('value2')).to.exist;
+                };
+                const deep = () => {
+                    const c = new Container();
+                    c.value('a', ['b', 'd'], 'a');
+                    c.value('b', ['c', 'e'], 'b');
+                    c.value('c', ['e', 'd'], 'c');
+                    c.value('d', ['b'], 'd');
+                    c.value('e', 'e');
+                    expect(c.resolve('a')).to.exist;
+                };
+
+                expect(self).to.throw(ReferenceError);
+                expect(shallow).to.throw(ReferenceError);
+                expect(deep).to.throw(ReferenceError);
+            });
+        });
     });
     describe('.resolveAll', () => {
         context('empty container', () => {
