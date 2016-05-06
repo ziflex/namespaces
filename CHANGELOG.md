@@ -47,7 +47,7 @@
         ]
     });
 
-    const paths = result.system([
+    const paths = namespaces.system([
         'component1',
         'component2'
     ]);
