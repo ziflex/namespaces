@@ -39,6 +39,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/storage.js~Storage.html">Storage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filter">filter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-find">find</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getIn">getIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasIn">hasIn</a></span></span></li>
@@ -489,6 +491,26 @@ describe(&apos;Resolver&apos;, function() {
                 expect(shallow).to.throw(ReferenceError);
                 expect(deep).to.throw(ReferenceError);
                 expect(deep2).to.throw(ReferenceError);
+            });
+
+            it(&apos;should not throw an error&apos;, () =&gt; {
+                container.namespace(&apos;core/system/api&apos;).factory(&apos;application&apos;, [
+                    &apos;core/infrastructure/logger&apos;,
+                    &apos;core/system/renderer&apos;
+                ], () =&gt; &apos;application&apos;);
+                container.namespace(&apos;core/infrastructure&apos;).factory(&apos;logger&apos;, () =&gt; {
+                    return &apos;logger&apos;;
+                });
+                container.namespace(&apos;core/system&apos;).factory(&apos;renderer&apos;, [
+                    &apos;core/settings&apos;,
+                    &apos;core/infrastructure/logger&apos;
+                ], () =&gt; &apos;renderer&apos;);
+                container.namespace(&apos;core&apos;).const(&apos;settings&apos;, {});
+
+                const resolve = () =&gt; container.resolve(&apos;core/system/api/application&apos;);
+
+                expect(resolve).to.not.throw(Error);
+                expect(resolve).to.not.throw(ReferenceError);
             });
         });
     });

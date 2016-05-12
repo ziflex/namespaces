@@ -1,4 +1,65 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Namespaces = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+
+/**
+ * Topological sorting function
+ *
+ * @param {Array} edges
+ * @returns {Array}
+ */
+
+module.exports = exports = function(edges){
+  return toposort(uniqueNodes(edges), edges)
+}
+
+exports.array = toposort
+
+function toposort(nodes, edges) {
+  var cursor = nodes.length
+    , sorted = new Array(cursor)
+    , visited = {}
+    , i = cursor
+
+  while (i--) {
+    if (!visited[i]) visit(nodes[i], i, [])
+  }
+
+  return sorted
+
+  function visit(node, i, predecessors) {
+    if(predecessors.indexOf(node) >= 0) {
+      throw new Error('Cyclic dependency: '+JSON.stringify(node))
+    }
+
+    if (visited[i]) return;
+    visited[i] = true
+
+    // outgoing edges
+    var outgoing = edges.filter(function(edge){
+      return edge[0] === node
+    })
+    if (i = outgoing.length) {
+      var preds = predecessors.concat(node)
+      do {
+        var child = outgoing[--i][1]
+        visit(child, nodes.indexOf(child), preds)
+      } while (i)
+    }
+
+    sorted[--cursor] = node
+  }
+}
+
+function uniqueNodes(arr){
+  var res = []
+  for (var i = 0, len = arr.length; i < len; i++) {
+    var edge = arr[i]
+    if (res.indexOf(edge[0]) < 0) res.push(edge[0])
+    if (res.indexOf(edge[1]) < 0) res.push(edge[1])
+  }
+  return res
+}
+
+},{}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -103,7 +164,7 @@ var Container = function (_Namespace) {
 Container.map = _mapPath2.default;
 exports.default = Container;
 
-},{"./map-path":3,"./namespace":5,"./resolver":6,"./storage":7}],2:[function(require,module,exports){
+},{"./map-path":4,"./namespace":6,"./resolver":7,"./storage":8}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -119,7 +180,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = _container2.default;
 
-},{"./container":1}],3:[function(require,module,exports){
+},{"./container":2}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -180,7 +241,7 @@ function createPathMap(target) {
     return result;
 }
 
-},{"./utils":8}],4:[function(require,module,exports){
+},{"./utils":9}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -292,7 +353,7 @@ var Module = function () {
 
 exports.default = Module;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -471,7 +532,7 @@ var Namespace = function () {
 
 exports.default = Namespace;
 
-},{"./module":4,"./utils":8}],6:[function(require,module,exports){
+},{"./module":5,"./utils":9}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -480,7 +541,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _toposort = require('toposort');
+
+var _toposort2 = _interopRequireDefault(_toposort);
+
 var _utils = require('./utils');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -515,14 +584,17 @@ var Resolver = function () {
         value: function resolve(path) {
             var _this = this;
 
+            var graph = [];
             var chain = [];
-            var checkCircularDependency = function checkCircularDependency(parent, current) {
-                if (current === parent) {
-                    throw new ReferenceError('Circular dependency: ' + parent + ' -> ' + current);
-                }
-
-                if (chain.indexOf(current) > -1) {
-                    throw new ReferenceError('Circular dependency: ' + parent + ' -> ' + chain.join(' -> '));
+            var checkCircularDependency = function checkCircularDependency(targetPath, dependencies) {
+                (0, _utils.forEach)(dependencies, function (i) {
+                    return graph.push([targetPath, i]);
+                });
+                chain.push.apply(chain, _toConsumableArray(dependencies));
+                try {
+                    (0, _toposort2.default)(graph);
+                } catch (e) {
+                    throw new ReferenceError('Circular dependency: ' + path + ' -> ' + chain.join(' -> '));
                 }
             };
             var resolveModule = function resolveModule(targetPath) {
@@ -534,10 +606,9 @@ var Resolver = function () {
 
                 var resolveDependencies = function resolveDependencies(dependencies) {
                     if ((0, _utils.isArray)(dependencies)) {
+                        checkCircularDependency(targetPath, dependencies);
                         return (0, _utils.map)(dependencies, function (currentPath) {
                             if ((0, _utils.isString)(currentPath)) {
-                                checkCircularDependency(targetPath, currentPath);
-                                chain.push(currentPath);
                                 return resolveModule(currentPath);
                             } else if ((0, _utils.isFunction)(currentPath)) {
                                 return currentPath();
@@ -593,7 +664,7 @@ var Resolver = function () {
 
 exports.default = Resolver;
 
-},{"./utils":8}],7:[function(require,module,exports){
+},{"./utils":9,"toposort":1}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -779,7 +850,7 @@ var Storage = function () {
 
 exports.default = Storage;
 
-},{"./module":4,"./utils":8}],8:[function(require,module,exports){
+},{"./module":5,"./utils":9}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -802,6 +873,8 @@ exports.isValidName = isValidName;
 exports.joinPath = joinPath;
 exports.splitPath = splitPath;
 exports.forEach = forEach;
+exports.find = find;
+exports.filter = filter;
 exports.map = map;
 exports.reduce = reduce;
 exports.setIn = setIn;
@@ -948,6 +1021,41 @@ function forEach(collection, iteratee) {
     }
 }
 
+function find(collection, iteratee) {
+    var result = null;
+
+    if (!isFunction(iteratee)) {
+        return result;
+    }
+
+    forEach(collection, function (v, k) {
+        if (iteratee(v, k) === true) {
+            result = v;
+            return false;
+        }
+
+        return true;
+    });
+
+    return result;
+}
+
+function filter(collection, iteratee) {
+    var result = [];
+
+    if (!isFunction(iteratee)) {
+        return result;
+    }
+
+    forEach(collection, function (v, k) {
+        if (iteratee(v, k) === true) {
+            result.push(v);
+        }
+    });
+
+    return result;
+}
+
 function map(collection, iteratee) {
     var context = arguments.length <= 2 || arguments[2] === undefined ? this : arguments[2];
 
@@ -1031,5 +1139,5 @@ function hasIn(target, path) {
     return getIn(target, path) !== null;
 }
 
-},{}]},{},[2])(2)
+},{}]},{},[3])(3)
 });

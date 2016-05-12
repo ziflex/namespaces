@@ -1,11 +1,14 @@
+import toposort from 'toposort';
 import {
     isString,
     isArray,
     isFunction,
+    forEach,
     map
 } from './utils';
 
 const DEFAULT_DEPENDENCIES = [];
+
 
 /**
  * Creates a new Resolver.
@@ -26,14 +29,15 @@ export default class Resolver {
      * @returns {any} Module's value.
      */
     resolve(path) {
+        const graph = [];
         const chain = [];
-        const checkCircularDependency = (parent, current) => {
-            if (current === parent) {
-                throw new ReferenceError(`Circular dependency: ${parent} -> ${current}`);
-            }
-
-            if (chain.indexOf(current) > -1) {
-                throw new ReferenceError(`Circular dependency: ${parent} -> ${chain.join(' -> ')}`);
+        const checkCircularDependency = (targetPath, dependencies) => {
+            forEach(dependencies, i => graph.push([targetPath, i]));
+            chain.push(...dependencies);
+            try {
+                toposort(graph);
+            } catch (e) {
+                throw new ReferenceError(`Circular dependency: ${path} -> ${chain.join(' -> ')}`);
             }
         };
         const resolveModule = (targetPath) => {
@@ -45,10 +49,9 @@ export default class Resolver {
 
             const resolveDependencies = (dependencies) => {
                 if (isArray(dependencies)) {
+                    checkCircularDependency(targetPath, dependencies);
                     return map(dependencies, (currentPath) => {
                         if (isString(currentPath)) {
-                            checkCircularDependency(targetPath, currentPath);
-                            chain.push(currentPath);
                             return resolveModule(currentPath);
                         } else if (isFunction(currentPath)) {
                             return currentPath();

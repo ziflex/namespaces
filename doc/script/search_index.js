@@ -42,6 +42,18 @@ window.esdocSearchIndex = [
     "function"
   ],
   [
+    "namespaces-js/src/utils.js~filter",
+    "function/index.html#static-function-filter",
+    "<span>filter</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
+    "function"
+  ],
+  [
+    "namespaces-js/src/utils.js~find",
+    "function/index.html#static-function-find",
+    "<span>find</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
+    "function"
+  ],
+  [
     "namespaces-js/src/utils.js~foreach",
     "function/index.html#static-function-forEach",
     "<span>forEach</span> <span class=\"search-result-import-path\">namespaces-js/src/utils.js</span>",
@@ -937,6 +949,12 @@ window.esdocSearchIndex = [
   ],
   [
     "",
+    "test-file/unit/resolver.test.js.html#lineNumber430",
+    "Resolver .resolve circular dependency should not throw an error",
+    "test"
+  ],
+  [
+    "",
     "test-file/unit/resolver.test.js.html#lineNumber391",
     "Resolver .resolve circular dependency should throw during resolving",
     "test"
@@ -1075,31 +1093,31 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber431",
+    "test-file/unit/resolver.test.js.html#lineNumber451",
     "Resolver .resolveAll",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber432",
+    "test-file/unit/resolver.test.js.html#lineNumber452",
     "Resolver .resolveAll empty container",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber433",
+    "test-file/unit/resolver.test.js.html#lineNumber453",
     "Resolver .resolveAll empty container should throw error",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber440",
+    "test-file/unit/resolver.test.js.html#lineNumber460",
     "Resolver .resolveAll not empty container",
     "test"
   ],
   [
     "",
-    "test-file/unit/resolver.test.js.html#lineNumber441",
+    "test-file/unit/resolver.test.js.html#lineNumber461",
     "Resolver .resolveAll not empty container should resolve all modules from particular namespace",
     "test"
   ],

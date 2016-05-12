@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.3
+### Fixed
+* Circular dependency check
+
 ## 0.5.2
 ### Added
 * Circular dependency check

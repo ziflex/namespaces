@@ -39,6 +39,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/storage.js~Storage.html">Storage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filter">filter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-find">find</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getIn">getIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasIn">hasIn</a></span></span></li>
@@ -62,14 +64,17 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/resolver.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import toposort from &apos;toposort&apos;;
+import {
     isString,
     isArray,
     isFunction,
+    forEach,
     map
 } from &apos;./utils&apos;;
 
 const DEFAULT_DEPENDENCIES = [];
+
 
 /**
  * Creates a new Resolver.
@@ -90,14 +95,15 @@ export default class Resolver {
      * @returns {any} Module&apos;s value.
      */
     resolve(path) {
+        const graph = [];
         const chain = [];
-        const checkCircularDependency = (parent, current) =&gt; {
-            if (current === parent) {
-                throw new ReferenceError(`Circular dependency: ${parent} -&gt; ${current}`);
-            }
-
-            if (chain.indexOf(current) &gt; -1) {
-                throw new ReferenceError(`Circular dependency: ${parent} -&gt; ${chain.join(&apos; -&gt; &apos;)}`);
+        const checkCircularDependency = (targetPath, dependencies) =&gt; {
+            forEach(dependencies, i =&gt; graph.push([targetPath, i]));
+            chain.push(...dependencies);
+            try {
+                toposort(graph);
+            } catch (e) {
+                throw new ReferenceError(`Circular dependency: ${path} -&gt; ${chain.join(&apos; -&gt; &apos;)}`);
             }
         };
         const resolveModule = (targetPath) =&gt; {
@@ -109,10 +115,9 @@ export default class Resolver {
 
             const resolveDependencies = (dependencies) =&gt; {
                 if (isArray(dependencies)) {
+                    checkCircularDependency(targetPath, dependencies);
                     return map(dependencies, (currentPath) =&gt; {
                         if (isString(currentPath)) {
-                            checkCircularDependency(targetPath, currentPath);
-                            chain.push(currentPath);
                             return resolveModule(currentPath);
                         } else if (isFunction(currentPath)) {
                             return currentPath();

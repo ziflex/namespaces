@@ -126,6 +126,41 @@ export function forEach(collection, iteratee, context = this) {
     }
 }
 
+export function find(collection, iteratee) {
+    let result = null;
+
+    if (!isFunction(iteratee)) {
+        return result;
+    }
+
+    forEach(collection, (v, k) => {
+        if (iteratee(v, k) === true) {
+            result = v;
+            return false;
+        }
+
+        return true;
+    });
+
+    return result;
+}
+
+export function filter(collection, iteratee) {
+    const result = [];
+
+    if (!isFunction(iteratee)) {
+        return result;
+    }
+
+    forEach(collection, (v, k) => {
+        if (iteratee(v, k) === true) {
+            result.push(v);
+        }
+    });
+
+    return result;
+}
+
 export function map(collection, iteratee, context = this) {
     const result = [];
 

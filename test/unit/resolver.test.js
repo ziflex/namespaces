@@ -426,6 +426,26 @@ describe('Resolver', function() {
                 expect(deep).to.throw(ReferenceError);
                 expect(deep2).to.throw(ReferenceError);
             });
+
+            it('should not throw an error', () => {
+                container.namespace('core/system/api').factory('application', [
+                    'core/infrastructure/logger',
+                    'core/system/renderer'
+                ], () => 'application');
+                container.namespace('core/infrastructure').factory('logger', () => {
+                    return 'logger';
+                });
+                container.namespace('core/system').factory('renderer', [
+                    'core/settings',
+                    'core/infrastructure/logger'
+                ], () => 'renderer');
+                container.namespace('core').const('settings', {});
+
+                const resolve = () => container.resolve('core/system/api/application');
+
+                expect(resolve).to.not.throw(Error);
+                expect(resolve).to.not.throw(ReferenceError);
+            });
         });
     });
     describe('.resolveAll', () => {

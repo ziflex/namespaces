@@ -1199,7 +1199,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {\n    isString,\n    isArray,\n    isFunction,\n    map\n} from './utils';\n\nconst DEFAULT_DEPENDENCIES = [];\n\n/**\n * Creates a new Resolver.\n * @class\n * @classdesc Represents a dependency resolver for particular module.\n */\nexport default class Resolver {\n    /**\n     * @constructor\n     * @param storage - Module's storage.\n     */\n    constructor(storage) {\n        this._storage = storage;\n    }\n\n    /**\n     * Resolves particular module.\n     * @returns {any} Module's value.\n     */\n    resolve(path) {\n        const chain = [];\n        const checkCircularDependency = (parent, current) => {\n            if (current === parent) {\n                throw new ReferenceError(`Circular dependency: ${parent} -> ${current}`);\n            }\n\n            if (chain.indexOf(current) > -1) {\n                throw new ReferenceError(`Circular dependency: ${parent} -> ${chain.join(' -> ')}`);\n            }\n        };\n        const resolveModule = (targetPath) => {\n            const module = this._storage.getItem(targetPath);\n\n            if (module.isInitialized()) {\n                return module.getValue();\n            }\n\n            const resolveDependencies = (dependencies) => {\n                if (isArray(dependencies)) {\n                    return map(dependencies, (currentPath) => {\n                        if (isString(currentPath)) {\n                            checkCircularDependency(targetPath, currentPath);\n                            chain.push(currentPath);\n                            return resolveModule(currentPath);\n                        } else if (isFunction(currentPath)) {\n                            return currentPath();\n                        }\n\n                        return undefined;\n                    });\n                }\n\n                if (isFunction(dependencies)) {\n                    const result = dependencies();\n\n                    if (!isArray(result)) {\n                        return [result];\n                    }\n\n                    return result;\n                }\n\n                return DEFAULT_DEPENDENCIES;\n            };\n\n            module.initialize(resolveDependencies(module.getDependencies()));\n            return module.getValue();\n        };\n\n        return resolveModule(path);\n    }\n\n    /**\n     * Resolves all modules from particular namespace.\n     * @param {string} namespace - Target namespace.\n     * @returns {Map<string, any>} Map of module values, where key is module name.\n     */\n    resolveAll(namespace) {\n        const result = {};\n\n        this._storage.forEachIn(namespace, (module, path) => {\n            result[module.getName()] = this.resolve(path);\n        });\n\n        return result;\n    }\n}\n"
+    "content": "import toposort from 'toposort';\nimport {\n    isString,\n    isArray,\n    isFunction,\n    forEach,\n    map\n} from './utils';\n\nconst DEFAULT_DEPENDENCIES = [];\n\n\n/**\n * Creates a new Resolver.\n * @class\n * @classdesc Represents a dependency resolver for particular module.\n */\nexport default class Resolver {\n    /**\n     * @constructor\n     * @param storage - Module's storage.\n     */\n    constructor(storage) {\n        this._storage = storage;\n    }\n\n    /**\n     * Resolves particular module.\n     * @returns {any} Module's value.\n     */\n    resolve(path) {\n        const graph = [];\n        const chain = [];\n        const checkCircularDependency = (targetPath, dependencies) => {\n            forEach(dependencies, i => graph.push([targetPath, i]));\n            chain.push(...dependencies);\n            try {\n                toposort(graph);\n            } catch (e) {\n                throw new ReferenceError(`Circular dependency: ${path} -> ${chain.join(' -> ')}`);\n            }\n        };\n        const resolveModule = (targetPath) => {\n            const module = this._storage.getItem(targetPath);\n\n            if (module.isInitialized()) {\n                return module.getValue();\n            }\n\n            const resolveDependencies = (dependencies) => {\n                if (isArray(dependencies)) {\n                    checkCircularDependency(targetPath, dependencies);\n                    return map(dependencies, (currentPath) => {\n                        if (isString(currentPath)) {\n                            return resolveModule(currentPath);\n                        } else if (isFunction(currentPath)) {\n                            return currentPath();\n                        }\n\n                        return undefined;\n                    });\n                }\n\n                if (isFunction(dependencies)) {\n                    const result = dependencies();\n\n                    if (!isArray(result)) {\n                        return [result];\n                    }\n\n                    return result;\n                }\n\n                return DEFAULT_DEPENDENCIES;\n            };\n\n            module.initialize(resolveDependencies(module.getDependencies()));\n            return module.getValue();\n        };\n\n        return resolveModule(path);\n    }\n\n    /**\n     * Resolves all modules from particular namespace.\n     * @param {string} namespace - Target namespace.\n     * @returns {Map<string, any>} Map of module values, where key is module name.\n     */\n    resolveAll(namespace) {\n        const result = {};\n\n        this._storage.forEachIn(namespace, (module, path) => {\n            result[module.getName()] = this.resolve(path);\n        });\n\n        return result;\n    }\n}\n"
   },
   {
     "__docId__": 42,
@@ -1214,7 +1214,7 @@
     "importPath": "namespaces-js/src/resolver.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 8,
+    "lineNumber": 10,
     "undocument": true,
     "type": {
       "types": [
@@ -1235,7 +1235,7 @@
     "importPath": "namespaces-js/src/resolver.js",
     "importStyle": "Resolver",
     "description": "Creates a new Resolver.",
-    "lineNumber": 15,
+    "lineNumber": 18,
     "unknown": [
       {
         "tagName": "@class",
@@ -1258,7 +1258,7 @@
     "longname": "src/resolver.js~Resolver#constructor",
     "access": null,
     "description": "",
-    "lineNumber": 20,
+    "lineNumber": 23,
     "unknown": [
       {
         "tagName": "@constructor",
@@ -1289,7 +1289,7 @@
     "longname": "src/resolver.js~Resolver#_storage",
     "access": null,
     "description": null,
-    "lineNumber": 21,
+    "lineNumber": 24,
     "undocument": true,
     "type": {
       "types": [
@@ -1307,7 +1307,7 @@
     "longname": "src/resolver.js~Resolver#resolve",
     "access": null,
     "description": "Resolves particular module.",
-    "lineNumber": 28,
+    "lineNumber": 31,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1342,7 +1342,7 @@
     "longname": "src/resolver.js~Resolver#resolveAll",
     "access": null,
     "description": "Resolves all modules from particular namespace.",
-    "lineNumber": 86,
+    "lineNumber": 89,
     "unknown": [
       {
         "tagName": "@returns",
@@ -1827,7 +1827,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "const toString = Object.prototype.toString;\n\nexport function isUndefined(value) {\n    return typeof value === 'undefined';\n}\n\nexport function isNull(value) {\n    return value === null;\n}\n\nexport function isNullOrUndefined(arg) {\n    return isNull(arg) || isUndefined(arg);\n}\n\nexport function isObject(value) {\n    return value !== null && typeof value === 'object';\n}\n\nexport function isString(value) {\n    return typeof value === 'string';\n}\n\nexport function isNumber(value) {\n    return value !== null && !isNaN(value) && typeof value === 'number';\n}\n\nexport function isFunction(value) {\n    return typeof value === 'function';\n}\n\nexport function isArray(value) {\n    return toString.call(value) === '[object Array]';\n}\n\nexport function create(constructor, args) {\n    function Temp() {}\n    Temp.prototype = constructor.prototype;\n    const instance = new Temp();\n    const result = constructor.apply(instance, args);\n    return Object(result) === result ? result : instance;\n}\n\nexport function parseArgs(...args) {\n    const name = args[0];\n    let dependencies = args[1];\n    let definition = args[2];\n\n    if (isUndefined(definition)) {\n        definition = dependencies;\n        dependencies = null;\n    }\n\n    return { name, dependencies, definition };\n}\n\nexport function isValidName(separator = '/', name) {\n    return name.indexOf(separator) === -1;\n}\n\nexport function joinPath(separator = '/', ...parts) {\n    const paths = [];\n    const len = parts.length;\n\n    for (let i = 0; i <= len; i += 1) {\n        let part = parts[i];\n\n        if (isString(part)) {\n            part = part.trim();\n\n            if (part && part !== separator) {\n                paths.push(part);\n            }\n        }\n    }\n\n    return `${paths.join(separator)}`;\n}\n\nexport function splitPath(separator = '/', path) {\n    const result = { namespace: '', name: '' };\n\n    if (!isString(path)) {\n        return result;\n    }\n\n    const normalizedPath = path.trim();\n\n    if (normalizedPath === separator) {\n        result.namespace = '';\n        return result;\n    }\n\n    const parts = normalizedPath.split(separator);\n    const len = parts.length;\n\n    if (len > 1) {\n        result.namespace = joinPath(separator, ...parts.slice(0, len - 1));\n    } else {\n        result.namespace = '';\n    }\n\n    result.name = parts[len - 1] || '';\n\n    if (isString(result.name) && !result.name.trim()) {\n        result.name = '';\n    }\n\n    return result;\n}\n\nexport function forEach(collection, iteratee, context = this) {\n    if (isArray(collection)) {\n        for (let i = 0; i < collection.length; i += 1) {\n            if (iteratee.call(context, collection[i], i) === false) {\n                break;\n            }\n        }\n    } else if (isObject(collection)) {\n        for (const prop in collection) {\n            if (collection.hasOwnProperty(prop)) {\n                if (iteratee.call(context, collection[prop], prop) === false) {\n                    break;\n                }\n            }\n        }\n    }\n}\n\nexport function map(collection, iteratee, context = this) {\n    const result = [];\n\n    forEach(collection, (v, k) => {\n        result.push(iteratee.call(context, v, k));\n    });\n\n    return result;\n}\n\nexport function reduce(collection, iteratee, initialValue, context = this) {\n    let result = initialValue;\n\n    forEach(collection, (v, k) => {\n        result = iteratee.call(this, result || v, v, k);\n    }, context);\n\n    return result;\n}\n\nexport function setIn(target, path, value) {\n    if (!isArray(path)) {\n        return target;\n    }\n\n    const result = target || {};\n    const endIndex = path.length - 1;\n    reduce(path, (obj, pathPart, index) => {\n        let prop = obj;\n\n        if (index === endIndex) {\n            prop[pathPart] = value;\n        } else {\n            prop = obj[pathPart];\n\n            if (!prop) {\n                prop = {};\n                obj[pathPart] = prop;\n            }\n        }\n\n        return prop;\n    }, result);\n\n    return result;\n}\n\nexport function getIn(target, path) {\n    let result = null;\n\n    if (!isArray(path)) {\n        return result;\n    }\n\n\n    const endIndex = path.length - 1;\n    let prop = target;\n\n    forEach(path, (pathPart, index) => {\n        if (endIndex === index) {\n            result = prop[pathPart];\n            return false;\n        }\n\n        prop = prop[pathPart];\n\n        if (!prop) {\n            return false;\n        }\n    });\n\n    return result;\n}\n\nexport function hasIn(target, path) {\n    return getIn(target, path) !== null;\n}\n"
+    "content": "const toString = Object.prototype.toString;\n\nexport function isUndefined(value) {\n    return typeof value === 'undefined';\n}\n\nexport function isNull(value) {\n    return value === null;\n}\n\nexport function isNullOrUndefined(arg) {\n    return isNull(arg) || isUndefined(arg);\n}\n\nexport function isObject(value) {\n    return value !== null && typeof value === 'object';\n}\n\nexport function isString(value) {\n    return typeof value === 'string';\n}\n\nexport function isNumber(value) {\n    return value !== null && !isNaN(value) && typeof value === 'number';\n}\n\nexport function isFunction(value) {\n    return typeof value === 'function';\n}\n\nexport function isArray(value) {\n    return toString.call(value) === '[object Array]';\n}\n\nexport function create(constructor, args) {\n    function Temp() {}\n    Temp.prototype = constructor.prototype;\n    const instance = new Temp();\n    const result = constructor.apply(instance, args);\n    return Object(result) === result ? result : instance;\n}\n\nexport function parseArgs(...args) {\n    const name = args[0];\n    let dependencies = args[1];\n    let definition = args[2];\n\n    if (isUndefined(definition)) {\n        definition = dependencies;\n        dependencies = null;\n    }\n\n    return { name, dependencies, definition };\n}\n\nexport function isValidName(separator = '/', name) {\n    return name.indexOf(separator) === -1;\n}\n\nexport function joinPath(separator = '/', ...parts) {\n    const paths = [];\n    const len = parts.length;\n\n    for (let i = 0; i <= len; i += 1) {\n        let part = parts[i];\n\n        if (isString(part)) {\n            part = part.trim();\n\n            if (part && part !== separator) {\n                paths.push(part);\n            }\n        }\n    }\n\n    return `${paths.join(separator)}`;\n}\n\nexport function splitPath(separator = '/', path) {\n    const result = { namespace: '', name: '' };\n\n    if (!isString(path)) {\n        return result;\n    }\n\n    const normalizedPath = path.trim();\n\n    if (normalizedPath === separator) {\n        result.namespace = '';\n        return result;\n    }\n\n    const parts = normalizedPath.split(separator);\n    const len = parts.length;\n\n    if (len > 1) {\n        result.namespace = joinPath(separator, ...parts.slice(0, len - 1));\n    } else {\n        result.namespace = '';\n    }\n\n    result.name = parts[len - 1] || '';\n\n    if (isString(result.name) && !result.name.trim()) {\n        result.name = '';\n    }\n\n    return result;\n}\n\nexport function forEach(collection, iteratee, context = this) {\n    if (isArray(collection)) {\n        for (let i = 0; i < collection.length; i += 1) {\n            if (iteratee.call(context, collection[i], i) === false) {\n                break;\n            }\n        }\n    } else if (isObject(collection)) {\n        for (const prop in collection) {\n            if (collection.hasOwnProperty(prop)) {\n                if (iteratee.call(context, collection[prop], prop) === false) {\n                    break;\n                }\n            }\n        }\n    }\n}\n\nexport function find(collection, iteratee) {\n    let result = null;\n\n    if (!isFunction(iteratee)) {\n        return result;\n    }\n\n    forEach(collection, (v, k) => {\n        if (iteratee(v, k) === true) {\n            result = v;\n            return false;\n        }\n\n        return true;\n    });\n\n    return result;\n}\n\nexport function filter(collection, iteratee) {\n    const result = [];\n\n    if (!isFunction(iteratee)) {\n        return result;\n    }\n\n    forEach(collection, (v, k) => {\n        if (iteratee(v, k) === true) {\n            result.push(v);\n        }\n    });\n\n    return result;\n}\n\nexport function map(collection, iteratee, context = this) {\n    const result = [];\n\n    forEach(collection, (v, k) => {\n        result.push(iteratee.call(context, v, k));\n    });\n\n    return result;\n}\n\nexport function reduce(collection, iteratee, initialValue, context = this) {\n    let result = initialValue;\n\n    forEach(collection, (v, k) => {\n        result = iteratee.call(this, result || v, v, k);\n    }, context);\n\n    return result;\n}\n\nexport function setIn(target, path, value) {\n    if (!isArray(path)) {\n        return target;\n    }\n\n    const result = target || {};\n    const endIndex = path.length - 1;\n    reduce(path, (obj, pathPart, index) => {\n        let prop = obj;\n\n        if (index === endIndex) {\n            prop[pathPart] = value;\n        } else {\n            prop = obj[pathPart];\n\n            if (!prop) {\n                prop = {};\n                obj[pathPart] = prop;\n            }\n        }\n\n        return prop;\n    }, result);\n\n    return result;\n}\n\nexport function getIn(target, path) {\n    let result = null;\n\n    if (!isArray(path)) {\n        return result;\n    }\n\n\n    const endIndex = path.length - 1;\n    let prop = target;\n\n    forEach(path, (pathPart, index) => {\n        if (endIndex === index) {\n            result = prop[pathPart];\n            return false;\n        }\n\n        prop = prop[pathPart];\n\n        if (!prop) {\n            return false;\n        }\n    });\n\n    return result;\n}\n\nexport function hasIn(target, path) {\n    return getIn(target, path) !== null;\n}\n"
   },
   {
     "__docId__": 68,
@@ -2318,6 +2318,78 @@
     "kind": "function",
     "static": true,
     "variation": null,
+    "name": "find",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~find",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{find}",
+    "description": null,
+    "lineNumber": 129,
+    "undocument": true,
+    "params": [
+      {
+        "name": "collection",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "iteratee",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 84,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "filter",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~filter",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{filter}",
+    "description": null,
+    "lineNumber": 148,
+    "undocument": true,
+    "params": [
+      {
+        "name": "collection",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "iteratee",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 85,
+    "kind": "function",
+    "static": true,
+    "variation": null,
     "name": "map",
     "memberof": "src/utils.js",
     "longname": "src/utils.js~map",
@@ -2326,7 +2398,7 @@
     "importPath": "namespaces-js/src/utils.js",
     "importStyle": "{map}",
     "description": null,
-    "lineNumber": 129,
+    "lineNumber": 164,
     "undocument": true,
     "params": [
       {
@@ -2357,7 +2429,7 @@
     "generator": false
   },
   {
-    "__docId__": 84,
+    "__docId__": 86,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -2369,7 +2441,7 @@
     "importPath": "namespaces-js/src/utils.js",
     "importStyle": "{reduce}",
     "description": null,
-    "lineNumber": 139,
+    "lineNumber": 174,
     "undocument": true,
     "params": [
       {
@@ -2406,7 +2478,7 @@
     "generator": false
   },
   {
-    "__docId__": 85,
+    "__docId__": 87,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -2418,7 +2490,7 @@
     "importPath": "namespaces-js/src/utils.js",
     "importStyle": "{setIn}",
     "description": null,
-    "lineNumber": 149,
+    "lineNumber": 184,
     "undocument": true,
     "params": [
       {
@@ -2448,7 +2520,7 @@
     "generator": false
   },
   {
-    "__docId__": 86,
+    "__docId__": 88,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -2460,43 +2532,7 @@
     "importPath": "namespaces-js/src/utils.js",
     "importStyle": "{getIn}",
     "description": null,
-    "lineNumber": 176,
-    "undocument": true,
-    "params": [
-      {
-        "name": "target",
-        "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "path",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "return": {
-      "types": [
-        "*"
-      ]
-    },
-    "generator": false
-  },
-  {
-    "__docId__": 87,
-    "kind": "function",
-    "static": true,
-    "variation": null,
-    "name": "hasIn",
-    "memberof": "src/utils.js",
-    "longname": "src/utils.js~hasIn",
-    "access": null,
-    "export": true,
-    "importPath": "namespaces-js/src/utils.js",
-    "importStyle": "{hasIn}",
-    "description": null,
-    "lineNumber": 203,
+    "lineNumber": 211,
     "undocument": true,
     "params": [
       {
@@ -2521,6 +2557,42 @@
   },
   {
     "__docId__": 89,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "hasIn",
+    "memberof": "src/utils.js",
+    "longname": "src/utils.js~hasIn",
+    "access": null,
+    "export": true,
+    "importPath": "namespaces-js/src/utils.js",
+    "importStyle": "{hasIn}",
+    "description": null,
+    "lineNumber": 238,
+    "undocument": true,
+    "params": [
+      {
+        "name": "target",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "path",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 91,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2533,7 +2605,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 90,
+    "__docId__": 92,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2546,7 +2618,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 91,
+    "__docId__": 93,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2559,7 +2631,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 92,
+    "__docId__": 94,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2572,7 +2644,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 93,
+    "__docId__": 95,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2585,7 +2657,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 94,
+    "__docId__": 96,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2598,7 +2670,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 95,
+    "__docId__": 97,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2611,7 +2683,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 96,
+    "__docId__": 98,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2624,7 +2696,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 97,
+    "__docId__": 99,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2637,7 +2709,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 98,
+    "__docId__": 100,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2650,7 +2722,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 99,
+    "__docId__": 101,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2663,7 +2735,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 100,
+    "__docId__": 102,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2676,7 +2748,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 101,
+    "__docId__": 103,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2689,7 +2761,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 102,
+    "__docId__": 104,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2702,7 +2774,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 103,
+    "__docId__": 105,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2715,7 +2787,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 104,
+    "__docId__": 106,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2728,7 +2800,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 105,
+    "__docId__": 107,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2741,7 +2813,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 106,
+    "__docId__": 108,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2754,7 +2826,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 107,
+    "__docId__": 109,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2767,7 +2839,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 108,
+    "__docId__": 110,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2780,7 +2852,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 109,
+    "__docId__": 111,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2793,7 +2865,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 110,
+    "__docId__": 112,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2806,7 +2878,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 111,
+    "__docId__": 113,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2819,7 +2891,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 112,
+    "__docId__": 114,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2832,7 +2904,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 113,
+    "__docId__": 115,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2845,7 +2917,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 114,
+    "__docId__": 116,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2858,7 +2930,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 115,
+    "__docId__": 117,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2871,7 +2943,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 116,
+    "__docId__": 118,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2884,7 +2956,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 117,
+    "__docId__": 119,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2897,7 +2969,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 118,
+    "__docId__": 120,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2910,7 +2982,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 119,
+    "__docId__": 121,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2923,7 +2995,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 120,
+    "__docId__": 122,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2936,7 +3008,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 121,
+    "__docId__": 123,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2949,7 +3021,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 122,
+    "__docId__": 124,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2962,7 +3034,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 123,
+    "__docId__": 125,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2975,7 +3047,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 124,
+    "__docId__": 126,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2988,7 +3060,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 125,
+    "__docId__": 127,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3001,7 +3073,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 126,
+    "__docId__": 128,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3014,7 +3086,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 127,
+    "__docId__": 129,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3027,7 +3099,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 128,
+    "__docId__": 130,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3040,7 +3112,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 129,
+    "__docId__": 131,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3053,7 +3125,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 130,
+    "__docId__": 132,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3066,7 +3138,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 131,
+    "__docId__": 133,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3079,7 +3151,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 132,
+    "__docId__": 134,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3092,7 +3164,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 133,
+    "__docId__": 135,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3105,7 +3177,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 134,
+    "__docId__": 136,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3118,7 +3190,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 135,
+    "__docId__": 137,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3131,7 +3203,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 137,
+    "__docId__": 139,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3144,7 +3216,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 138,
+    "__docId__": 140,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3157,7 +3229,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 139,
+    "__docId__": 141,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3170,7 +3242,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 140,
+    "__docId__": 142,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3183,7 +3255,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 141,
+    "__docId__": 143,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3196,7 +3268,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 142,
+    "__docId__": 144,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3209,7 +3281,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 143,
+    "__docId__": 145,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3222,7 +3294,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 144,
+    "__docId__": 146,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -3235,7 +3307,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 145,
+    "__docId__": 147,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -3248,7 +3320,7 @@
     "content": "/* eslint-disable no-unused-expressions, func-names */\r\nimport {expect} from 'chai';\r\nimport Container from '../../src/index';\r\n\r\ndescribe('Container', () => {\r\n    let container = null;\r\n\r\n    beforeEach(() => {\r\n        container = new Container();\r\n    });\r\n\r\n    describe('registration', () => {\r\n        context('empty container', () => {\r\n            it('should successfully register modules', () => {\r\n                const register = () => {\r\n                    container.value('value', {name: 'bar'});\r\n                    container.service('service', function Service() {\r\n                        this.name = 'bar';\r\n                    });\r\n                    container.factory('factory', function Service() {\r\n                        return {value: new Date()};\r\n                    });\r\n                };\r\n\r\n                expect(register).to.not.throw();\r\n            });\r\n\r\n            it('should register object with predefines names', () => {\r\n                const register = () => {\r\n                    container.factory('toString', function toStringConverter() {\r\n                        return () => 'foobar';\r\n                    });\r\n                };\r\n\r\n                expect(register).to.not.throw();\r\n                const toStringConverter = container.resolve('toString');\r\n\r\n                expect(toStringConverter()).to.equal('foobar');\r\n            });\r\n        });\r\n\r\n        context('not empty container', () => {\r\n            it('should throw error when register module twice', () => {\r\n                const register = () => {\r\n                    container.value('value', {name: 'bar'});\r\n                    container.value('value', {name: 'bar'});\r\n                };\r\n\r\n                expect(register).to.throw();\r\n            });\r\n        });\r\n\r\n        describe('register twice using namespace instance', () => {\r\n            context('same type of module', () => {\r\n                it('should throw error', () => {\r\n                    const register = () => {\r\n                        container.value('foo', 'foo');\r\n                        container.value('foo', 'bar');\r\n                    };\r\n\r\n                    expect(register).to.throw();\r\n                });\r\n            });\r\n\r\n            context('different type of module', () => {\r\n                it('should throw error', () => {\r\n                    const register = () => {\r\n                        container.value('foo', 'foo');\r\n                        container.service('foo', function Service() {});\r\n                    };\r\n\r\n                    expect(register).to.throw();\r\n                });\r\n            });\r\n\r\n            context('different type and name of module', () => {\r\n                it('should not throw error', () => {\r\n                    const register = () => {\r\n                        container.value('foo', 'foo');\r\n                        container.service('bar', function Service() {});\r\n                    };\r\n\r\n                    expect(register).to.not.throw();\r\n                });\r\n            });\r\n\r\n            context('module name with separator', () => {\r\n                it('should throw error', () => {\r\n                    const register = () => {\r\n                        container.value('foo/bar', 1);\r\n                    };\r\n\r\n                    expect(register).to.throw();\r\n                });\r\n            });\r\n        });\r\n\r\n        describe('.namespace', () => {\r\n            it('should support chain', () => {\r\n                let namespace = container.namespace('foo').namespace('bar');\r\n                namespace.value('qaz', 1);\r\n                let resolved = container.resolve('foo/bar/qaz');\r\n                expect(resolved).to.equal(1);\r\n\r\n                namespace = container.namespace('foo/bar').namespace('qaz');\r\n                namespace.value('wsx', 1);\r\n                resolved = container.resolve('foo/bar/qaz/wsx');\r\n                expect(resolved).to.equal(1);\r\n            });\r\n            context('same name', () => {\r\n                it('should register in different namespaces', () => {\r\n                    const register = () => {\r\n                        container.namespace('models').value('user', function User() {});\r\n                        container.namespace('services').service('user', function UserService() {});\r\n                    };\r\n\r\n                    expect(register).to.not.throw();\r\n                });\r\n\r\n                it('should not register in same namespace', () => {\r\n                    const register = () => {\r\n                        container.namespace('models').value('user', function User() {});\r\n                        container.namespace('models').service('user', function UserService() {});\r\n                    };\r\n\r\n                    expect(register).to.throw();\r\n                });\r\n            });\r\n        });\r\n\r\n        describe('#map', () => {\r\n            it('should exist', () => {\r\n                expect(() => {\r\n                    return Container.map({\r\n                        core: 'core'\r\n                    });\r\n                }).to.not.throw;\r\n            });\r\n        });\r\n    });\r\n});\r\n/* eslint-enable no-unused-expressions, func-names */\r\n"
   },
   {
-    "__docId__": 146,
+    "__docId__": 148,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3262,7 +3334,7 @@
     "lineNumber": 5
   },
   {
-    "__docId__": 147,
+    "__docId__": 149,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3276,7 +3348,7 @@
     "lineNumber": 12
   },
   {
-    "__docId__": 148,
+    "__docId__": 150,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3290,7 +3362,7 @@
     "lineNumber": 13
   },
   {
-    "__docId__": 149,
+    "__docId__": 151,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3304,7 +3376,7 @@
     "lineNumber": 14
   },
   {
-    "__docId__": 150,
+    "__docId__": 152,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3318,7 +3390,7 @@
     "lineNumber": 28
   },
   {
-    "__docId__": 151,
+    "__docId__": 153,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3332,7 +3404,7 @@
     "lineNumber": 42
   },
   {
-    "__docId__": 152,
+    "__docId__": 154,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3346,7 +3418,7 @@
     "lineNumber": 43
   },
   {
-    "__docId__": 153,
+    "__docId__": 155,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3360,7 +3432,7 @@
     "lineNumber": 53
   },
   {
-    "__docId__": 154,
+    "__docId__": 156,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3374,7 +3446,7 @@
     "lineNumber": 54
   },
   {
-    "__docId__": 155,
+    "__docId__": 157,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3388,7 +3460,7 @@
     "lineNumber": 55
   },
   {
-    "__docId__": 156,
+    "__docId__": 158,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3402,7 +3474,7 @@
     "lineNumber": 65
   },
   {
-    "__docId__": 157,
+    "__docId__": 159,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3416,7 +3488,7 @@
     "lineNumber": 66
   },
   {
-    "__docId__": 158,
+    "__docId__": 160,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3430,7 +3502,7 @@
     "lineNumber": 76
   },
   {
-    "__docId__": 159,
+    "__docId__": 161,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3444,7 +3516,7 @@
     "lineNumber": 77
   },
   {
-    "__docId__": 160,
+    "__docId__": 162,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3458,7 +3530,7 @@
     "lineNumber": 87
   },
   {
-    "__docId__": 161,
+    "__docId__": 163,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3472,7 +3544,7 @@
     "lineNumber": 88
   },
   {
-    "__docId__": 162,
+    "__docId__": 164,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3486,7 +3558,7 @@
     "lineNumber": 98
   },
   {
-    "__docId__": 163,
+    "__docId__": 165,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3500,7 +3572,7 @@
     "lineNumber": 99
   },
   {
-    "__docId__": 164,
+    "__docId__": 166,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3514,7 +3586,7 @@
     "lineNumber": 110
   },
   {
-    "__docId__": 165,
+    "__docId__": 167,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3528,7 +3600,7 @@
     "lineNumber": 111
   },
   {
-    "__docId__": 166,
+    "__docId__": 168,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3542,7 +3614,7 @@
     "lineNumber": 120
   },
   {
-    "__docId__": 167,
+    "__docId__": 169,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3556,7 +3628,7 @@
     "lineNumber": 131
   },
   {
-    "__docId__": 168,
+    "__docId__": 170,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3570,7 +3642,7 @@
     "lineNumber": 132
   },
   {
-    "__docId__": 169,
+    "__docId__": 171,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -3583,7 +3655,7 @@
     "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport map from '../../src/map-path';\nimport {\n    isFunction,\n    isString\n} from '../../src/utils';\n\ndescribe('map-path', function() {\n    it('should map paths', () => {\n        const result = map({\n            consts: 'consts',\n            services: {\n                components: [\n                    'actions',\n                    'dispatcher',\n                    ['helpers'],\n                    { 'stores': ['user', {'users': ['joe'] }] }\n                ],\n                domain: 'domain',\n                core: {\n                    networking: 'networking',\n                    database: 'database'\n                }\n            }\n        });\n\n        expect(isFunction(result), '\"result\" must be a function').to.be.true;\n        expect(result(), '\"result()\"').to.eql('');\n        expect(result('foo'), '\"result(`foo`)\"').to.eql('foo');\n\n        expect(isFunction(result.consts), '\"result.consts\" must be a function').to.be.true;\n        expect(result.consts(), '\"result.consts()\"').to.eql('consts');\n        expect(result.consts('foo'), '\"result.consts(`foo`)\"').to.eql('consts/foo');\n\n        expect(isFunction(result.services), '\"result.services\" must be a function').to.be.true;\n        expect(result.services(), '\"result.services()\"').to.eql('services');\n        expect(result.services('foo'), '\"result.services(`foo`)\"').to.eql('services/foo');\n\n        expect(isFunction(result.services.components), '\"result.services.components\" must be a function').to.be.true;\n        expect(result.services.components(), '\"result.services.components()\"').to.eql('services/components');\n        expect(result.services.components('foo'), '\"result.services.components(`foo`)\"').to.eql('services/components/foo');\n\n        expect(isFunction(result.services.components.actions), '\"result.services.components.actions\" must be a function').to.be.true;\n        expect(result.services.components.actions(), '\"result.services.components.actions()\"').to.eql('services/components/actions');\n        expect(result.services.components.actions('foo'), '\"result.services.components.actions(`foo`)\"').to.eql('services/components/actions/foo');\n\n        expect(isFunction(result.services.components.dispatcher), '\"result.services.components.dispatcher\" must be a function').to.be.true;\n        expect(result.services.components.dispatcher(), '\"result.services.components.dispatcher()\"').to.eql('services/components/dispatcher');\n        expect(result.services.components.dispatcher('foo'), '\"result.services.components.dispatcher(`foo`)\"').to.eql('services/components/dispatcher/foo');\n\n        expect(isFunction(result.services.components.helpers), '\"result.services.components.helpers\" must be a function').to.be.true;\n        expect(result.services.components.helpers(), '\"result.services.components.helpers()\"').to.eql('services/components/helpers');\n        expect(result.services.components.helpers('foo'), '\"result.services.components.helpers(`foo`)\"').to.eql('services/components/helpers/foo');\n\n        expect(isFunction(result.services.components.stores), '\"result.services.components.stores\" must be a function').to.be.true;\n        expect(result.services.components.stores(), '\"result.services.components.stores()\"').to.eql('services/components/stores');\n        expect(result.services.components.stores('foo'), '\"result.services.components.stores(`foo`)\"').to.eql('services/components/stores/foo');\n\n        expect(isFunction(result.services.components.stores.user), '\"result.services.components.stores.user\" must be a function').to.be.true;\n        expect(result.services.components.stores.user(), '\"result.services.components.stores.user()\"').to.eql('services/components/stores/user');\n        expect(result.services.components.stores.user('foo'), '\"result.services.components.stores.user(`foo`)\"').to.eql('services/components/stores/user/foo');\n\n        expect(isFunction(result.services.components.stores.users.joe), '\"result.services.components.stores.users.joe\" must be a function').to.be.true;\n        expect(result.services.components.stores.users.joe(), '\"result.services.components.stores.users.joe()\"').to.eql('services/components/stores/users/joe');\n        expect(result.services.components.stores.users.joe('foo'), '\"result.services.components.stores.users.joe(`foo`)\"').to.eql('services/components/stores/users/joe/foo');\n\n        expect(isFunction(result.services.domain), '\"result.services.domain\" must be a function').to.be.true;\n        expect(result.services.domain(), '\"result.services.domain()\"').to.eql('services/domain');\n        expect(result.services.domain('foo'), '\"result.services.domain(`foo`)\"').to.eql('services/domain/foo');\n\n        expect(isFunction(result.services.core)).to.be.true;\n        expect(result.services.core()).to.eql('services/core');\n        expect(result.services.core('foo')).to.eql('services/core/foo');\n\n        expect(isFunction(result.services.core.networking)).to.be.true;\n        expect(result.services.core.networking()).to.eql('services/core/networking');\n        expect(result.services.core.networking('foo')).to.eql('services/core/networking/foo');\n\n        expect(isFunction(result.services.core.database)).to.be.true;\n        expect(result.services.core.database()).to.eql('services/core/database');\n        expect(result.services.core.database('foo')).to.eql('services/core/database/foo');\n    });\n\n    it('should map array based paths', () => {\n        const result = map([\n            'foo',\n            'bar',\n            {\n                qaz: 'wsx'\n            },\n            [\n                'edc'\n            ]\n        ]);\n\n        expect(isFunction(result.foo), 'result.foo').to.be.true;\n        expect(result.foo(), 'result.foo()').to.eql('foo');\n        expect(isFunction(result.wsx), 'result.wsx').to.be.true;\n        expect(result.wsx(), 'result.wsx()').to.eql('wsx');\n        expect(isFunction(result.edc), 'result.edc').to.be.true;\n        expect(result.edc(), 'result.edc()').to.eql('edc');\n    });\n\n    it('should resolve array of paths', () => {\n        const result = map({\n            core: {\n                infrastructure: [\n                    'item1',\n                    'item2'\n                ],\n                domain: 'foo'\n            },\n            system: [\n                'component1',\n                'component2'\n            ]\n        });\n\n        const paths = result.system([\n            'component1',\n            'component2'\n        ]);\n\n        expect(isString(paths[0]), '\"paths[0]\" must be a string').to.be.true;\n        expect(paths[0], '\"path[0]\"').to.eql('system/component1');\n\n        expect(isString(paths[1]), '\"paths[1]\" must be a string').to.be.true;\n        expect(paths[1], '\"path[1]\"').to.eql('system/component2');\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
   },
   {
-    "__docId__": 170,
+    "__docId__": 172,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3597,7 +3669,7 @@
     "lineNumber": 10
   },
   {
-    "__docId__": 171,
+    "__docId__": 173,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3611,7 +3683,7 @@
     "lineNumber": 11
   },
   {
-    "__docId__": 172,
+    "__docId__": 174,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3625,7 +3697,7 @@
     "lineNumber": 86
   },
   {
-    "__docId__": 173,
+    "__docId__": 175,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3639,7 +3711,7 @@
     "lineNumber": 106
   },
   {
-    "__docId__": 174,
+    "__docId__": 176,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -3652,7 +3724,7 @@
     "content": "/* eslint-disable no-unused-expressions, func-names */\n\nimport {expect} from 'chai';\nimport Module from '../../src/module';\n\ndescribe('Module', function() {\n    describe('.getNamespace', function() {\n        it('should return module namespace', function() {\n            const namespace = 'foo';\n            const module = new Module(namespace);\n\n            expect(module.getNamespace).to.not.throw;\n            expect(module.getNamespace()).to.be.equal(namespace);\n        });\n    });\n    describe('.getName', function() {\n        it('should return module name', function() {\n            const namespace = 'foo';\n            const name = 'bar';\n            const module = new Module(namespace, name);\n\n            expect(module.getName).to.not.throw;\n            expect(module.getName()).to.be.equal(name);\n        });\n    });\n    describe('.getDependencies', function() {\n        it('should return module dependencies', function() {\n            const namespace = 'foo';\n            const name = 'bar';\n            const dependencies = ['foo/qaz', 'foo/wsx'];\n            const module = new Module(namespace, name, dependencies);\n\n            expect(module.getDependencies).to.not.throw;\n            expect(module.getDependencies()).to.be.equal(dependencies);\n        });\n    });\n    describe('.getValue', function() {\n        context('when is initialized', function() {\n            it('should return value', function() {\n                const values = [\n                    1,\n                    'string',\n                    {foo: 'bar'},\n                    ['foo', 'bar'],\n                    function() {\n                        return 'function';\n                    }\n                ];\n\n                values.forEach((value) => {\n                    const namespace = 'foo';\n                    const name = 'bar';\n                    const dependencies = [];\n                    const module = new Module(namespace, name, dependencies, () => {\n                        return () => value;\n                    });\n\n                    module.initialize();\n                    expect(module.getValue).to.not.throw;\n                    expect(module.getValue()).to.be.equal(value);\n                });\n            });\n        });\n        context('when is not initialized', function() {\n            it('should throw an error', function() {\n                const module = new Module('foo', 'bar', []);\n\n                expect(module.getValue).to.throw;\n            });\n        });\n    });\n    describe('.isInitialized', function() {\n        context('when is initialized', function() {\n            it('should return \"true\"', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                module.initialize();\n                expect(module.isInitialized()).to.equal(true);\n            });\n        });\n        context('when is not initialized', function() {\n            it('should return \"false\"', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                expect(module.isInitialized()).to.equal(false);\n            });\n        });\n    });\n    describe('initialize', function() {\n        context('when is initialized', function() {\n            it('should not throw an error', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                expect(module.initialize).to.not.throw;\n            });\n        });\n        context('when is not initialized', function() {\n            it('should throw an error', function() {\n                const namespace = 'foo';\n                const name = 'bar';\n                const dependencies = [];\n                const module = new Module(namespace, name, dependencies, function init() {\n                    return 1;\n                });\n\n                module.initialize();\n                expect(module.initialize).to.throw;\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
   },
   {
-    "__docId__": 175,
+    "__docId__": 177,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3666,7 +3738,7 @@
     "lineNumber": 6
   },
   {
-    "__docId__": 176,
+    "__docId__": 178,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3680,7 +3752,7 @@
     "lineNumber": 7
   },
   {
-    "__docId__": 177,
+    "__docId__": 179,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3694,7 +3766,7 @@
     "lineNumber": 8
   },
   {
-    "__docId__": 178,
+    "__docId__": 180,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3708,7 +3780,7 @@
     "lineNumber": 16
   },
   {
-    "__docId__": 179,
+    "__docId__": 181,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3722,7 +3794,7 @@
     "lineNumber": 17
   },
   {
-    "__docId__": 180,
+    "__docId__": 182,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3736,7 +3808,7 @@
     "lineNumber": 26
   },
   {
-    "__docId__": 181,
+    "__docId__": 183,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3750,7 +3822,7 @@
     "lineNumber": 27
   },
   {
-    "__docId__": 182,
+    "__docId__": 184,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3764,7 +3836,7 @@
     "lineNumber": 37
   },
   {
-    "__docId__": 183,
+    "__docId__": 185,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3778,7 +3850,7 @@
     "lineNumber": 38
   },
   {
-    "__docId__": 184,
+    "__docId__": 186,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3792,7 +3864,7 @@
     "lineNumber": 39
   },
   {
-    "__docId__": 185,
+    "__docId__": 187,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3806,7 +3878,7 @@
     "lineNumber": 64
   },
   {
-    "__docId__": 186,
+    "__docId__": 188,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3820,7 +3892,7 @@
     "lineNumber": 65
   },
   {
-    "__docId__": 187,
+    "__docId__": 189,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3834,7 +3906,7 @@
     "lineNumber": 72
   },
   {
-    "__docId__": 188,
+    "__docId__": 190,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3848,7 +3920,7 @@
     "lineNumber": 73
   },
   {
-    "__docId__": 189,
+    "__docId__": 191,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3862,7 +3934,7 @@
     "lineNumber": 74
   },
   {
-    "__docId__": 190,
+    "__docId__": 192,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3876,7 +3948,7 @@
     "lineNumber": 86
   },
   {
-    "__docId__": 191,
+    "__docId__": 193,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3890,7 +3962,7 @@
     "lineNumber": 87
   },
   {
-    "__docId__": 192,
+    "__docId__": 194,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3904,7 +3976,7 @@
     "lineNumber": 99
   },
   {
-    "__docId__": 193,
+    "__docId__": 195,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3918,7 +3990,7 @@
     "lineNumber": 100
   },
   {
-    "__docId__": 194,
+    "__docId__": 196,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3932,7 +4004,7 @@
     "lineNumber": 101
   },
   {
-    "__docId__": 195,
+    "__docId__": 197,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3946,7 +4018,7 @@
     "lineNumber": 112
   },
   {
-    "__docId__": 196,
+    "__docId__": 198,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -3960,7 +4032,7 @@
     "lineNumber": 113
   },
   {
-    "__docId__": 197,
+    "__docId__": 199,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -3970,10 +4042,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport Container from '../../src/container';\n\ndescribe('Resolver', function() {\n    let container = null;\n\n    beforeEach(function() {\n        container = new Container();\n    });\n\n    describe('.resolve', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                const resolve = () => {\n                    container.resolve('foo');\n                };\n\n                expect(resolve).to.throw();\n            });\n        });\n\n        context('custom resolver', () => {\n            it('should return array of dependencies', (done) => {\n                container.factory('my-service', () => {\n                    return [\n                        'foo',\n                        'bar'\n                    ];\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg1 equals to \"foo\"').to.equal('foo');\n                    expect(arg2, 'arg2 equals to \"bar\"').to.equal('bar');\n                    done();\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return object as single dependency', (done) => {\n                container.factory('my-service', () => {\n                    return { foo: 'bar' };\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.not.exist;\n                    expect(arg1, 'arg1 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                    done();\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return single value for dependency', (done) => {\n                container.const('my-val', 'value');\n                container.factory('my-service', [\n                    'my-val',\n                    () => {\n                        return { foo: 'bar' };\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                    done();\n                });\n\n                container.factory('my-service2', [\n                    'my-val',\n                    () => {\n                        return [{ foo: 'bar' }, { qaz: 'wsx'}];\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"[{ foo: \\'bar\\' }, { qaz: \\'wsx\\'}]\"').to.eql([{ foo: 'bar' }, { qaz: 'wsx'}]);\n                });\n\n                container.resolve('my-service');\n                container.resolve('my-service2');\n            });\n        });\n\n        describe('#const', () => {\n            context('plain types', () => {\n                it('should successfully resolve function', () => {\n                    const module = function foo() { return 'bar'; };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                    expect(found).to.eql(found2);\n                    expect(found() === 'bar').to.be.true;\n                });\n\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n        });\n\n        describe('#value', () => {\n            context('plain types', () => {\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n            context('constructor', () => {\n                context('without dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('value', function User() {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                        });\n\n                        const found = container.resolve('value');\n                        const found2 = container.resolve('value');\n                        expect(found).to.exist;\n                        expect(found2).to.exist;\n                        expect(found).to.not.equal(found2);\n                        expect(found.name).to.exist;\n                        expect(found.surname).to.exist;\n                    });\n                });\n                context('with dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('group', function Group() {\n                            this.accounts = [];\n                        });\n                        container.value('user', ['group'], function User(group) {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                            this.group = group;\n                        });\n\n                        const found = container.resolve('user');\n                        expect(found).to.exist;\n                        expect(found.group).to.exist;\n                        expect(found.group.accounts).to.exist;\n                    });\n                });\n            });\n        });\n\n        describe('#service', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.service('http', function HttpService() {\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.service('http', ['http-transport', 'settings'], function HttpService(transport, settings) {\n                        this.settings = settings;\n                        this.transport = transport;\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('#factory', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.factory('http', function HttpServiceFactory() {\n                        return new function HttpService() {\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.factory('http', ['http-transport', 'settings'], function HttpServiceFactory(transport, settings) {\n                        return new function HttpService() {\n                            this.settings = settings;\n                            this.transport = transport;\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('in namespace', () => {\n            describe('#value', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.value('value', 1);\n                        container.namespace('consts').value('value', 2);\n\n                        expect(container.resolve('value')).to.equal(1);\n                        expect(container.resolve('consts/value')).to.equal(2);\n                    });\n                });\n\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('consts').value('value', 1);\n                        container.namespace('models').value('user', ['consts/value'], function User(value) {\n                            this.value = value;\n                        });\n\n                        const user = container.resolve('models/user');\n                        expect(user).to.exist;\n                        expect(user.value).to.equal(1);\n                    });\n                });\n            });\n            describe('#factory', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', function factoryB() {\n                            return {name: 'B'};\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', ['services/api/service'], function factoryB(serviceA) {\n                            return {name: 'B', api: serviceA};\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n            describe('#service', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.service('service', function ServiceA() {\n                        });\n                        container.namespace('services').service('service', function ServiceB() {\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').service('service', function ServiceA() {});\n                        container.namespace('services').service('service', ['services/api/service'], function ServiceB(serviceA) {\n                            this.api = serviceA;\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n        });\n\n        describe('circular dependency', () => {\n            it('should throw during resolving', () => {\n                const self = () => {\n                    const c = new Container();\n                    c.value('value1', ['value1'], 1);\n                    expect(c.resolve('value1')).to.exist;\n                };\n                const shallow = () => {\n                    const c = new Container();\n                    c.value('value1', ['value2'], 1);\n                    c.value('value2', ['value1'], 2);\n                    expect(c.resolve('value1')).to.exist;\n                    expect(c.resolve('value2')).to.exist;\n                };\n                const deep = () => {\n                    const c = new Container();\n                    c.value('a', ['b', 'd'], 'a');\n                    c.value('b', ['c', 'e'], 'b');\n                    c.value('c', ['e', 'd'], 'c');\n                    c.value('d', ['b'], 'd');\n                    c.value('e', 'e');\n                    expect(c.resolve('a')).to.exist;\n                };\n\n                const deep2 = () => {\n                    const c = new Container();\n                    c.value('a', ['b', 'd'], 'a');\n                    c.value('b', ['c', 'e'], 'b');\n                    c.value('c', ['e', 'd'], 'c');\n                    c.value('d', ['a'], 'd');\n                    c.value('e', 'e');\n                    expect(c.resolve('a')).to.exist;\n                };\n\n                expect(self).to.throw(ReferenceError);\n                expect(shallow).to.throw(ReferenceError);\n                expect(deep).to.throw(ReferenceError);\n                expect(deep2).to.throw(ReferenceError);\n            });\n        });\n    });\n    describe('.resolveAll', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                expect(() => {\n                    container.resolveAll('foo');\n                }).to.throw();\n            });\n        });\n\n        context('not empty container', () => {\n            it('should resolve all modules from particular namespace', () => {\n                const foo = container.namespace('foo');\n                foo.service('A', function() { this.name = 'A'; });\n                foo.service('B', ['foo/A'], function() { this.name = 'B'; });\n                foo.service('C', ['foo/B'], function() { this.name = 'C'; });\n                foo.service('D', ['foo/B', 'foo/C'], function() { this.name = 'D'; });\n\n                const bar = container.namespace('bar');\n                bar.service('E', ['foo/A'], function() { this.name = 'E'; });\n                bar.service('F', ['bar/E', 'foo/C'], function() { this.name = 'F'; });\n\n                const resolved = container.resolveAll('bar');\n                const arr = [];\n\n                for (const name in resolved) {\n                    if (resolved.hasOwnProperty(name)) {\n                        arr.push({\n                            name: name,\n                            value: resolved[name]\n                        });\n                    }\n                }\n\n                expect(arr.length).to.equal(2);\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
+    "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport Container from '../../src/container';\n\ndescribe('Resolver', function() {\n    let container = null;\n\n    beforeEach(function() {\n        container = new Container();\n    });\n\n    describe('.resolve', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                const resolve = () => {\n                    container.resolve('foo');\n                };\n\n                expect(resolve).to.throw();\n            });\n        });\n\n        context('custom resolver', () => {\n            it('should return array of dependencies', (done) => {\n                container.factory('my-service', () => {\n                    return [\n                        'foo',\n                        'bar'\n                    ];\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg1 equals to \"foo\"').to.equal('foo');\n                    expect(arg2, 'arg2 equals to \"bar\"').to.equal('bar');\n                    done();\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return object as single dependency', (done) => {\n                container.factory('my-service', () => {\n                    return { foo: 'bar' };\n                }, (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.not.exist;\n                    expect(arg1, 'arg1 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                    done();\n                });\n\n                container.resolve('my-service');\n            });\n\n            it('should return single value for dependency', (done) => {\n                container.const('my-val', 'value');\n                container.factory('my-service', [\n                    'my-val',\n                    () => {\n                        return { foo: 'bar' };\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"{ foo: \\'bar\\' }\"').to.eql({ foo: 'bar' });\n                    done();\n                });\n\n                container.factory('my-service2', [\n                    'my-val',\n                    () => {\n                        return [{ foo: 'bar' }, { qaz: 'wsx'}];\n                    }\n                ], (arg1, arg2) => {\n                    expect(arg1, 'arg1 exists').to.exist;\n                    expect(arg2, 'arg1 exists').to.exist;\n                    expect(arg1, 'arg2 equals to \"value\"').to.equal('value');\n                    expect(arg2, 'arg2 equals to \"[{ foo: \\'bar\\' }, { qaz: \\'wsx\\'}]\"').to.eql([{ foo: 'bar' }, { qaz: 'wsx'}]);\n                });\n\n                container.resolve('my-service');\n                container.resolve('my-service2');\n            });\n        });\n\n        describe('#const', () => {\n            context('plain types', () => {\n                it('should successfully resolve function', () => {\n                    const module = function foo() { return 'bar'; };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                    expect(found).to.eql(found2);\n                    expect(found() === 'bar').to.be.true;\n                });\n\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.const('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n        });\n\n        describe('#value', () => {\n            context('plain types', () => {\n                it('should successfully resolve object', () => {\n                    const module = { name: 'bar' };\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve number', () => {\n                    const module = 10;\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve string', () => {\n                    const module = 'foo';\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n\n                it('should successfully resolve array', () => {\n                    const module = [1, 2, 3];\n                    container.value('value', module);\n                    const found = container.resolve('value');\n                    const found2 = container.resolve('value');\n                    expect(found).to.equal(module);\n                    expect(found2).to.equal(module);\n                });\n            });\n            context('constructor', () => {\n                context('without dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('value', function User() {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                        });\n\n                        const found = container.resolve('value');\n                        const found2 = container.resolve('value');\n                        expect(found).to.exist;\n                        expect(found2).to.exist;\n                        expect(found).to.not.equal(found2);\n                        expect(found.name).to.exist;\n                        expect(found.surname).to.exist;\n                    });\n                });\n                context('with dependencies', () => {\n                    it('should successfully resolved', () => {\n                        let index = 0;\n                        container.value('group', function Group() {\n                            this.accounts = [];\n                        });\n                        container.value('user', ['group'], function User(group) {\n                            index += 1;\n                            this.name = `foo_${index}`;\n                            this.surname = `bar_${index}`;\n                            this.group = group;\n                        });\n\n                        const found = container.resolve('user');\n                        expect(found).to.exist;\n                        expect(found.group).to.exist;\n                        expect(found.group.accounts).to.exist;\n                    });\n                });\n            });\n        });\n\n        describe('#service', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.service('http', function HttpService() {\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.service('http', ['http-transport', 'settings'], function HttpService(transport, settings) {\n                        this.settings = settings;\n                        this.transport = transport;\n                        this.get = () => {};\n                        this.post = () => {};\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('#factory', () => {\n            context('without dependencies', () => {\n                it('should resolve single service', () => {\n                    container.factory('http', function HttpServiceFactory() {\n                        return new function HttpService() {\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                });\n            });\n            context('with dependencies', () => {\n                it('should resolve single service', () => {\n                    container.value('http-transport', function HttpTransport() {});\n\n                    container.service('settings', function Settings() {});\n\n                    container.factory('http', ['http-transport', 'settings'], function HttpServiceFactory(transport, settings) {\n                        return new function HttpService() {\n                            this.settings = settings;\n                            this.transport = transport;\n                            this.get = () => {};\n                            this.post = () => {};\n                        };\n                    });\n\n                    const found = container.resolve('http');\n                    const found2 = container.resolve('http');\n\n                    expect(found).to.exist;\n                    expect(found).to.equal(found2);\n                    expect(found.settings).to.exist;\n                    expect(found.transport).to.exist;\n                });\n            });\n        });\n\n        describe('in namespace', () => {\n            describe('#value', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.value('value', 1);\n                        container.namespace('consts').value('value', 2);\n\n                        expect(container.resolve('value')).to.equal(1);\n                        expect(container.resolve('consts/value')).to.equal(2);\n                    });\n                });\n\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('consts').value('value', 1);\n                        container.namespace('models').value('user', ['consts/value'], function User(value) {\n                            this.value = value;\n                        });\n\n                        const user = container.resolve('models/user');\n                        expect(user).to.exist;\n                        expect(user.value).to.equal(1);\n                    });\n                });\n            });\n            describe('#factory', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', function factoryB() {\n                            return {name: 'B'};\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').factory('service', function factoryA() {\n                            return {name: 'A'};\n                        });\n                        container.namespace('services').factory('service', ['services/api/service'], function factoryB(serviceA) {\n                            return {name: 'B', api: serviceA};\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n            describe('#service', () => {\n                context('same name', () => {\n                    it('should resolve from different namespaces', () => {\n                        container.service('service', function ServiceA() {\n                        });\n                        container.namespace('services').service('service', function ServiceB() {\n                        });\n\n                        const serviceA = container.resolve('service');\n                        const serviceB = container.resolve('services/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceA).to.not.equal(serviceB);\n                    });\n                });\n                context('as dependency', () => {\n                    it('should resolve', () => {\n                        container.namespace('services/api').service('service', function ServiceA() {});\n                        container.namespace('services').service('service', ['services/api/service'], function ServiceB(serviceA) {\n                            this.api = serviceA;\n                        });\n\n                        const serviceB = container.resolve('services/service');\n                        const serviceA = container.resolve('services/api/service');\n                        expect(serviceA).to.exist;\n                        expect(serviceB).to.exist;\n                        expect(serviceB.api).to.equal(serviceA);\n                    });\n                });\n            });\n        });\n\n        describe('circular dependency', () => {\n            it('should throw during resolving', () => {\n                const self = () => {\n                    const c = new Container();\n                    c.value('value1', ['value1'], 1);\n                    expect(c.resolve('value1')).to.exist;\n                };\n                const shallow = () => {\n                    const c = new Container();\n                    c.value('value1', ['value2'], 1);\n                    c.value('value2', ['value1'], 2);\n                    expect(c.resolve('value1')).to.exist;\n                    expect(c.resolve('value2')).to.exist;\n                };\n                const deep = () => {\n                    const c = new Container();\n                    c.value('a', ['b', 'd'], 'a');\n                    c.value('b', ['c', 'e'], 'b');\n                    c.value('c', ['e', 'd'], 'c');\n                    c.value('d', ['b'], 'd');\n                    c.value('e', 'e');\n                    expect(c.resolve('a')).to.exist;\n                };\n\n                const deep2 = () => {\n                    const c = new Container();\n                    c.value('a', ['b', 'd'], 'a');\n                    c.value('b', ['c', 'e'], 'b');\n                    c.value('c', ['e', 'd'], 'c');\n                    c.value('d', ['a'], 'd');\n                    c.value('e', 'e');\n                    expect(c.resolve('a')).to.exist;\n                };\n\n                expect(self).to.throw(ReferenceError);\n                expect(shallow).to.throw(ReferenceError);\n                expect(deep).to.throw(ReferenceError);\n                expect(deep2).to.throw(ReferenceError);\n            });\n\n            it('should not throw an error', () => {\n                container.namespace('core/system/api').factory('application', [\n                    'core/infrastructure/logger',\n                    'core/system/renderer'\n                ], () => 'application');\n                container.namespace('core/infrastructure').factory('logger', () => {\n                    return 'logger';\n                });\n                container.namespace('core/system').factory('renderer', [\n                    'core/settings',\n                    'core/infrastructure/logger'\n                ], () => 'renderer');\n                container.namespace('core').const('settings', {});\n\n                const resolve = () => container.resolve('core/system/api/application');\n\n                expect(resolve).to.not.throw(Error);\n                expect(resolve).to.not.throw(ReferenceError);\n            });\n        });\n    });\n    describe('.resolveAll', () => {\n        context('empty container', () => {\n            it('should throw error', () => {\n                expect(() => {\n                    container.resolveAll('foo');\n                }).to.throw();\n            });\n        });\n\n        context('not empty container', () => {\n            it('should resolve all modules from particular namespace', () => {\n                const foo = container.namespace('foo');\n                foo.service('A', function() { this.name = 'A'; });\n                foo.service('B', ['foo/A'], function() { this.name = 'B'; });\n                foo.service('C', ['foo/B'], function() { this.name = 'C'; });\n                foo.service('D', ['foo/B', 'foo/C'], function() { this.name = 'D'; });\n\n                const bar = container.namespace('bar');\n                bar.service('E', ['foo/A'], function() { this.name = 'E'; });\n                bar.service('F', ['bar/E', 'foo/C'], function() { this.name = 'F'; });\n\n                const resolved = container.resolveAll('bar');\n                const arr = [];\n\n                for (const name in resolved) {\n                    if (resolved.hasOwnProperty(name)) {\n                        arr.push({\n                            name: name,\n                            value: resolved[name]\n                        });\n                    }\n                }\n\n                expect(arr.length).to.equal(2);\n            });\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
   },
   {
-    "__docId__": 198,
+    "__docId__": 200,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -3987,7 +4059,7 @@
     "lineNumber": 6
   },
   {
-    "__docId__": 199,
+    "__docId__": 201,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4001,7 +4073,7 @@
     "lineNumber": 13
   },
   {
-    "__docId__": 200,
+    "__docId__": 202,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4015,7 +4087,7 @@
     "lineNumber": 14
   },
   {
-    "__docId__": 201,
+    "__docId__": 203,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4029,7 +4101,7 @@
     "lineNumber": 15
   },
   {
-    "__docId__": 202,
+    "__docId__": 204,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4043,7 +4115,7 @@
     "lineNumber": 24
   },
   {
-    "__docId__": 203,
+    "__docId__": 205,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4057,7 +4129,7 @@
     "lineNumber": 25
   },
   {
-    "__docId__": 204,
+    "__docId__": 206,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4071,7 +4143,7 @@
     "lineNumber": 42
   },
   {
-    "__docId__": 205,
+    "__docId__": 207,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4085,7 +4157,7 @@
     "lineNumber": 55
   },
   {
-    "__docId__": 206,
+    "__docId__": 208,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4099,7 +4171,7 @@
     "lineNumber": 87
   },
   {
-    "__docId__": 207,
+    "__docId__": 209,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4113,7 +4185,7 @@
     "lineNumber": 88
   },
   {
-    "__docId__": 208,
+    "__docId__": 210,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4127,7 +4199,7 @@
     "lineNumber": 89
   },
   {
-    "__docId__": 209,
+    "__docId__": 211,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4141,7 +4213,7 @@
     "lineNumber": 100
   },
   {
-    "__docId__": 210,
+    "__docId__": 212,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4155,7 +4227,7 @@
     "lineNumber": 109
   },
   {
-    "__docId__": 211,
+    "__docId__": 213,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4169,7 +4241,7 @@
     "lineNumber": 118
   },
   {
-    "__docId__": 212,
+    "__docId__": 214,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4183,7 +4255,7 @@
     "lineNumber": 127
   },
   {
-    "__docId__": 213,
+    "__docId__": 215,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4197,7 +4269,7 @@
     "lineNumber": 138
   },
   {
-    "__docId__": 214,
+    "__docId__": 216,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4211,7 +4283,7 @@
     "lineNumber": 139
   },
   {
-    "__docId__": 215,
+    "__docId__": 217,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4225,7 +4297,7 @@
     "lineNumber": 140
   },
   {
-    "__docId__": 216,
+    "__docId__": 218,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4239,7 +4311,7 @@
     "lineNumber": 149
   },
   {
-    "__docId__": 217,
+    "__docId__": 219,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4253,7 +4325,7 @@
     "lineNumber": 158
   },
   {
-    "__docId__": 218,
+    "__docId__": 220,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4267,7 +4339,7 @@
     "lineNumber": 167
   },
   {
-    "__docId__": 219,
+    "__docId__": 221,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4281,7 +4353,7 @@
     "lineNumber": 176
   },
   {
-    "__docId__": 220,
+    "__docId__": 222,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4295,7 +4367,7 @@
     "lineNumber": 177
   },
   {
-    "__docId__": 221,
+    "__docId__": 223,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4309,7 +4381,7 @@
     "lineNumber": 178
   },
   {
-    "__docId__": 222,
+    "__docId__": 224,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4323,7 +4395,7 @@
     "lineNumber": 195
   },
   {
-    "__docId__": 223,
+    "__docId__": 225,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4337,7 +4409,7 @@
     "lineNumber": 196
   },
   {
-    "__docId__": 224,
+    "__docId__": 226,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4351,7 +4423,7 @@
     "lineNumber": 217
   },
   {
-    "__docId__": 225,
+    "__docId__": 227,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4365,7 +4437,7 @@
     "lineNumber": 218
   },
   {
-    "__docId__": 226,
+    "__docId__": 228,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4379,7 +4451,7 @@
     "lineNumber": 219
   },
   {
-    "__docId__": 227,
+    "__docId__": 229,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4393,7 +4465,7 @@
     "lineNumber": 232
   },
   {
-    "__docId__": 228,
+    "__docId__": 230,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4407,7 +4479,7 @@
     "lineNumber": 233
   },
   {
-    "__docId__": 229,
+    "__docId__": 231,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4421,7 +4493,7 @@
     "lineNumber": 256
   },
   {
-    "__docId__": 230,
+    "__docId__": 232,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4435,7 +4507,7 @@
     "lineNumber": 257
   },
   {
-    "__docId__": 231,
+    "__docId__": 233,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4449,7 +4521,7 @@
     "lineNumber": 258
   },
   {
-    "__docId__": 232,
+    "__docId__": 234,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4463,7 +4535,7 @@
     "lineNumber": 273
   },
   {
-    "__docId__": 233,
+    "__docId__": 235,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4477,7 +4549,7 @@
     "lineNumber": 274
   },
   {
-    "__docId__": 234,
+    "__docId__": 236,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4491,7 +4563,7 @@
     "lineNumber": 299
   },
   {
-    "__docId__": 235,
+    "__docId__": 237,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4505,7 +4577,7 @@
     "lineNumber": 300
   },
   {
-    "__docId__": 236,
+    "__docId__": 238,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4519,7 +4591,7 @@
     "lineNumber": 301
   },
   {
-    "__docId__": 237,
+    "__docId__": 239,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4533,7 +4605,7 @@
     "lineNumber": 302
   },
   {
-    "__docId__": 238,
+    "__docId__": 240,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4547,7 +4619,7 @@
     "lineNumber": 311
   },
   {
-    "__docId__": 239,
+    "__docId__": 241,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4561,7 +4633,7 @@
     "lineNumber": 312
   },
   {
-    "__docId__": 240,
+    "__docId__": 242,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4575,7 +4647,7 @@
     "lineNumber": 324
   },
   {
-    "__docId__": 241,
+    "__docId__": 243,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4589,7 +4661,7 @@
     "lineNumber": 325
   },
   {
-    "__docId__": 242,
+    "__docId__": 244,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4603,7 +4675,7 @@
     "lineNumber": 326
   },
   {
-    "__docId__": 243,
+    "__docId__": 245,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4617,7 +4689,7 @@
     "lineNumber": 341
   },
   {
-    "__docId__": 244,
+    "__docId__": 246,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4631,7 +4703,7 @@
     "lineNumber": 342
   },
   {
-    "__docId__": 245,
+    "__docId__": 247,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4645,7 +4717,7 @@
     "lineNumber": 358
   },
   {
-    "__docId__": 246,
+    "__docId__": 248,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4659,7 +4731,7 @@
     "lineNumber": 359
   },
   {
-    "__docId__": 247,
+    "__docId__": 249,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4673,7 +4745,7 @@
     "lineNumber": 360
   },
   {
-    "__docId__": 248,
+    "__docId__": 250,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4687,7 +4759,7 @@
     "lineNumber": 373
   },
   {
-    "__docId__": 249,
+    "__docId__": 251,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4701,7 +4773,7 @@
     "lineNumber": 374
   },
   {
-    "__docId__": 250,
+    "__docId__": 252,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
@@ -4715,7 +4787,7 @@
     "lineNumber": 390
   },
   {
-    "__docId__": 251,
+    "__docId__": 253,
     "kind": "testIt",
     "static": true,
     "variation": null,
@@ -4729,77 +4801,91 @@
     "lineNumber": 391
   },
   {
-    "__docId__": 252,
-    "kind": "testDescribe",
-    "static": true,
-    "variation": null,
-    "name": "describe103",
-    "testId": 103,
-    "memberof": "unit/resolver.test.js~describe49",
-    "testDepth": 1,
-    "longname": "unit/resolver.test.js~describe49.describe103",
-    "access": null,
-    "description": ".resolveAll",
-    "lineNumber": 431
-  },
-  {
-    "__docId__": 253,
-    "kind": "testDescribe",
-    "static": true,
-    "variation": null,
-    "name": "context104",
-    "testId": 104,
-    "memberof": "unit/resolver.test.js~describe49.describe103",
-    "testDepth": 2,
-    "longname": "unit/resolver.test.js~describe49.describe103.context104",
-    "access": null,
-    "description": "empty container",
-    "lineNumber": 432
-  },
-  {
     "__docId__": 254,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it105",
-    "testId": 105,
-    "memberof": "unit/resolver.test.js~describe49.describe103.context104",
+    "name": "it103",
+    "testId": 103,
+    "memberof": "unit/resolver.test.js~describe49.describe50.describe101",
     "testDepth": 3,
-    "longname": "unit/resolver.test.js~describe49.describe103.context104.it105",
+    "longname": "unit/resolver.test.js~describe49.describe50.describe101.it103",
     "access": null,
-    "description": "should throw error",
-    "lineNumber": 433
+    "description": "should not throw an error",
+    "lineNumber": 430
   },
   {
     "__docId__": 255,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "context106",
-    "testId": 106,
-    "memberof": "unit/resolver.test.js~describe49.describe103",
-    "testDepth": 2,
-    "longname": "unit/resolver.test.js~describe49.describe103.context106",
+    "name": "describe104",
+    "testId": 104,
+    "memberof": "unit/resolver.test.js~describe49",
+    "testDepth": 1,
+    "longname": "unit/resolver.test.js~describe49.describe104",
     "access": null,
-    "description": "not empty container",
-    "lineNumber": 440
+    "description": ".resolveAll",
+    "lineNumber": 451
   },
   {
     "__docId__": 256,
-    "kind": "testIt",
+    "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "it107",
-    "testId": 107,
-    "memberof": "unit/resolver.test.js~describe49.describe103.context106",
-    "testDepth": 3,
-    "longname": "unit/resolver.test.js~describe49.describe103.context106.it107",
+    "name": "context105",
+    "testId": 105,
+    "memberof": "unit/resolver.test.js~describe49.describe104",
+    "testDepth": 2,
+    "longname": "unit/resolver.test.js~describe49.describe104.context105",
     "access": null,
-    "description": "should resolve all modules from particular namespace",
-    "lineNumber": 441
+    "description": "empty container",
+    "lineNumber": 452
   },
   {
     "__docId__": 257,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it106",
+    "testId": 106,
+    "memberof": "unit/resolver.test.js~describe49.describe104.context105",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe49.describe104.context105.it106",
+    "access": null,
+    "description": "should throw error",
+    "lineNumber": 453
+  },
+  {
+    "__docId__": 258,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context107",
+    "testId": 107,
+    "memberof": "unit/resolver.test.js~describe49.describe104",
+    "testDepth": 2,
+    "longname": "unit/resolver.test.js~describe49.describe104.context107",
+    "access": null,
+    "description": "not empty container",
+    "lineNumber": 460
+  },
+  {
+    "__docId__": 259,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it108",
+    "testId": 108,
+    "memberof": "unit/resolver.test.js~describe49.describe104.context107",
+    "testDepth": 3,
+    "longname": "unit/resolver.test.js~describe49.describe104.context107.it108",
+    "access": null,
+    "description": "should resolve all modules from particular namespace",
+    "lineNumber": 461
+  },
+  {
+    "__docId__": 260,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -4812,455 +4898,455 @@
     "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport {expect} from 'chai';\nimport { isNull, isUndefined } from '../../src/utils';\nimport Storage from '../../src/storage';\nimport Module from '../../src/module';\n\ndescribe('Storage', function() {\n    let storage = null;\n\n    beforeEach(() => {\n        storage = new Storage('/');\n    });\n\n    describe('.addItem', () => {\n        context('invalid parameters', () => {\n            it('should throw error when module is not passed', () => {\n                expect(() => {\n                    storage.addItem();\n                }).to.throw();\n            });\n\n            it('should throw error when module is not instance of Module class', () => {\n                const values = [\n                    new Date(),\n                    {},\n                    [],\n                    1,\n                    'foo'\n                ];\n\n                values.forEach((value) => {\n                    expect(() => {\n                        storage.addItem(value);\n                    }).to.throw();\n                });\n            });\n\n            it('should throw error when namespace name is not string', () => {\n                const values = [\n                    new Date(),\n                    {},\n                    [],\n                    1,\n                    null,\n                    undefined\n                ];\n\n                values.forEach((value) => {\n                    expect(() => {\n                        storage.addItem(new Module(value));\n                    }).to.throw();\n                });\n            });\n\n            it('should throw error when module name is missed', () => {\n                expect(() => {\n                    storage.addItem(new Module('/'));\n                }).to.throw();\n            });\n\n            it('should throw error when module name is not string', () => {\n                const values = [\n                    new Date(),\n                    {},\n                    [],\n                    1,\n                    null,\n                    undefined\n                ];\n\n                values.forEach((value) => {\n                    expect(() => {\n                        storage.addItem(new Module('/', value));\n                    }).to.throw();\n                });\n            });\n\n            it('should throw error when module already exists', () => {\n                expect(() => {\n                    storage.addItem(new Module('/', 'foo', [], function init() {}));\n                    storage.addItem(new Module('/', 'foo', [], function init() {}));\n                }).to.throw();\n            });\n        });\n\n        context('valid parameters', () => {\n            it('should add new module', () => {\n                expect(() => {\n                    storage.addItem(new Module('/', 'foo', [], function init() {}));\n                }).to.not.throw();\n            });\n        });\n    });\n\n    describe('.getItem', () => {\n        context('invalid parameters', () => {\n            it('should throw error when module path is missed', () => {\n                expect(() => {\n                    storage.getItem();\n                }).to.throw();\n            });\n\n            it('should throw error when module path is not string', () => {\n                const values = [\n                    new Date(),\n                    {},\n                    [],\n                    1,\n                    null,\n                    undefined\n                ];\n\n                values.forEach((value) => {\n                    expect(() => {\n                        storage.getItem(value);\n                    }).to.throw();\n                });\n            });\n\n            it('should throw error when namespace does not exist', () => {\n                storage.addItem(new Module('foo', 'bar', [], function init() {}));\n\n                expect(() => {\n                    storage.getItem('qaz/bar');\n                }).to.throw();\n            });\n\n            it('should throw error when module does not exist', () => {\n                storage.addItem(new Module('foo', 'bar', [], function init() {}));\n\n                expect(() => {\n                    storage.getItem('foo/qaz');\n                }).to.throw();\n            });\n        });\n\n        context('valid parameters', () => {\n            it('should return item', () => {\n                storage.addItem(new Module('foo', 'bar', [], function init() {}));\n\n                expect(storage.getItem('foo/bar')).to.exist;\n            });\n        });\n    });\n\n    describe('.contains', () => {\n        context('when module is registered', () => {\n            it('should return \"true\"', () => {\n                storage.addItem(new Module('foo', 'bar', [], function init() {}));\n\n                expect(storage.contains('foo/bar')).to.be.true;\n            });\n        });\n\n        context('when module is not registered', () => {\n            it('should return \"false\"', () => {\n                expect(storage.contains('foo/bar')).to.be.false;\n\n                storage.addItem(new Module('foo', 'bar', [], function init() {}));\n\n                expect(storage.contains('qaz/bar')).to.be.false;\n            });\n        });\n    });\n\n    describe('.forEachIn', () => {\n        context('invalid parameters', () => {\n            it('should throw an error when namespace not passed', () => {\n                expect(storage.forEachIn).to.throw;\n            });\n\n            it('should throw an error when callback not passed', () => {\n                expect(() => {\n                    storage.addItem(new Module('foo', 'bar'));\n                    storage.forEachIn('foo');\n                }).to.throw;\n            });\n        });\n\n        context('valid parameters', () => {\n            it('should iterate over modules inside target namespace', () => {\n                const fooModules = [\n                    new Module('foo', 'qaz'),\n                    new Module('foo', 'wsx'),\n                    new Module('foo', 'rfv')\n                ];\n\n                const barModules = [\n                    new Module('bar', 'tgb'),\n                    new Module('bar', 'yhn')\n                ];\n\n                fooModules.forEach(module => storage.addItem(module));\n                barModules.forEach(module => storage.addItem(module));\n\n                const found = [];\n                storage.forEachIn('foo', module => found.push(module));\n                expect(found).to.eql(fooModules);\n            });\n\n            it('should pass module path during iteration', () => {\n                const fooModules = [\n                    new Module('foo', 'qaz'),\n                    new Module('foo', 'wsx'),\n                    new Module('foo', 'rfv')\n                ];\n\n                const barModules = [\n                    new Module('bar', 'tgb'),\n                    new Module('bar', 'yhn')\n                ];\n\n                fooModules.forEach(module => storage.addItem(module));\n                barModules.forEach(module => storage.addItem(module));\n\n                const found = [];\n                storage.forEachIn('foo', (module, path) => found.push(path));\n                expect(found).to.eql([\n                    'foo/qaz',\n                    'foo/wsx',\n                    'foo/rfv'\n                ]);\n            });\n        });\n    });\n\n    it('should support different separators', () => {\n        const separators = [\n            '/',\n            '.',\n            '-',\n            '@'\n        ];\n\n        separators.forEach((separator) => {\n            const s = new Storage(separator);\n            s.addItem(new Module('foo', 'bar'));\n            const getItem = function getItem() {\n                return s.getItem(`foo${separator}bar`);\n            };\n\n            expect(getItem).not.to.throw;\n            const item = getItem();\n            expect(isNull(item) || isUndefined(item)).to.be.not.true;\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
   },
   {
-    "__docId__": 258,
-    "kind": "testDescribe",
-    "static": true,
-    "variation": null,
-    "name": "describe108",
-    "testId": 108,
-    "memberof": "unit/storage.test.js",
-    "testDepth": 0,
-    "longname": "unit/storage.test.js~describe108",
-    "access": null,
-    "description": "Storage",
-    "lineNumber": 8
-  },
-  {
-    "__docId__": 259,
+    "__docId__": 261,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
     "name": "describe109",
     "testId": 109,
-    "memberof": "unit/storage.test.js~describe108",
+    "memberof": "unit/storage.test.js",
+    "testDepth": 0,
+    "longname": "unit/storage.test.js~describe109",
+    "access": null,
+    "description": "Storage",
+    "lineNumber": 8
+  },
+  {
+    "__docId__": 262,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe110",
+    "testId": 110,
+    "memberof": "unit/storage.test.js~describe109",
     "testDepth": 1,
-    "longname": "unit/storage.test.js~describe108.describe109",
+    "longname": "unit/storage.test.js~describe109.describe110",
     "access": null,
     "description": ".addItem",
     "lineNumber": 15
   },
   {
-    "__docId__": 260,
+    "__docId__": 263,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "context110",
-    "testId": 110,
-    "memberof": "unit/storage.test.js~describe108.describe109",
+    "name": "context111",
+    "testId": 111,
+    "memberof": "unit/storage.test.js~describe109.describe110",
     "testDepth": 2,
-    "longname": "unit/storage.test.js~describe108.describe109.context110",
+    "longname": "unit/storage.test.js~describe109.describe110.context111",
     "access": null,
     "description": "invalid parameters",
     "lineNumber": 16
-  },
-  {
-    "__docId__": 261,
-    "kind": "testIt",
-    "static": true,
-    "variation": null,
-    "name": "it111",
-    "testId": 111,
-    "memberof": "unit/storage.test.js~describe108.describe109.context110",
-    "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe109.context110.it111",
-    "access": null,
-    "description": "should throw error when module is not passed",
-    "lineNumber": 17
-  },
-  {
-    "__docId__": 262,
-    "kind": "testIt",
-    "static": true,
-    "variation": null,
-    "name": "it112",
-    "testId": 112,
-    "memberof": "unit/storage.test.js~describe108.describe109.context110",
-    "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe109.context110.it112",
-    "access": null,
-    "description": "should throw error when module is not instance of Module class",
-    "lineNumber": 23
-  },
-  {
-    "__docId__": 263,
-    "kind": "testIt",
-    "static": true,
-    "variation": null,
-    "name": "it113",
-    "testId": 113,
-    "memberof": "unit/storage.test.js~describe108.describe109.context110",
-    "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe109.context110.it113",
-    "access": null,
-    "description": "should throw error when namespace name is not string",
-    "lineNumber": 39
   },
   {
     "__docId__": 264,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it114",
-    "testId": 114,
-    "memberof": "unit/storage.test.js~describe108.describe109.context110",
+    "name": "it112",
+    "testId": 112,
+    "memberof": "unit/storage.test.js~describe109.describe110.context111",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe109.context110.it114",
+    "longname": "unit/storage.test.js~describe109.describe110.context111.it112",
     "access": null,
-    "description": "should throw error when module name is missed",
-    "lineNumber": 56
+    "description": "should throw error when module is not passed",
+    "lineNumber": 17
   },
   {
     "__docId__": 265,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it115",
-    "testId": 115,
-    "memberof": "unit/storage.test.js~describe108.describe109.context110",
+    "name": "it113",
+    "testId": 113,
+    "memberof": "unit/storage.test.js~describe109.describe110.context111",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe109.context110.it115",
+    "longname": "unit/storage.test.js~describe109.describe110.context111.it113",
     "access": null,
-    "description": "should throw error when module name is not string",
-    "lineNumber": 62
+    "description": "should throw error when module is not instance of Module class",
+    "lineNumber": 23
   },
   {
     "__docId__": 266,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it116",
-    "testId": 116,
-    "memberof": "unit/storage.test.js~describe108.describe109.context110",
+    "name": "it114",
+    "testId": 114,
+    "memberof": "unit/storage.test.js~describe109.describe110.context111",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe109.context110.it116",
+    "longname": "unit/storage.test.js~describe109.describe110.context111.it114",
     "access": null,
-    "description": "should throw error when module already exists",
-    "lineNumber": 79
+    "description": "should throw error when namespace name is not string",
+    "lineNumber": 39
   },
   {
     "__docId__": 267,
-    "kind": "testDescribe",
+    "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "context117",
-    "testId": 117,
-    "memberof": "unit/storage.test.js~describe108.describe109",
-    "testDepth": 2,
-    "longname": "unit/storage.test.js~describe108.describe109.context117",
+    "name": "it115",
+    "testId": 115,
+    "memberof": "unit/storage.test.js~describe109.describe110.context111",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe109.describe110.context111.it115",
     "access": null,
-    "description": "valid parameters",
-    "lineNumber": 87
+    "description": "should throw error when module name is missed",
+    "lineNumber": 56
   },
   {
     "__docId__": 268,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it118",
-    "testId": 118,
-    "memberof": "unit/storage.test.js~describe108.describe109.context117",
+    "name": "it116",
+    "testId": 116,
+    "memberof": "unit/storage.test.js~describe109.describe110.context111",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe109.context117.it118",
+    "longname": "unit/storage.test.js~describe109.describe110.context111.it116",
     "access": null,
-    "description": "should add new module",
-    "lineNumber": 88
+    "description": "should throw error when module name is not string",
+    "lineNumber": 62
   },
   {
     "__docId__": 269,
-    "kind": "testDescribe",
+    "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "describe119",
-    "testId": 119,
-    "memberof": "unit/storage.test.js~describe108",
-    "testDepth": 1,
-    "longname": "unit/storage.test.js~describe108.describe119",
+    "name": "it117",
+    "testId": 117,
+    "memberof": "unit/storage.test.js~describe109.describe110.context111",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe109.describe110.context111.it117",
     "access": null,
-    "description": ".getItem",
-    "lineNumber": 96
+    "description": "should throw error when module already exists",
+    "lineNumber": 79
   },
   {
     "__docId__": 270,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "context120",
-    "testId": 120,
-    "memberof": "unit/storage.test.js~describe108.describe119",
+    "name": "context118",
+    "testId": 118,
+    "memberof": "unit/storage.test.js~describe109.describe110",
     "testDepth": 2,
-    "longname": "unit/storage.test.js~describe108.describe119.context120",
+    "longname": "unit/storage.test.js~describe109.describe110.context118",
     "access": null,
-    "description": "invalid parameters",
-    "lineNumber": 97
+    "description": "valid parameters",
+    "lineNumber": 87
   },
   {
     "__docId__": 271,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it121",
-    "testId": 121,
-    "memberof": "unit/storage.test.js~describe108.describe119.context120",
+    "name": "it119",
+    "testId": 119,
+    "memberof": "unit/storage.test.js~describe109.describe110.context118",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe119.context120.it121",
+    "longname": "unit/storage.test.js~describe109.describe110.context118.it119",
     "access": null,
-    "description": "should throw error when module path is missed",
-    "lineNumber": 98
+    "description": "should add new module",
+    "lineNumber": 88
   },
   {
     "__docId__": 272,
-    "kind": "testIt",
+    "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "it122",
-    "testId": 122,
-    "memberof": "unit/storage.test.js~describe108.describe119.context120",
-    "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe119.context120.it122",
+    "name": "describe120",
+    "testId": 120,
+    "memberof": "unit/storage.test.js~describe109",
+    "testDepth": 1,
+    "longname": "unit/storage.test.js~describe109.describe120",
     "access": null,
-    "description": "should throw error when module path is not string",
-    "lineNumber": 104
+    "description": ".getItem",
+    "lineNumber": 96
   },
   {
     "__docId__": 273,
-    "kind": "testIt",
+    "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "it123",
-    "testId": 123,
-    "memberof": "unit/storage.test.js~describe108.describe119.context120",
-    "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe119.context120.it123",
+    "name": "context121",
+    "testId": 121,
+    "memberof": "unit/storage.test.js~describe109.describe120",
+    "testDepth": 2,
+    "longname": "unit/storage.test.js~describe109.describe120.context121",
     "access": null,
-    "description": "should throw error when namespace does not exist",
-    "lineNumber": 121
+    "description": "invalid parameters",
+    "lineNumber": 97
   },
   {
     "__docId__": 274,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it124",
-    "testId": 124,
-    "memberof": "unit/storage.test.js~describe108.describe119.context120",
+    "name": "it122",
+    "testId": 122,
+    "memberof": "unit/storage.test.js~describe109.describe120.context121",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe119.context120.it124",
+    "longname": "unit/storage.test.js~describe109.describe120.context121.it122",
     "access": null,
-    "description": "should throw error when module does not exist",
-    "lineNumber": 129
+    "description": "should throw error when module path is missed",
+    "lineNumber": 98
   },
   {
     "__docId__": 275,
-    "kind": "testDescribe",
+    "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "context125",
-    "testId": 125,
-    "memberof": "unit/storage.test.js~describe108.describe119",
-    "testDepth": 2,
-    "longname": "unit/storage.test.js~describe108.describe119.context125",
+    "name": "it123",
+    "testId": 123,
+    "memberof": "unit/storage.test.js~describe109.describe120.context121",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe109.describe120.context121.it123",
     "access": null,
-    "description": "valid parameters",
-    "lineNumber": 138
+    "description": "should throw error when module path is not string",
+    "lineNumber": 104
   },
   {
     "__docId__": 276,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it126",
-    "testId": 126,
-    "memberof": "unit/storage.test.js~describe108.describe119.context125",
+    "name": "it124",
+    "testId": 124,
+    "memberof": "unit/storage.test.js~describe109.describe120.context121",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe119.context125.it126",
+    "longname": "unit/storage.test.js~describe109.describe120.context121.it124",
     "access": null,
-    "description": "should return item",
-    "lineNumber": 139
+    "description": "should throw error when namespace does not exist",
+    "lineNumber": 121
   },
   {
     "__docId__": 277,
-    "kind": "testDescribe",
+    "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "describe127",
-    "testId": 127,
-    "memberof": "unit/storage.test.js~describe108",
-    "testDepth": 1,
-    "longname": "unit/storage.test.js~describe108.describe127",
+    "name": "it125",
+    "testId": 125,
+    "memberof": "unit/storage.test.js~describe109.describe120.context121",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe109.describe120.context121.it125",
     "access": null,
-    "description": ".contains",
-    "lineNumber": 147
+    "description": "should throw error when module does not exist",
+    "lineNumber": 129
   },
   {
     "__docId__": 278,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "context128",
-    "testId": 128,
-    "memberof": "unit/storage.test.js~describe108.describe127",
+    "name": "context126",
+    "testId": 126,
+    "memberof": "unit/storage.test.js~describe109.describe120",
     "testDepth": 2,
-    "longname": "unit/storage.test.js~describe108.describe127.context128",
+    "longname": "unit/storage.test.js~describe109.describe120.context126",
     "access": null,
-    "description": "when module is registered",
-    "lineNumber": 148
+    "description": "valid parameters",
+    "lineNumber": 138
   },
   {
     "__docId__": 279,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it129",
-    "testId": 129,
-    "memberof": "unit/storage.test.js~describe108.describe127.context128",
+    "name": "it127",
+    "testId": 127,
+    "memberof": "unit/storage.test.js~describe109.describe120.context126",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe127.context128.it129",
+    "longname": "unit/storage.test.js~describe109.describe120.context126.it127",
     "access": null,
-    "description": "should return \"true\"",
-    "lineNumber": 149
+    "description": "should return item",
+    "lineNumber": 139
   },
   {
     "__docId__": 280,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "context130",
-    "testId": 130,
-    "memberof": "unit/storage.test.js~describe108.describe127",
-    "testDepth": 2,
-    "longname": "unit/storage.test.js~describe108.describe127.context130",
+    "name": "describe128",
+    "testId": 128,
+    "memberof": "unit/storage.test.js~describe109",
+    "testDepth": 1,
+    "longname": "unit/storage.test.js~describe109.describe128",
     "access": null,
-    "description": "when module is not registered",
-    "lineNumber": 156
+    "description": ".contains",
+    "lineNumber": 147
   },
   {
     "__docId__": 281,
-    "kind": "testIt",
-    "static": true,
-    "variation": null,
-    "name": "it131",
-    "testId": 131,
-    "memberof": "unit/storage.test.js~describe108.describe127.context130",
-    "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe127.context130.it131",
-    "access": null,
-    "description": "should return \"false\"",
-    "lineNumber": 157
-  },
-  {
-    "__docId__": 282,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "describe132",
-    "testId": 132,
-    "memberof": "unit/storage.test.js~describe108",
-    "testDepth": 1,
-    "longname": "unit/storage.test.js~describe108.describe132",
+    "name": "context129",
+    "testId": 129,
+    "memberof": "unit/storage.test.js~describe109.describe128",
+    "testDepth": 2,
+    "longname": "unit/storage.test.js~describe109.describe128.context129",
     "access": null,
-    "description": ".forEachIn",
-    "lineNumber": 167
+    "description": "when module is registered",
+    "lineNumber": 148
+  },
+  {
+    "__docId__": 282,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it130",
+    "testId": 130,
+    "memberof": "unit/storage.test.js~describe109.describe128.context129",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe109.describe128.context129.it130",
+    "access": null,
+    "description": "should return \"true\"",
+    "lineNumber": 149
   },
   {
     "__docId__": 283,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "context133",
-    "testId": 133,
-    "memberof": "unit/storage.test.js~describe108.describe132",
+    "name": "context131",
+    "testId": 131,
+    "memberof": "unit/storage.test.js~describe109.describe128",
     "testDepth": 2,
-    "longname": "unit/storage.test.js~describe108.describe132.context133",
+    "longname": "unit/storage.test.js~describe109.describe128.context131",
     "access": null,
-    "description": "invalid parameters",
-    "lineNumber": 168
+    "description": "when module is not registered",
+    "lineNumber": 156
   },
   {
     "__docId__": 284,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it134",
-    "testId": 134,
-    "memberof": "unit/storage.test.js~describe108.describe132.context133",
+    "name": "it132",
+    "testId": 132,
+    "memberof": "unit/storage.test.js~describe109.describe128.context131",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe132.context133.it134",
+    "longname": "unit/storage.test.js~describe109.describe128.context131.it132",
     "access": null,
-    "description": "should throw an error when namespace not passed",
-    "lineNumber": 169
+    "description": "should return \"false\"",
+    "lineNumber": 157
   },
   {
     "__docId__": 285,
-    "kind": "testIt",
+    "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "it135",
-    "testId": 135,
-    "memberof": "unit/storage.test.js~describe108.describe132.context133",
-    "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe132.context133.it135",
+    "name": "describe133",
+    "testId": 133,
+    "memberof": "unit/storage.test.js~describe109",
+    "testDepth": 1,
+    "longname": "unit/storage.test.js~describe109.describe133",
     "access": null,
-    "description": "should throw an error when callback not passed",
-    "lineNumber": 173
+    "description": ".forEachIn",
+    "lineNumber": 167
   },
   {
     "__docId__": 286,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "context136",
-    "testId": 136,
-    "memberof": "unit/storage.test.js~describe108.describe132",
+    "name": "context134",
+    "testId": 134,
+    "memberof": "unit/storage.test.js~describe109.describe133",
     "testDepth": 2,
-    "longname": "unit/storage.test.js~describe108.describe132.context136",
+    "longname": "unit/storage.test.js~describe109.describe133.context134",
     "access": null,
-    "description": "valid parameters",
-    "lineNumber": 181
+    "description": "invalid parameters",
+    "lineNumber": 168
   },
   {
     "__docId__": 287,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it137",
-    "testId": 137,
-    "memberof": "unit/storage.test.js~describe108.describe132.context136",
+    "name": "it135",
+    "testId": 135,
+    "memberof": "unit/storage.test.js~describe109.describe133.context134",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe132.context136.it137",
+    "longname": "unit/storage.test.js~describe109.describe133.context134.it135",
     "access": null,
-    "description": "should iterate over modules inside target namespace",
-    "lineNumber": 182
+    "description": "should throw an error when namespace not passed",
+    "lineNumber": 169
   },
   {
     "__docId__": 288,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it138",
-    "testId": 138,
-    "memberof": "unit/storage.test.js~describe108.describe132.context136",
+    "name": "it136",
+    "testId": 136,
+    "memberof": "unit/storage.test.js~describe109.describe133.context134",
     "testDepth": 3,
-    "longname": "unit/storage.test.js~describe108.describe132.context136.it138",
+    "longname": "unit/storage.test.js~describe109.describe133.context134.it136",
     "access": null,
-    "description": "should pass module path during iteration",
-    "lineNumber": 202
+    "description": "should throw an error when callback not passed",
+    "lineNumber": 173
   },
   {
     "__docId__": 289,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "context137",
+    "testId": 137,
+    "memberof": "unit/storage.test.js~describe109.describe133",
+    "testDepth": 2,
+    "longname": "unit/storage.test.js~describe109.describe133.context137",
+    "access": null,
+    "description": "valid parameters",
+    "lineNumber": 181
+  },
+  {
+    "__docId__": 290,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it138",
+    "testId": 138,
+    "memberof": "unit/storage.test.js~describe109.describe133.context137",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe109.describe133.context137.it138",
+    "access": null,
+    "description": "should iterate over modules inside target namespace",
+    "lineNumber": 182
+  },
+  {
+    "__docId__": 291,
     "kind": "testIt",
     "static": true,
     "variation": null,
     "name": "it139",
     "testId": 139,
-    "memberof": "unit/storage.test.js~describe108",
+    "memberof": "unit/storage.test.js~describe109.describe133.context137",
+    "testDepth": 3,
+    "longname": "unit/storage.test.js~describe109.describe133.context137.it139",
+    "access": null,
+    "description": "should pass module path during iteration",
+    "lineNumber": 202
+  },
+  {
+    "__docId__": 292,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it140",
+    "testId": 140,
+    "memberof": "unit/storage.test.js~describe109",
     "testDepth": 1,
-    "longname": "unit/storage.test.js~describe108.it139",
+    "longname": "unit/storage.test.js~describe109.it140",
     "access": null,
     "description": "should support different separators",
     "lineNumber": 228
   },
   {
-    "__docId__": 290,
+    "__docId__": 293,
     "kind": "testFile",
     "static": true,
     "variation": null,
@@ -5273,617 +5359,617 @@
     "content": "/* eslint-disable no-unused-expressions, func-names  */\n\nimport { expect } from 'chai';\nimport sinon from 'sinon';\nimport {\n    isFunction,\n    isNumber,\n    joinPath,\n    splitPath,\n    forEach,\n    setIn,\n    getIn\n} from '../../src/utils';\n\ndescribe('Utils', function() {\n    const separator = '/';\n\n    describe('isFunction', () => {\n        it('should return true when \"Function\" is passed', () => {\n            expect(isFunction(function() {})).to.be.true;\n        });\n\n        it('should return false when \"String\" is passed', () => {\n            expect(isFunction('')).to.be.false;\n        });\n\n        it('should return false when \"Number\" is passed', () => {\n            expect(isFunction(1)).to.be.false;\n        });\n\n        it('should return false when \"Object\" is passed', () => {\n            expect(isFunction({})).to.be.false;\n        });\n\n        it('should return false when \"Array\" is passed', () => {\n            expect(isFunction([])).to.be.false;\n        });\n\n        it('should return false when \"null\" is passed', () => {\n            expect(isFunction(null)).to.be.false;\n        });\n\n        it('should return false when \"undefined\" is passed', () => {\n            expect(isFunction(undefined)).to.be.false;\n        });\n\n        it('should return false when \"NaN\" is passed', () => {\n            expect(isFunction(NaN)).to.be.false;\n        });\n    });\n\n    describe('isNumber', () => {\n        it('should return true when \"Number\" is passed', () => {\n            expect(isNumber(1)).to.be.true;\n        });\n\n        it('should return false when \"Function\" is passed', () => {\n            expect(isNumber(function() {})).to.be.false;\n        });\n\n        it('should return false when \"String\" is passed', () => {\n            expect(isNumber('')).to.be.false;\n        });\n\n        it('should return false when \"Object\" is passed', () => {\n            expect(isNumber({})).to.be.false;\n        });\n\n        it('should return false when \"Array\" is passed', () => {\n            expect(isNumber([])).to.be.false;\n        });\n\n        it('should return false when \"null\" is passed', () => {\n            expect(isNumber(null)).to.be.false;\n        });\n\n        it('should return false when \"undefined\" is passed', () => {\n            expect(isNumber(undefined)).to.be.false;\n        });\n\n        it('should return false when \"NaN\" is passed', () => {\n            expect(isNumber(NaN)).to.be.false;\n        });\n    });\n\n    describe('joinPath', () => {\n        it('should join \"foo\"', () => {\n            expect(joinPath(separator, 'foo')).to.equal('foo');\n        });\n\n        it('should join \"/, foo\"', () => {\n            expect(joinPath(separator, '/', 'foo')).to.equal('foo');\n        });\n\n        it('should join \"/, /, foo\"', () => {\n            expect(joinPath(separator, '/', '/', 'foo')).to.equal('foo');\n        });\n\n        it('should join \"foo, bar\"', () => {\n            expect(joinPath(separator, 'foo', 'bar')).to.equal('foo/bar');\n        });\n\n        it('should join \"/, foo, bar\"', () => {\n            expect(joinPath(separator, '/', 'foo', 'bar')).to.equal('foo/bar');\n        });\n\n        it('should join \"/, foo, bar, \"', () => {\n            expect(joinPath(separator, '/', 'foo', 'bar', ' ')).to.equal('foo/bar');\n        });\n\n        it('should join \"/, foo, bar, /\"', () => {\n            expect(joinPath(separator, '/', 'foo', 'bar', '/')).to.equal('foo/bar');\n        });\n\n        it('should join \"/, undefined, null, 1, [], {}\"', () => {\n            expect(joinPath(separator, '/', undefined, null, 1, [], {})).to.equal('');\n        });\n    });\n\n    describe('splitPath', () => {\n        it('should split \"/\"', () => {\n            expect(splitPath(separator, '/')).to.eql({ namespace: '', name: '' });\n        });\n\n        it('should split \"foo\"', () => {\n            expect(splitPath(separator, 'foo')).to.eql({ namespace: '', name: 'foo' });\n        });\n\n        it('should split \"/foo\"', () => {\n            expect(splitPath(separator, '/foo')).to.eql({ namespace: '', name: 'foo' });\n        });\n\n        it('should split \"/foo/bar\"', () => {\n            expect(splitPath(separator, '/foo/bar')).to.eql({ namespace: 'foo', name: 'bar' });\n        });\n\n        it('should split \"/foo/bar/\"', () => {\n            expect(splitPath(separator, '/foo/bar/')).to.eql({ namespace: 'foo/bar', name: '' });\n        });\n    });\n\n    describe('forEach', () => {\n        it('should iterate over an object', () => {\n            const key = 'foo';\n            const value = 'bar';\n\n            const obj = {\n                [key]: value\n            };\n\n            forEach(obj, (v, k) => {\n                expect(v).to.eql(value);\n                expect(k).to.eql(key);\n            });\n\n            const spy = sinon.spy();\n\n            const obj2 = {\n                'foo': 1,\n                'bar': 2,\n                'quz': 3\n            };\n\n            forEach(obj2, spy);\n\n            expect(spy.callCount).to.equal(3);\n        });\n\n        it('should iterate over an array', () => {\n            const value = 'bar';\n\n            const arr = ['bar'];\n\n            forEach(arr, (v, i) => {\n                expect(v).to.eql(value);\n                expect(i).to.eql(0);\n            });\n\n            const spy = sinon.spy();\n\n            const arr2 = [\n                1,\n                2,\n                3\n            ];\n\n            forEach(arr2, spy);\n\n            expect(spy.callCount).to.equal(3);\n        });\n    });\n\n    describe('setIn', () => {\n        it('should set value with short path', () => {\n            const path = ['foo'];\n            const result = setIn({}, path, 'bar');\n\n            expect(result, 'result').to.exist;\n            expect(result.foo, 'result.foo').to.eql('bar');\n        });\n\n        it('should set value with long path', () => {\n            const path = ['foo', 'bar', 'qaz'];\n            const result = setIn({}, path, 'rfv');\n\n            expect(result, 'result').to.exist;\n            expect(result.foo, 'result.foo').to.exist;\n            expect(result.foo.bar, 'result.foo.bar').to.exist;\n            expect(result.foo.bar.qaz, 'result.foo.bar.qaz').to.exist;\n            expect(result.foo.bar.qaz, 'result.foo.bar.qaz').to.eql('rfv');\n        });\n    });\n\n    describe('getIn', () => {\n        it('should get value with short path', () => {\n            const target = { foo: 'bar' };\n            const path = ['foo'];\n            const result = getIn(target, path);\n\n            expect(result, 'result').to.eql('bar');\n        });\n\n        it('should get value with long path', () => {\n            const target = { foo: { bar: { 'qaz': 'rfv' }}};\n            const path = ['foo', 'bar', 'qaz'];\n            const result = getIn(target, path);\n\n            expect(result, 'result').to.eql('rfv');\n        });\n\n        it('should return null when there is no value', () => {\n            const target = { foo: {}};\n            const path = ['foo', 'bar', 'qaz'];\n            const result = getIn(target, path);\n\n            expect(result, 'result').to.be.null;\n        });\n    });\n});\n\n/* eslint-enable no-unused-expressions, func-names  */\n"
   },
   {
-    "__docId__": 291,
-    "kind": "testDescribe",
-    "static": true,
-    "variation": null,
-    "name": "describe140",
-    "testId": 140,
-    "memberof": "unit/utils.test.js",
-    "testDepth": 0,
-    "longname": "unit/utils.test.js~describe140",
-    "access": null,
-    "description": "Utils",
-    "lineNumber": 15
-  },
-  {
-    "__docId__": 292,
+    "__docId__": 294,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
     "name": "describe141",
     "testId": 141,
-    "memberof": "unit/utils.test.js~describe140",
-    "testDepth": 1,
-    "longname": "unit/utils.test.js~describe140.describe141",
+    "memberof": "unit/utils.test.js",
+    "testDepth": 0,
+    "longname": "unit/utils.test.js~describe141",
     "access": null,
-    "description": "isFunction",
-    "lineNumber": 18
-  },
-  {
-    "__docId__": 293,
-    "kind": "testIt",
-    "static": true,
-    "variation": null,
-    "name": "it142",
-    "testId": 142,
-    "memberof": "unit/utils.test.js~describe140.describe141",
-    "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe141.it142",
-    "access": null,
-    "description": "should return true when \"Function\" is passed",
-    "lineNumber": 19
-  },
-  {
-    "__docId__": 294,
-    "kind": "testIt",
-    "static": true,
-    "variation": null,
-    "name": "it143",
-    "testId": 143,
-    "memberof": "unit/utils.test.js~describe140.describe141",
-    "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe141.it143",
-    "access": null,
-    "description": "should return false when \"String\" is passed",
-    "lineNumber": 23
+    "description": "Utils",
+    "lineNumber": 15
   },
   {
     "__docId__": 295,
-    "kind": "testIt",
+    "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "it144",
-    "testId": 144,
-    "memberof": "unit/utils.test.js~describe140.describe141",
-    "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe141.it144",
+    "name": "describe142",
+    "testId": 142,
+    "memberof": "unit/utils.test.js~describe141",
+    "testDepth": 1,
+    "longname": "unit/utils.test.js~describe141.describe142",
     "access": null,
-    "description": "should return false when \"Number\" is passed",
-    "lineNumber": 27
+    "description": "isFunction",
+    "lineNumber": 18
   },
   {
     "__docId__": 296,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it145",
-    "testId": 145,
-    "memberof": "unit/utils.test.js~describe140.describe141",
+    "name": "it143",
+    "testId": 143,
+    "memberof": "unit/utils.test.js~describe141.describe142",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe141.it145",
+    "longname": "unit/utils.test.js~describe141.describe142.it143",
     "access": null,
-    "description": "should return false when \"Object\" is passed",
-    "lineNumber": 31
+    "description": "should return true when \"Function\" is passed",
+    "lineNumber": 19
   },
   {
     "__docId__": 297,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it146",
-    "testId": 146,
-    "memberof": "unit/utils.test.js~describe140.describe141",
+    "name": "it144",
+    "testId": 144,
+    "memberof": "unit/utils.test.js~describe141.describe142",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe141.it146",
+    "longname": "unit/utils.test.js~describe141.describe142.it144",
     "access": null,
-    "description": "should return false when \"Array\" is passed",
-    "lineNumber": 35
+    "description": "should return false when \"String\" is passed",
+    "lineNumber": 23
   },
   {
     "__docId__": 298,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it147",
-    "testId": 147,
-    "memberof": "unit/utils.test.js~describe140.describe141",
+    "name": "it145",
+    "testId": 145,
+    "memberof": "unit/utils.test.js~describe141.describe142",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe141.it147",
+    "longname": "unit/utils.test.js~describe141.describe142.it145",
     "access": null,
-    "description": "should return false when \"null\" is passed",
-    "lineNumber": 39
+    "description": "should return false when \"Number\" is passed",
+    "lineNumber": 27
   },
   {
     "__docId__": 299,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it148",
-    "testId": 148,
-    "memberof": "unit/utils.test.js~describe140.describe141",
+    "name": "it146",
+    "testId": 146,
+    "memberof": "unit/utils.test.js~describe141.describe142",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe141.it148",
+    "longname": "unit/utils.test.js~describe141.describe142.it146",
     "access": null,
-    "description": "should return false when \"undefined\" is passed",
-    "lineNumber": 43
+    "description": "should return false when \"Object\" is passed",
+    "lineNumber": 31
   },
   {
     "__docId__": 300,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it149",
-    "testId": 149,
-    "memberof": "unit/utils.test.js~describe140.describe141",
+    "name": "it147",
+    "testId": 147,
+    "memberof": "unit/utils.test.js~describe141.describe142",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe141.it149",
+    "longname": "unit/utils.test.js~describe141.describe142.it147",
     "access": null,
-    "description": "should return false when \"NaN\" is passed",
-    "lineNumber": 47
+    "description": "should return false when \"Array\" is passed",
+    "lineNumber": 35
   },
   {
     "__docId__": 301,
-    "kind": "testDescribe",
+    "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "describe150",
-    "testId": 150,
-    "memberof": "unit/utils.test.js~describe140",
-    "testDepth": 1,
-    "longname": "unit/utils.test.js~describe140.describe150",
+    "name": "it148",
+    "testId": 148,
+    "memberof": "unit/utils.test.js~describe141.describe142",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe141.describe142.it148",
     "access": null,
-    "description": "isNumber",
-    "lineNumber": 52
+    "description": "should return false when \"null\" is passed",
+    "lineNumber": 39
   },
   {
     "__docId__": 302,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it151",
-    "testId": 151,
-    "memberof": "unit/utils.test.js~describe140.describe150",
+    "name": "it149",
+    "testId": 149,
+    "memberof": "unit/utils.test.js~describe141.describe142",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe150.it151",
+    "longname": "unit/utils.test.js~describe141.describe142.it149",
     "access": null,
-    "description": "should return true when \"Number\" is passed",
-    "lineNumber": 53
+    "description": "should return false when \"undefined\" is passed",
+    "lineNumber": 43
   },
   {
     "__docId__": 303,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it152",
-    "testId": 152,
-    "memberof": "unit/utils.test.js~describe140.describe150",
+    "name": "it150",
+    "testId": 150,
+    "memberof": "unit/utils.test.js~describe141.describe142",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe150.it152",
+    "longname": "unit/utils.test.js~describe141.describe142.it150",
     "access": null,
-    "description": "should return false when \"Function\" is passed",
-    "lineNumber": 57
+    "description": "should return false when \"NaN\" is passed",
+    "lineNumber": 47
   },
   {
     "__docId__": 304,
-    "kind": "testIt",
+    "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "it153",
-    "testId": 153,
-    "memberof": "unit/utils.test.js~describe140.describe150",
-    "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe150.it153",
+    "name": "describe151",
+    "testId": 151,
+    "memberof": "unit/utils.test.js~describe141",
+    "testDepth": 1,
+    "longname": "unit/utils.test.js~describe141.describe151",
     "access": null,
-    "description": "should return false when \"String\" is passed",
-    "lineNumber": 61
+    "description": "isNumber",
+    "lineNumber": 52
   },
   {
     "__docId__": 305,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it154",
-    "testId": 154,
-    "memberof": "unit/utils.test.js~describe140.describe150",
+    "name": "it152",
+    "testId": 152,
+    "memberof": "unit/utils.test.js~describe141.describe151",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe150.it154",
+    "longname": "unit/utils.test.js~describe141.describe151.it152",
     "access": null,
-    "description": "should return false when \"Object\" is passed",
-    "lineNumber": 65
+    "description": "should return true when \"Number\" is passed",
+    "lineNumber": 53
   },
   {
     "__docId__": 306,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it155",
-    "testId": 155,
-    "memberof": "unit/utils.test.js~describe140.describe150",
+    "name": "it153",
+    "testId": 153,
+    "memberof": "unit/utils.test.js~describe141.describe151",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe150.it155",
+    "longname": "unit/utils.test.js~describe141.describe151.it153",
     "access": null,
-    "description": "should return false when \"Array\" is passed",
-    "lineNumber": 69
+    "description": "should return false when \"Function\" is passed",
+    "lineNumber": 57
   },
   {
     "__docId__": 307,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it156",
-    "testId": 156,
-    "memberof": "unit/utils.test.js~describe140.describe150",
+    "name": "it154",
+    "testId": 154,
+    "memberof": "unit/utils.test.js~describe141.describe151",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe150.it156",
+    "longname": "unit/utils.test.js~describe141.describe151.it154",
     "access": null,
-    "description": "should return false when \"null\" is passed",
-    "lineNumber": 73
+    "description": "should return false when \"String\" is passed",
+    "lineNumber": 61
   },
   {
     "__docId__": 308,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it157",
-    "testId": 157,
-    "memberof": "unit/utils.test.js~describe140.describe150",
+    "name": "it155",
+    "testId": 155,
+    "memberof": "unit/utils.test.js~describe141.describe151",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe150.it157",
+    "longname": "unit/utils.test.js~describe141.describe151.it155",
     "access": null,
-    "description": "should return false when \"undefined\" is passed",
-    "lineNumber": 77
+    "description": "should return false when \"Object\" is passed",
+    "lineNumber": 65
   },
   {
     "__docId__": 309,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it158",
-    "testId": 158,
-    "memberof": "unit/utils.test.js~describe140.describe150",
+    "name": "it156",
+    "testId": 156,
+    "memberof": "unit/utils.test.js~describe141.describe151",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe150.it158",
+    "longname": "unit/utils.test.js~describe141.describe151.it156",
     "access": null,
-    "description": "should return false when \"NaN\" is passed",
-    "lineNumber": 81
+    "description": "should return false when \"Array\" is passed",
+    "lineNumber": 69
   },
   {
     "__docId__": 310,
-    "kind": "testDescribe",
+    "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "describe159",
-    "testId": 159,
-    "memberof": "unit/utils.test.js~describe140",
-    "testDepth": 1,
-    "longname": "unit/utils.test.js~describe140.describe159",
+    "name": "it157",
+    "testId": 157,
+    "memberof": "unit/utils.test.js~describe141.describe151",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe141.describe151.it157",
     "access": null,
-    "description": "joinPath",
-    "lineNumber": 86
+    "description": "should return false when \"null\" is passed",
+    "lineNumber": 73
   },
   {
     "__docId__": 311,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it160",
-    "testId": 160,
-    "memberof": "unit/utils.test.js~describe140.describe159",
+    "name": "it158",
+    "testId": 158,
+    "memberof": "unit/utils.test.js~describe141.describe151",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe159.it160",
+    "longname": "unit/utils.test.js~describe141.describe151.it158",
     "access": null,
-    "description": "should join \"foo\"",
-    "lineNumber": 87
+    "description": "should return false when \"undefined\" is passed",
+    "lineNumber": 77
   },
   {
     "__docId__": 312,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it161",
-    "testId": 161,
-    "memberof": "unit/utils.test.js~describe140.describe159",
+    "name": "it159",
+    "testId": 159,
+    "memberof": "unit/utils.test.js~describe141.describe151",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe159.it161",
+    "longname": "unit/utils.test.js~describe141.describe151.it159",
     "access": null,
-    "description": "should join \"/, foo\"",
-    "lineNumber": 91
+    "description": "should return false when \"NaN\" is passed",
+    "lineNumber": 81
   },
   {
     "__docId__": 313,
-    "kind": "testIt",
+    "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "it162",
-    "testId": 162,
-    "memberof": "unit/utils.test.js~describe140.describe159",
-    "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe159.it162",
+    "name": "describe160",
+    "testId": 160,
+    "memberof": "unit/utils.test.js~describe141",
+    "testDepth": 1,
+    "longname": "unit/utils.test.js~describe141.describe160",
     "access": null,
-    "description": "should join \"/, /, foo\"",
-    "lineNumber": 95
+    "description": "joinPath",
+    "lineNumber": 86
   },
   {
     "__docId__": 314,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it163",
-    "testId": 163,
-    "memberof": "unit/utils.test.js~describe140.describe159",
+    "name": "it161",
+    "testId": 161,
+    "memberof": "unit/utils.test.js~describe141.describe160",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe159.it163",
+    "longname": "unit/utils.test.js~describe141.describe160.it161",
     "access": null,
-    "description": "should join \"foo, bar\"",
-    "lineNumber": 99
+    "description": "should join \"foo\"",
+    "lineNumber": 87
   },
   {
     "__docId__": 315,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it164",
-    "testId": 164,
-    "memberof": "unit/utils.test.js~describe140.describe159",
+    "name": "it162",
+    "testId": 162,
+    "memberof": "unit/utils.test.js~describe141.describe160",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe159.it164",
+    "longname": "unit/utils.test.js~describe141.describe160.it162",
     "access": null,
-    "description": "should join \"/, foo, bar\"",
-    "lineNumber": 103
+    "description": "should join \"/, foo\"",
+    "lineNumber": 91
   },
   {
     "__docId__": 316,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it165",
-    "testId": 165,
-    "memberof": "unit/utils.test.js~describe140.describe159",
+    "name": "it163",
+    "testId": 163,
+    "memberof": "unit/utils.test.js~describe141.describe160",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe159.it165",
+    "longname": "unit/utils.test.js~describe141.describe160.it163",
     "access": null,
-    "description": "should join \"/, foo, bar, \"",
-    "lineNumber": 107
+    "description": "should join \"/, /, foo\"",
+    "lineNumber": 95
   },
   {
     "__docId__": 317,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it166",
-    "testId": 166,
-    "memberof": "unit/utils.test.js~describe140.describe159",
+    "name": "it164",
+    "testId": 164,
+    "memberof": "unit/utils.test.js~describe141.describe160",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe159.it166",
+    "longname": "unit/utils.test.js~describe141.describe160.it164",
     "access": null,
-    "description": "should join \"/, foo, bar, /\"",
-    "lineNumber": 111
+    "description": "should join \"foo, bar\"",
+    "lineNumber": 99
   },
   {
     "__docId__": 318,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it167",
-    "testId": 167,
-    "memberof": "unit/utils.test.js~describe140.describe159",
+    "name": "it165",
+    "testId": 165,
+    "memberof": "unit/utils.test.js~describe141.describe160",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe159.it167",
+    "longname": "unit/utils.test.js~describe141.describe160.it165",
     "access": null,
-    "description": "should join \"/, undefined, null, 1, [], {}\"",
-    "lineNumber": 115
+    "description": "should join \"/, foo, bar\"",
+    "lineNumber": 103
   },
   {
     "__docId__": 319,
-    "kind": "testDescribe",
+    "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "describe168",
-    "testId": 168,
-    "memberof": "unit/utils.test.js~describe140",
-    "testDepth": 1,
-    "longname": "unit/utils.test.js~describe140.describe168",
+    "name": "it166",
+    "testId": 166,
+    "memberof": "unit/utils.test.js~describe141.describe160",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe141.describe160.it166",
     "access": null,
-    "description": "splitPath",
-    "lineNumber": 120
+    "description": "should join \"/, foo, bar, \"",
+    "lineNumber": 107
   },
   {
     "__docId__": 320,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it169",
-    "testId": 169,
-    "memberof": "unit/utils.test.js~describe140.describe168",
+    "name": "it167",
+    "testId": 167,
+    "memberof": "unit/utils.test.js~describe141.describe160",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe168.it169",
+    "longname": "unit/utils.test.js~describe141.describe160.it167",
     "access": null,
-    "description": "should split \"/\"",
-    "lineNumber": 121
+    "description": "should join \"/, foo, bar, /\"",
+    "lineNumber": 111
   },
   {
     "__docId__": 321,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it170",
-    "testId": 170,
-    "memberof": "unit/utils.test.js~describe140.describe168",
+    "name": "it168",
+    "testId": 168,
+    "memberof": "unit/utils.test.js~describe141.describe160",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe168.it170",
+    "longname": "unit/utils.test.js~describe141.describe160.it168",
     "access": null,
-    "description": "should split \"foo\"",
-    "lineNumber": 125
+    "description": "should join \"/, undefined, null, 1, [], {}\"",
+    "lineNumber": 115
   },
   {
     "__docId__": 322,
-    "kind": "testIt",
+    "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "it171",
-    "testId": 171,
-    "memberof": "unit/utils.test.js~describe140.describe168",
-    "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe168.it171",
+    "name": "describe169",
+    "testId": 169,
+    "memberof": "unit/utils.test.js~describe141",
+    "testDepth": 1,
+    "longname": "unit/utils.test.js~describe141.describe169",
     "access": null,
-    "description": "should split \"/foo\"",
-    "lineNumber": 129
+    "description": "splitPath",
+    "lineNumber": 120
   },
   {
     "__docId__": 323,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it172",
-    "testId": 172,
-    "memberof": "unit/utils.test.js~describe140.describe168",
+    "name": "it170",
+    "testId": 170,
+    "memberof": "unit/utils.test.js~describe141.describe169",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe168.it172",
+    "longname": "unit/utils.test.js~describe141.describe169.it170",
     "access": null,
-    "description": "should split \"/foo/bar\"",
-    "lineNumber": 133
+    "description": "should split \"/\"",
+    "lineNumber": 121
   },
   {
     "__docId__": 324,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it173",
-    "testId": 173,
-    "memberof": "unit/utils.test.js~describe140.describe168",
+    "name": "it171",
+    "testId": 171,
+    "memberof": "unit/utils.test.js~describe141.describe169",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe168.it173",
+    "longname": "unit/utils.test.js~describe141.describe169.it171",
     "access": null,
-    "description": "should split \"/foo/bar/\"",
-    "lineNumber": 137
+    "description": "should split \"foo\"",
+    "lineNumber": 125
   },
   {
     "__docId__": 325,
-    "kind": "testDescribe",
+    "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "describe174",
-    "testId": 174,
-    "memberof": "unit/utils.test.js~describe140",
-    "testDepth": 1,
-    "longname": "unit/utils.test.js~describe140.describe174",
+    "name": "it172",
+    "testId": 172,
+    "memberof": "unit/utils.test.js~describe141.describe169",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe141.describe169.it172",
     "access": null,
-    "description": "forEach",
-    "lineNumber": 142
+    "description": "should split \"/foo\"",
+    "lineNumber": 129
   },
   {
     "__docId__": 326,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it175",
-    "testId": 175,
-    "memberof": "unit/utils.test.js~describe140.describe174",
+    "name": "it173",
+    "testId": 173,
+    "memberof": "unit/utils.test.js~describe141.describe169",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe174.it175",
+    "longname": "unit/utils.test.js~describe141.describe169.it173",
     "access": null,
-    "description": "should iterate over an object",
-    "lineNumber": 143
+    "description": "should split \"/foo/bar\"",
+    "lineNumber": 133
   },
   {
     "__docId__": 327,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it176",
-    "testId": 176,
-    "memberof": "unit/utils.test.js~describe140.describe174",
+    "name": "it174",
+    "testId": 174,
+    "memberof": "unit/utils.test.js~describe141.describe169",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe174.it176",
+    "longname": "unit/utils.test.js~describe141.describe169.it174",
     "access": null,
-    "description": "should iterate over an array",
-    "lineNumber": 169
+    "description": "should split \"/foo/bar/\"",
+    "lineNumber": 137
   },
   {
     "__docId__": 328,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "describe177",
-    "testId": 177,
-    "memberof": "unit/utils.test.js~describe140",
+    "name": "describe175",
+    "testId": 175,
+    "memberof": "unit/utils.test.js~describe141",
     "testDepth": 1,
-    "longname": "unit/utils.test.js~describe140.describe177",
+    "longname": "unit/utils.test.js~describe141.describe175",
     "access": null,
-    "description": "setIn",
-    "lineNumber": 193
+    "description": "forEach",
+    "lineNumber": 142
   },
   {
     "__docId__": 329,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it178",
-    "testId": 178,
-    "memberof": "unit/utils.test.js~describe140.describe177",
+    "name": "it176",
+    "testId": 176,
+    "memberof": "unit/utils.test.js~describe141.describe175",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe177.it178",
+    "longname": "unit/utils.test.js~describe141.describe175.it176",
     "access": null,
-    "description": "should set value with short path",
-    "lineNumber": 194
+    "description": "should iterate over an object",
+    "lineNumber": 143
   },
   {
     "__docId__": 330,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it179",
-    "testId": 179,
-    "memberof": "unit/utils.test.js~describe140.describe177",
+    "name": "it177",
+    "testId": 177,
+    "memberof": "unit/utils.test.js~describe141.describe175",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe177.it179",
+    "longname": "unit/utils.test.js~describe141.describe175.it177",
     "access": null,
-    "description": "should set value with long path",
-    "lineNumber": 202
+    "description": "should iterate over an array",
+    "lineNumber": 169
   },
   {
     "__docId__": 331,
     "kind": "testDescribe",
     "static": true,
     "variation": null,
-    "name": "describe180",
-    "testId": 180,
-    "memberof": "unit/utils.test.js~describe140",
+    "name": "describe178",
+    "testId": 178,
+    "memberof": "unit/utils.test.js~describe141",
     "testDepth": 1,
-    "longname": "unit/utils.test.js~describe140.describe180",
+    "longname": "unit/utils.test.js~describe141.describe178",
     "access": null,
-    "description": "getIn",
-    "lineNumber": 214
+    "description": "setIn",
+    "lineNumber": 193
   },
   {
     "__docId__": 332,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it181",
-    "testId": 181,
-    "memberof": "unit/utils.test.js~describe140.describe180",
+    "name": "it179",
+    "testId": 179,
+    "memberof": "unit/utils.test.js~describe141.describe178",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe180.it181",
+    "longname": "unit/utils.test.js~describe141.describe178.it179",
     "access": null,
-    "description": "should get value with short path",
-    "lineNumber": 215
+    "description": "should set value with short path",
+    "lineNumber": 194
   },
   {
     "__docId__": 333,
     "kind": "testIt",
     "static": true,
     "variation": null,
-    "name": "it182",
-    "testId": 182,
-    "memberof": "unit/utils.test.js~describe140.describe180",
+    "name": "it180",
+    "testId": 180,
+    "memberof": "unit/utils.test.js~describe141.describe178",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe180.it182",
+    "longname": "unit/utils.test.js~describe141.describe178.it180",
     "access": null,
-    "description": "should get value with long path",
-    "lineNumber": 223
+    "description": "should set value with long path",
+    "lineNumber": 202
   },
   {
     "__docId__": 334,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe181",
+    "testId": 181,
+    "memberof": "unit/utils.test.js~describe141",
+    "testDepth": 1,
+    "longname": "unit/utils.test.js~describe141.describe181",
+    "access": null,
+    "description": "getIn",
+    "lineNumber": 214
+  },
+  {
+    "__docId__": 335,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it182",
+    "testId": 182,
+    "memberof": "unit/utils.test.js~describe141.describe181",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe141.describe181.it182",
+    "access": null,
+    "description": "should get value with short path",
+    "lineNumber": 215
+  },
+  {
+    "__docId__": 336,
     "kind": "testIt",
     "static": true,
     "variation": null,
     "name": "it183",
     "testId": 183,
-    "memberof": "unit/utils.test.js~describe140.describe180",
+    "memberof": "unit/utils.test.js~describe141.describe181",
     "testDepth": 2,
-    "longname": "unit/utils.test.js~describe140.describe180.it183",
+    "longname": "unit/utils.test.js~describe141.describe181.it183",
+    "access": null,
+    "description": "should get value with long path",
+    "lineNumber": 223
+  },
+  {
+    "__docId__": 337,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it184",
+    "testId": 184,
+    "memberof": "unit/utils.test.js~describe141.describe181",
+    "testDepth": 2,
+    "longname": "unit/utils.test.js~describe141.describe181.it184",
     "access": null,
     "description": "should return null when there is no value",
     "lineNumber": 231

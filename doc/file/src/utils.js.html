@@ -39,6 +39,8 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/storage.js~Storage.html">Storage</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-createPathMap">createPathMap</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-create">create</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-filter">filter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-find">find</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-forEach">forEach</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getIn">getIn</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hasIn">hasIn</a></span></span></li>
@@ -188,6 +190,41 @@ export function forEach(collection, iteratee, context = this) {
             }
         }
     }
+}
+
+export function find(collection, iteratee) {
+    let result = null;
+
+    if (!isFunction(iteratee)) {
+        return result;
+    }
+
+    forEach(collection, (v, k) =&gt; {
+        if (iteratee(v, k) === true) {
+            result = v;
+            return false;
+        }
+
+        return true;
+    });
+
+    return result;
+}
+
+export function filter(collection, iteratee) {
+    const result = [];
+
+    if (!isFunction(iteratee)) {
+        return result;
+    }
+
+    forEach(collection, (v, k) =&gt; {
+        if (iteratee(v, k) === true) {
+            result.push(v);
+        }
+    });
+
+    return result;
 }
 
 export function map(collection, iteratee, context = this) {
