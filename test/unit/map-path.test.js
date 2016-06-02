@@ -90,6 +90,11 @@ describe('map-path', function() {
             {
                 qaz: 'wsx'
             },
+            {
+                system: [
+                    'process'
+                ]
+            },
             [
                 'edc'
             ]
@@ -97,10 +102,18 @@ describe('map-path', function() {
 
         expect(isFunction(result.foo), 'result.foo').to.be.true;
         expect(result.foo(), 'result.foo()').to.eql('foo');
+
         expect(isFunction(result.wsx), 'result.wsx').to.be.true;
         expect(result.wsx(), 'result.wsx()').to.eql('wsx');
+
         expect(isFunction(result.edc), 'result.edc').to.be.true;
         expect(result.edc(), 'result.edc()').to.eql('edc');
+
+        expect(isFunction(result.system), 'result.system').to.be.true;
+        expect(result.system(), 'result.system()').to.eql('system');
+
+        expect(isFunction(result.system.process), 'result.system.process').to.be.true;
+        expect(result.system.process(), 'result.system.process()').to.eql('system/process');
     });
 
     it('should resolve array of paths', () => {
