@@ -63,10 +63,8 @@ function uniqueNodes(arr){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _namespace = require('./namespace');
 
@@ -86,11 +84,13 @@ var _mapPath2 = _interopRequireDefault(_mapPath);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
 
 /**
  * Creates a new Container.
@@ -99,39 +99,37 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 
 var Container = function (_Namespace) {
-  _inherits(Container, _Namespace);
+    _inherits(Container, _Namespace);
 
-  /** @constructs
-   * @param {string} separator - Namespace separator. Optional. Default '/'.
-   */
+    /** @constructs
+     * @param {string} separator - Namespace separator. Optional. Default '/'.
+     */
 
-  function Container() {
-    var separator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
+    function Container() {
+        var separator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
 
-    _classCallCheck(this, Container);
+        _classCallCheck(this, Container);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Container).call(this, separator, '', new _storage2.default(separator)));
+        var _this = _possibleConstructorReturn(this, _Namespace.call(this, separator, '', new _storage2.default(separator)));
 
-    _this._resolver = new _resolver2.default(_this._storage);
-    return _this;
-  }
-
-  /**
-   * Determines whether a module with passed path exists.
-   * @param {string} path - Module's path.
-   * @return {boolean} Value that determines whether a module with passed path exists.
-   */
-
-  /**
-   * Converts object/array to a function chain that's help to use namespaces.
-   */
-
-
-  _createClass(Container, [{
-    key: 'contains',
-    value: function contains(path) {
-      return this._storage.contains(path);
+        _this._resolver = new _resolver2.default(_this._storage);
+        return _this;
     }
+
+    /**
+     * Determines whether a module with passed path exists.
+     * @param {string} path - Module's path.
+     * @return {boolean} Value that determines whether a module with passed path exists.
+     */
+
+    /**
+     * Converts object/array to a function chain that's help to use namespaces.
+     */
+
+
+    Container.prototype.contains = function contains(path) {
+        return this._storage.contains(path);
+    };
 
     /**
      * Resolve a module.
@@ -139,11 +137,10 @@ var Container = function (_Namespace) {
      * @returns {Module} new Module.
      */
 
-  }, {
-    key: 'resolve',
-    value: function resolve(path) {
-      return this._resolver.resolve(path);
-    }
+
+    Container.prototype.resolve = function resolve(path) {
+        return this._resolver.resolve(path);
+    };
 
     /**
      * Resolves all modules from particular namespace.
@@ -151,14 +148,12 @@ var Container = function (_Namespace) {
      * @returns {Map<string, any>} Map of module values, where key is module name.
      */
 
-  }, {
-    key: 'resolveAll',
-    value: function resolveAll(namespace) {
-      return this._resolver.resolveAll(namespace);
-    }
-  }]);
 
-  return Container;
+    Container.prototype.resolveAll = function resolveAll(namespace) {
+        return this._resolver.resolveAll(namespace);
+    };
+
+    return Container;
 }(_namespace2.default);
 
 Container.map = _mapPath2.default;
@@ -248,8 +243,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -276,77 +269,69 @@ var Module = function () {
      */
 
 
-    _createClass(Module, [{
-        key: 'getNamespace',
-        value: function getNamespace() {
-            return this._namespace;
+    Module.prototype.getNamespace = function getNamespace() {
+        return this._namespace;
+    };
+
+    /**
+     * Returns module name.
+     * @returns {string} Module name.
+     */
+
+
+    Module.prototype.getName = function getName() {
+        return this._name;
+    };
+
+    /**
+     * Returns a list of module dependencies.
+     * @returns {(Array<string>|undefined)} List of module dependencies.
+     */
+
+
+    Module.prototype.getDependencies = function getDependencies() {
+        return this._dependencies;
+    };
+
+    /**
+     * Returns initialized module value.
+     * @returns {any} Modules value.
+     * @throws {Error} Throws error if modules is not initialized.
+     */
+
+
+    Module.prototype.getValue = function getValue() {
+        if (!this.isInitialized()) {
+            throw new Error('Module is not initialized!');
         }
 
-        /**
-         * Returns module name.
-         * @returns {string} Module name.
-         */
+        return this._value();
+    };
 
-    }, {
-        key: 'getName',
-        value: function getName() {
-            return this._name;
+    /**
+     * Returns value that determines whether module is initialized.
+     * @returns {boolean} Value that determines whether module is initialized.
+     */
+
+
+    Module.prototype.isInitialized = function isInitialized() {
+        return this._isInitialized;
+    };
+
+    /**
+     * Initializes module.
+     * @throws {Error} Throws error if modules is already initialized.
+     */
+
+
+    Module.prototype.initialize = function initialize(dependencies) {
+        if (this.isInitialized()) {
+            throw new Error('Module has been already initialized!');
         }
 
-        /**
-         * Returns a list of module dependencies.
-         * @returns {(Array<string>|undefined)} List of module dependencies.
-         */
-
-    }, {
-        key: 'getDependencies',
-        value: function getDependencies() {
-            return this._dependencies;
-        }
-
-        /**
-         * Returns initialized module value.
-         * @returns {any} Modules value.
-         * @throws {Error} Throws error if modules is not initialized.
-         */
-
-    }, {
-        key: 'getValue',
-        value: function getValue() {
-            if (!this.isInitialized()) {
-                throw new Error('Module is not initialized!');
-            }
-
-            return this._value();
-        }
-
-        /**
-         * Returns value that determines whether module is initialized.
-         * @returns {boolean} Value that determines whether module is initialized.
-         */
-
-    }, {
-        key: 'isInitialized',
-        value: function isInitialized() {
-            return this._isInitialized;
-        }
-
-        /**
-         * Initializes module.
-         * @throws {Error} Throws error if modules is already initialized.
-         */
-
-    }, {
-        key: 'initialize',
-        value: function initialize(dependencies) {
-            if (this.isInitialized()) {
-                throw new Error('Module has been already initialized!');
-            }
-
-            this._value = this._initialize(dependencies);
-            this._isInitialized = true;
-        }
-    }]);
+        this._value = this._initialize(dependencies);
+        this._isInitialized = true;
+    };
 
     return Module;
 }();
@@ -359,8 +344,6 @@ exports.default = Module;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _utils = require('./utils');
 
@@ -406,126 +389,118 @@ var Namespace = function () {
      */
 
 
-    _createClass(Namespace, [{
-        key: 'getName',
-        value: function getName() {
-            return this._name;
-        }
+    Namespace.prototype.getName = function getName() {
+        return this._name;
+    };
 
-        /**
-         * Returns a module namespace.
-         * @param {string} name - Module namespace. Optional.
-         * @returns {Namespace} Module namespace.
-         */
+    /**
+     * Returns a module namespace.
+     * @param {string} name - Module namespace. Optional.
+     * @returns {Namespace} Module namespace.
+     */
 
-    }, {
-        key: 'namespace',
-        value: function namespace(name) {
-            return new Namespace(this._separator, (0, _utils.joinPath)(this._separator, this._name, name), this._storage);
-        }
 
-        /**
-         * Register a value, such as a string, a number, an array, an object or a function.
-         * @param {string} name - Module name.
-         * @param {(string|number|object|array|function)} definition - Module value.
-         * @returns {function} Value.
-         */
+    Namespace.prototype.namespace = function namespace(name) {
+        return new Namespace(this._separator, (0, _utils.joinPath)(this._separator, this._name, name), this._storage);
+    };
 
-    }, {
-        key: 'const',
-        value: function _const(name, definition) {
-            var args = (0, _utils.parseArgs)(name, definition);
+    /**
+     * Register a value, such as a string, a number, an array, an object or a function.
+     * @param {string} name - Module name.
+     * @param {(string|number|object|array|function)} definition - Module value.
+     * @returns {function} Value.
+     */
 
-            this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize() {
+
+    Namespace.prototype.const = function _const(name, definition) {
+        var args = (0, _utils.parseArgs)(name, definition);
+
+        this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize() {
+            return function factory() {
+                return args.definition;
+            };
+        }));
+    };
+
+    /**
+     * Register a value, such as a string, a number, an array, an object or a constructor.
+     * Note: If passed value is function type, it will be treated as constructor
+     * and every time when it's injected, new instance will be created.
+     * @param {string} name - Module name.
+     * @param {array} dependencies - Module dependencies. Optional.
+     * @param {(string|number|object|array|function)} definition - Module value.
+     * @returns {function} Value factory.
+     */
+
+
+    Namespace.prototype.value = function value(name, dependencies, definition) {
+        var args = (0, _utils.parseArgs)(name, dependencies, definition);
+
+        this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
+            // instances, simple types
+            if (!(0, _utils.isFunction)(args.definition)) {
                 return function factory() {
                     return args.definition;
                 };
-            }));
-        }
-
-        /**
-         * Register a value, such as a string, a number, an array, an object or a constructor.
-         * Note: If passed value is function type, it will be treated as constructor
-         * and every time when it's injected, new instance will be created.
-         * @param {string} name - Module name.
-         * @param {array} dependencies - Module dependencies. Optional.
-         * @param {(string|number|object|array|function)} definition - Module value.
-         * @returns {function} Value factory.
-         */
-
-    }, {
-        key: 'value',
-        value: function value(name, dependencies, definition) {
-            var args = (0, _utils.parseArgs)(name, dependencies, definition);
-
-            this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
-                // instances, simple types
-                if (!(0, _utils.isFunction)(args.definition)) {
-                    return function factory() {
-                        return args.definition;
-                    };
-                }
-
-                return function factory() {
-                    return (0, _utils.create)(args.definition, resolved);
-                };
-            }));
-        }
-
-        /**
-         * Register a service constructor, which will be invoked with `new` to create the service instance.
-         * Any type which was registered as a service is singleton.
-         * @param {string} name - Module name.
-         * @param {array} dependencies - Module dependencies. Optional.
-         * @param {function} definition - Module constructor that will be instantiated.
-         * @returns {function} Value factory.
-         */
-
-    }, {
-        key: 'service',
-        value: function service(name, dependencies, definition) {
-            var args = (0, _utils.parseArgs)(name, dependencies, definition);
-
-            if (!(0, _utils.isFunction)(args.definition)) {
-                throw new Error('Service supports only constructors.');
             }
 
-            this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
-                var value = (0, _utils.create)(args.definition, resolved);
+            return function factory() {
+                return (0, _utils.create)(args.definition, resolved);
+            };
+        }));
+    };
 
-                return function factory() {
-                    return value;
-                };
-            }));
+    /**
+     * Register a service constructor, which will be invoked with `new` to create the service instance.
+     * Any type which was registered as a service is singleton.
+     * @param {string} name - Module name.
+     * @param {array} dependencies - Module dependencies. Optional.
+     * @param {function} definition - Module constructor that will be instantiated.
+     * @returns {function} Value factory.
+     */
+
+
+    Namespace.prototype.service = function service(name, dependencies, definition) {
+        var args = (0, _utils.parseArgs)(name, dependencies, definition);
+
+        if (!(0, _utils.isFunction)(args.definition)) {
+            throw new Error('Service supports only constructors.');
         }
 
-        /**
-         * Register a service factory, which will be called to return the service instance.
-         * Any function's value will be registered as a singleton.
-         * @param {string} name - Module name.
-         * @param {array} dependencies - Module dependencies. Optional.
-         * @param {function} definition - Module factory.
-         * @returns {function} Value factory.
-         */
+        this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
+            var value = (0, _utils.create)(args.definition, resolved);
 
-    }, {
-        key: 'factory',
-        value: function factory(name, dependencies, definition) {
-            var args = (0, _utils.parseArgs)(name, dependencies, definition);
+            return function factory() {
+                return value;
+            };
+        }));
+    };
 
-            if (!(0, _utils.isFunction)(args.definition)) {
-                throw new Error('Factory supports only functions.');
-            }
+    /**
+     * Register a service factory, which will be called to return the service instance.
+     * Any function's value will be registered as a singleton.
+     * @param {string} name - Module name.
+     * @param {array} dependencies - Module dependencies. Optional.
+     * @param {function} definition - Module factory.
+     * @returns {function} Value factory.
+     */
 
-            this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
-                var value = args.definition.apply(args, _toConsumableArray(resolved));
 
-                return function factory() {
-                    return value;
-                };
-            }));
+    Namespace.prototype.factory = function factory(name, dependencies, definition) {
+        var args = (0, _utils.parseArgs)(name, dependencies, definition);
+
+        if (!(0, _utils.isFunction)(args.definition)) {
+            throw new Error('Factory supports only functions.');
         }
-    }]);
+
+        this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
+            var value = args.definition.apply(args, _toConsumableArray(resolved));
+
+            return function factory() {
+                return value;
+            };
+        }));
+    };
 
     return Namespace;
 }();
@@ -538,8 +513,6 @@ exports.default = Namespace;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _toposort = require('toposort');
 
@@ -579,85 +552,81 @@ var Resolver = function () {
      */
 
 
-    _createClass(Resolver, [{
-        key: 'resolve',
-        value: function resolve(path) {
-            var _this = this;
+    Resolver.prototype.resolve = function resolve(path) {
+        var _this = this;
 
-            var graph = [];
-            var chain = [];
-            var checkCircularDependency = function checkCircularDependency(targetPath, dependencies) {
-                (0, _utils.forEach)(dependencies, function (i) {
-                    return graph.push([targetPath, i]);
-                });
-                chain.push.apply(chain, _toConsumableArray(dependencies));
-                try {
-                    (0, _toposort2.default)(graph);
-                } catch (e) {
-                    throw new ReferenceError('Circular dependency: ' + path + ' -> ' + chain.join(' -> '));
-                }
-            };
-            var resolveModule = function resolveModule(targetPath) {
-                var module = _this._storage.getItem(targetPath);
+        var graph = [];
+        var chain = [];
+        var checkCircularDependency = function checkCircularDependency(targetPath, dependencies) {
+            (0, _utils.forEach)(dependencies, function (i) {
+                return graph.push([targetPath, i]);
+            });
+            chain.push.apply(chain, _toConsumableArray(dependencies));
+            try {
+                (0, _toposort2.default)(graph);
+            } catch (e) {
+                throw new ReferenceError('Circular dependency: ' + path + ' -> ' + chain.join(' -> '));
+            }
+        };
+        var resolveModule = function resolveModule(targetPath) {
+            var module = _this._storage.getItem(targetPath);
 
-                if (module.isInitialized()) {
-                    return module.getValue();
-                }
+            if (module.isInitialized()) {
+                return module.getValue();
+            }
 
-                var resolveDependencies = function resolveDependencies(dependencies) {
-                    if ((0, _utils.isArray)(dependencies)) {
-                        checkCircularDependency(targetPath, dependencies);
-                        return (0, _utils.map)(dependencies, function (currentPath) {
-                            if ((0, _utils.isString)(currentPath)) {
-                                return resolveModule(currentPath);
-                            } else if ((0, _utils.isFunction)(currentPath)) {
-                                return currentPath();
-                            }
-
-                            return undefined;
-                        });
-                    }
-
-                    if ((0, _utils.isFunction)(dependencies)) {
-                        var result = dependencies();
-
-                        if (!(0, _utils.isArray)(result)) {
-                            return [result];
+            var resolveDependencies = function resolveDependencies(dependencies) {
+                if ((0, _utils.isArray)(dependencies)) {
+                    checkCircularDependency(targetPath, dependencies);
+                    return (0, _utils.map)(dependencies, function (currentPath) {
+                        if ((0, _utils.isString)(currentPath)) {
+                            return resolveModule(currentPath);
+                        } else if ((0, _utils.isFunction)(currentPath)) {
+                            return currentPath();
                         }
 
-                        return result;
+                        return undefined;
+                    });
+                }
+
+                if ((0, _utils.isFunction)(dependencies)) {
+                    var result = dependencies();
+
+                    if (!(0, _utils.isArray)(result)) {
+                        return [result];
                     }
 
-                    return DEFAULT_DEPENDENCIES;
-                };
+                    return result;
+                }
 
-                module.initialize(resolveDependencies(module.getDependencies()));
-                return module.getValue();
+                return DEFAULT_DEPENDENCIES;
             };
 
-            return resolveModule(path);
-        }
+            module.initialize(resolveDependencies(module.getDependencies()));
+            return module.getValue();
+        };
 
-        /**
-         * Resolves all modules from particular namespace.
-         * @param {string} namespace - Target namespace.
-         * @returns {Map<string, any>} Map of module values, where key is module name.
-         */
+        return resolveModule(path);
+    };
 
-    }, {
-        key: 'resolveAll',
-        value: function resolveAll(namespace) {
-            var _this2 = this;
+    /**
+     * Resolves all modules from particular namespace.
+     * @param {string} namespace - Target namespace.
+     * @returns {Map<string, any>} Map of module values, where key is module name.
+     */
 
-            var result = {};
 
-            this._storage.forEachIn(namespace, function (module, path) {
-                result[module.getName()] = _this2.resolve(path);
-            });
+    Resolver.prototype.resolveAll = function resolveAll(namespace) {
+        var _this2 = this;
 
-            return result;
-        }
-    }]);
+        var result = {};
+
+        this._storage.forEachIn(namespace, function (module, path) {
+            result[module.getName()] = _this2.resolve(path);
+        });
+
+        return result;
+    };
 
     return Resolver;
 }();
@@ -670,8 +639,6 @@ exports.default = Resolver;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _module = require('./module');
 
@@ -717,133 +684,127 @@ var Storage = function () {
      */
 
 
-    _createClass(Storage, [{
-        key: 'addItem',
-        value: function addItem(module) {
-            if (!module) {
-                throw new Error(MISSED_MODULE);
-            }
-
-            if (!(module instanceof _module2.default)) {
-                throw new Error(INVALID_MODULE);
-            }
-
-            var namespace = module.getNamespace();
-
-            if (!(0, _utils.isString)(namespace)) {
-                throw new Error(INVALID_NAMESPACE);
-            }
-
-            var name = module.getName();
-
-            if (!name) {
-                throw new Error(MISSED_MODULE_NAME);
-            }
-
-            if (!(0, _utils.isString)(name)) {
-                throw new Error(INVALID_MODULE_NAME);
-            }
-
-            if (!(0, _utils.isValidName)(this._separator, name)) {
-                throw new Error(INVALID_MODULE_PATH + ' Module is now alllowed to contain namespace separators.');
-            }
-
-            var registry = this._namespaces[namespace];
-
-            if (!registry) {
-                registry = {};
-                this._namespaces[namespace] = registry;
-            }
-
-            if (registry.hasOwnProperty(name)) {
-                throw new Error(name + ' is already registered.');
-            }
-
-            registry[name] = module;
+    Storage.prototype.addItem = function addItem(module) {
+        if (!module) {
+            throw new Error(MISSED_MODULE);
         }
 
-        /**
-         * Tries to find a module with passed path.
-         * @param {string} path - Module's path.
-         * @return {Module} found module.
-         * @throws {Error} Throws error in module wasn't found.
-         */
-
-    }, {
-        key: 'getItem',
-        value: function getItem(path) {
-            if (!(0, _utils.isString)(path)) {
-                throw new Error(INVALID_MODULE_PATH);
-            }
-
-            var parts = (0, _utils.splitPath)(this._separator, path);
-            var namespace = this._namespaces[parts.namespace];
-
-            if (!namespace) {
-                throw new Error(MODULE_NOT_FOUND + ': ' + path + '!');
-            }
-
-            var module = namespace[parts.name];
-
-            if (!module) {
-                throw new Error(MODULE_NOT_FOUND + ': ' + path + '!');
-            }
-
-            return module;
+        if (!(module instanceof _module2.default)) {
+            throw new Error(INVALID_MODULE);
         }
 
-        /**
-         * Determines whether a module with passed path exists.
-         * @param {string} path - Module's path.
-         * @return {boolean} Value that determines whether a module with passed path exists.
-         */
+        var namespace = module.getNamespace();
 
-    }, {
-        key: 'contains',
-        value: function contains(path) {
-            if (!(0, _utils.isString)(path)) {
-                throw new Error(INVALID_MODULE_PATH);
-            }
-
-            var parts = (0, _utils.splitPath)(this._separator, path);
-            var namespace = this._namespaces[parts.namespace];
-
-            if (!namespace) {
-                return false;
-            }
-
-            var module = namespace[parts.name];
-
-            if (!module) {
-                return false;
-            }
-
-            return true;
+        if (!(0, _utils.isString)(namespace)) {
+            throw new Error(INVALID_NAMESPACE);
         }
-    }, {
-        key: 'forEachIn',
-        value: function forEachIn(namespace, callback) {
-            if ((0, _utils.isNullOrUndefined)(namespace)) {
-                throw new Error(MISSED_NAMESPACE);
-            }
 
-            if (!(0, _utils.isFunction)(callback)) {
-                throw new Error(MISSED_CALLBACK);
-            }
+        var name = module.getName();
 
-            var registry = this._namespaces[namespace];
+        if (!name) {
+            throw new Error(MISSED_MODULE_NAME);
+        }
 
-            if (!registry) {
-                throw new Error(NAMESPACE_NOT_FOUND + ': ' + namespace + '!');
-            }
+        if (!(0, _utils.isString)(name)) {
+            throw new Error(INVALID_MODULE_NAME);
+        }
 
-            for (var name in registry) {
-                if (registry.hasOwnProperty(name) && registry[name]) {
-                    callback(registry[name], (0, _utils.joinPath)(this._separator, namespace, name));
-                }
+        if (!(0, _utils.isValidName)(this._separator, name)) {
+            throw new Error(INVALID_MODULE_PATH + ' Module is now alllowed to contain namespace separators.');
+        }
+
+        var registry = this._namespaces[namespace];
+
+        if (!registry) {
+            registry = {};
+            this._namespaces[namespace] = registry;
+        }
+
+        if (registry.hasOwnProperty(name)) {
+            throw new Error(name + ' is already registered.');
+        }
+
+        registry[name] = module;
+    };
+
+    /**
+     * Tries to find a module with passed path.
+     * @param {string} path - Module's path.
+     * @return {Module} found module.
+     * @throws {Error} Throws error in module wasn't found.
+     */
+
+
+    Storage.prototype.getItem = function getItem(path) {
+        if (!(0, _utils.isString)(path)) {
+            throw new Error(INVALID_MODULE_PATH);
+        }
+
+        var parts = (0, _utils.splitPath)(this._separator, path);
+        var namespace = this._namespaces[parts.namespace];
+
+        if (!namespace) {
+            throw new Error(MODULE_NOT_FOUND + ': ' + path + '!');
+        }
+
+        var module = namespace[parts.name];
+
+        if (!module) {
+            throw new Error(MODULE_NOT_FOUND + ': ' + path + '!');
+        }
+
+        return module;
+    };
+
+    /**
+     * Determines whether a module with passed path exists.
+     * @param {string} path - Module's path.
+     * @return {boolean} Value that determines whether a module with passed path exists.
+     */
+
+
+    Storage.prototype.contains = function contains(path) {
+        if (!(0, _utils.isString)(path)) {
+            throw new Error(INVALID_MODULE_PATH);
+        }
+
+        var parts = (0, _utils.splitPath)(this._separator, path);
+        var namespace = this._namespaces[parts.namespace];
+
+        if (!namespace) {
+            return false;
+        }
+
+        var module = namespace[parts.name];
+
+        if (!module) {
+            return false;
+        }
+
+        return true;
+    };
+
+    Storage.prototype.forEachIn = function forEachIn(namespace, callback) {
+        if ((0, _utils.isNullOrUndefined)(namespace)) {
+            throw new Error(MISSED_NAMESPACE);
+        }
+
+        if (!(0, _utils.isFunction)(callback)) {
+            throw new Error(MISSED_CALLBACK);
+        }
+
+        var registry = this._namespaces[namespace];
+
+        if (!registry) {
+            throw new Error(NAMESPACE_NOT_FOUND + ': ' + namespace + '!');
+        }
+
+        for (var name in registry) {
+            if (registry.hasOwnProperty(name) && registry[name]) {
+                callback(registry[name], (0, _utils.joinPath)(this._separator, namespace, name));
             }
         }
-    }]);
+    };
 
     return Storage;
 }();
