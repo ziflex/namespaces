@@ -38,7 +38,11 @@ export default class Namespace {
      * @returns {Namespace} Module namespace.
      */
     namespace(name) {
-        return new Namespace(this._separator, joinPath(this._separator, this._name, name), this._storage);
+        return new Namespace(
+            this._separator,
+            joinPath(this._separator, this._name, name),
+            this._storage
+        );
     }
 
     /**
@@ -50,11 +54,16 @@ export default class Namespace {
     const(name, definition) {
         const args = parseArgs(name, definition);
 
-        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize() {
-            return function factory() {
-                return args.definition;
-            };
-        }));
+        this._storage.addItem(new Module(
+            this._name,
+            args.name,
+            args.dependencies,
+            function initialize() {
+                return function factory() {
+                    return args.definition;
+                };
+            }
+        ));
     }
 
     /**
@@ -69,22 +78,28 @@ export default class Namespace {
     value(name, dependencies, definition) {
         const args = parseArgs(name, dependencies, definition);
 
-        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {
-            // instances, simple types
-            if (!isFunction(args.definition)) {
+        this._storage.addItem(new Module(
+            this._name,
+            args.name,
+            args.dependencies,
+            function initialize(resolved) {
+                // instances, simple types
+                if (!isFunction(args.definition)) {
+                    return function factory() {
+                        return args.definition;
+                    };
+                }
+
                 return function factory() {
-                    return args.definition;
+                    return create(args.definition, resolved);
                 };
             }
-
-            return function factory() {
-                return create(args.definition, resolved);
-            };
-        }));
+        ));
     }
 
     /**
-     * Register a service constructor, which will be invoked with `new` to create the service instance.
+     * Register a service constructor,
+     * which will be invoked with `new` to create the service instance.
      * Any type which was registered as a service is singleton.
      * @param {string} name - Module name.
      * @param {array} dependencies - Module dependencies. Optional.
@@ -95,16 +110,22 @@ export default class Namespace {
         const args = parseArgs(name, dependencies, definition);
 
         if (!isFunction(args.definition)) {
-            throw new Error(`Service supports only constructors.`);
+            const path = joinPath(this._separator, this._name, name);
+            throw new Error(`Service supports only constructors: ${path}`);
         }
 
-        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {
-            const value = create(args.definition, resolved);
+        this._storage.addItem(new Module(
+            this._name,
+            args.name,
+            args.dependencies,
+            function initialize(resolved) {
+                const value = create(args.definition, resolved);
 
-            return function factory() {
-                return value;
-            };
-        }));
+                return function factory() {
+                    return value;
+                };
+            }
+        ));
     }
 
     /**
@@ -119,15 +140,21 @@ export default class Namespace {
         const args = parseArgs(name, dependencies, definition);
 
         if (!isFunction(args.definition)) {
-            throw new Error(`Factory supports only functions.`);
+            const path = joinPath(this._separator, this._name, name);
+            throw new Error(`Factory supports only functions: ${path}`);
         }
 
-        this._storage.addItem(new Module(this._name, args.name, args.dependencies, function initialize(resolved) {
-            const value = args.definition(...resolved);
+        this._storage.addItem(new Module(
+            this._name,
+            args.name,
+            args.dependencies,
+            function initialize(resolved) {
+                const value = args.definition(...resolved);
 
-            return function factory() {
-                return value;
-            };
-        }));
+                return function factory() {
+                    return value;
+                };
+            }
+        ));
     }
 }

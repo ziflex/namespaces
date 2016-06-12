@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.4
+### Fixed
+* Fixed build for IE
+
 ## 0.5.3
 ### Fixed
 * Circular dependency check

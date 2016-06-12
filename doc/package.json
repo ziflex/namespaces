@@ -1,6 +1,6 @@
 {
   "name": "namespaces-js",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Angular-flavored DI container.",
   "main": "lib/index.js",
   "directories": {
@@ -25,7 +25,7 @@
     "package:npm": "npm run lint && npm run clean:npm && npm run build:npm",
     "package:bower": "npm run lint && npm run clean:bower && mkdir -p dist && npm run build:bower",
     "prepublish": "npm run package",
-    "lint": "eslint src test/unit --config ./.eslintrc",
+    "lint": "eslint -c ./.eslintrc.json src",
     "cover": "mochify --recursive ./test/unit --transform babelify  --reporter spec --plugin [ mochify-istanbul --report html --report text --instrumenter babel-istanbul --exclude '**/test/**/*' --exclude '**/node_modules/**/*' ] ",
     "test": "mochify --recursive ./test/unit --transform babelify  --reporter spec"
   },
@@ -38,25 +38,27 @@
     "angular"
   ],
   "devDependencies": {
-    "babel-cli": "^6.5.1",
-    "babel-eslint": "^5.0.0",
-    "babel-istanbul": "^0.6.0",
-    "babel-preset-es2015": "^6.5.0",
+    "babel-cli": "^6.10.1",
+    "babel-eslint": "^6.0.4",
+    "babel-istanbul": "^0.8.0",
+    "babel-preset-es2015-ie": "^6.6.2",
     "babel-preset-stage-0": "^6.5.0",
-    "babelify": "^7.2.0",
-    "browserify": "^13.0.0",
-    "chai": "^3.3.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.0.1",
+    "chai": "^3.5.0",
     "chai-spies": "^0.7.1",
-    "esdoc": "^0.4.5",
+    "esdoc": "^0.4.7",
     "esdoc-es7-plugin": "0.0.3",
-    "eslint": "^1.6.0",
-    "eslint-config-airbnb": "^0.1.0",
-    "eslint-plugin-mocha": "^1.0.0",
-    "mocha": "^2.3.3",
-    "mochify": "^2.14.3",
-    "mochify-istanbul": "^2.3.0",
-    "rimraf": "2.4.3",
-    "sinon": "^1.17.3"
+    "eslint": "^2.12.0",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.8.1",
+    "eslint-plugin-jsx-a11y": "^1.4.2",
+    "eslint-plugin-mocha": "^3.0.0",
+    "mocha": "^2.5.3",
+    "mochify": "^2.18.0",
+    "mochify-istanbul": "^2.4.1",
+    "rimraf": "2.5.2",
+    "sinon": "^1.17.4"
   },
   "browserify": {
     "transform": [

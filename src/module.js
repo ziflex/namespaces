@@ -64,7 +64,9 @@ export default class Module {
      */
     initialize(dependencies) {
         if (this.isInitialized()) {
-            throw new Error(`Module has been already initialized!`);
+            throw new Error(
+                `Module has been already initialized: ${this._name} @ ${this._namespace}`
+            );
         }
 
         this._value = this._initialize(dependencies);

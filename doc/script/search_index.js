@@ -1597,7 +1597,7 @@ window.esdocSearchIndex = [
   ],
   [
     "",
-    "test-file/unit/map-path.test.js.html#lineNumber106",
+    "test-file/unit/map-path.test.js.html#lineNumber119",
     "map-path should resolve array of paths",
     "test"
   ],

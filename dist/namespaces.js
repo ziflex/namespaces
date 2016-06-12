@@ -63,7 +63,7 @@ function uniqueNodes(arr){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _namespace = require('./namespace');
@@ -99,61 +99,61 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 
 var Container = function (_Namespace) {
-    _inherits(Container, _Namespace);
+  _inherits(Container, _Namespace);
 
-    /** @constructs
-     * @param {string} separator - Namespace separator. Optional. Default '/'.
-     */
+  /** @constructs
+   * @param {string} separator - Namespace separator. Optional. Default '/'.
+   */
 
-    function Container() {
-        var separator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
+  function Container() {
+    var separator = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
 
-        _classCallCheck(this, Container);
+    _classCallCheck(this, Container);
 
-        var _this = _possibleConstructorReturn(this, _Namespace.call(this, separator, '', new _storage2.default(separator)));
+    var _this = _possibleConstructorReturn(this, _Namespace.call(this, separator, '', new _storage2.default(separator)));
 
-        _this._resolver = new _resolver2.default(_this._storage);
-        return _this;
-    }
+    _this._resolver = new _resolver2.default(_this._storage);
+    return _this;
+  }
 
-    /**
-     * Determines whether a module with passed path exists.
-     * @param {string} path - Module's path.
-     * @return {boolean} Value that determines whether a module with passed path exists.
-     */
+  /**
+   * Determines whether a module with passed path exists.
+   * @param {string} path - Module's path.
+   * @return {boolean} Value that determines whether a module with passed path exists.
+   */
 
-    /**
-     * Converts object/array to a function chain that's help to use namespaces.
-     */
-
-
-    Container.prototype.contains = function contains(path) {
-        return this._storage.contains(path);
-    };
-
-    /**
-     * Resolve a module.
-     * @param {string} path - Module namespace.
-     * @returns {Module} new Module.
-     */
+  /**
+   * Converts object/array to a function chain that's help to use namespaces.
+   */
 
 
-    Container.prototype.resolve = function resolve(path) {
-        return this._resolver.resolve(path);
-    };
+  Container.prototype.contains = function contains(path) {
+    return this._storage.contains(path);
+  };
 
-    /**
-     * Resolves all modules from particular namespace.
-     * @param {string} namespace - Target namespace.
-     * @returns {Map<string, any>} Map of module values, where key is module name.
-     */
+  /**
+   * Resolve a module.
+   * @param {string} path - Module namespace.
+   * @returns {Module} new Module.
+   */
 
 
-    Container.prototype.resolveAll = function resolveAll(namespace) {
-        return this._resolver.resolveAll(namespace);
-    };
+  Container.prototype.resolve = function resolve(path) {
+    return this._resolver.resolve(path);
+  };
 
-    return Container;
+  /**
+   * Resolves all modules from particular namespace.
+   * @param {string} namespace - Target namespace.
+   * @returns {Map<string, any>} Map of module values, where key is module name.
+   */
+
+
+  Container.prototype.resolveAll = function resolveAll(namespace) {
+    return this._resolver.resolveAll(namespace);
+  };
+
+  return Container;
 }(_namespace2.default);
 
 Container.map = _mapPath2.default;
@@ -326,7 +326,7 @@ var Module = function () {
 
     Module.prototype.initialize = function initialize(dependencies) {
         if (this.isInitialized()) {
-            throw new Error('Module has been already initialized!');
+            throw new Error('Module has been already initialized: ' + this._name + ' @ ' + this._namespace);
         }
 
         this._value = this._initialize(dependencies);
@@ -451,7 +451,8 @@ var Namespace = function () {
     };
 
     /**
-     * Register a service constructor, which will be invoked with `new` to create the service instance.
+     * Register a service constructor,
+     * which will be invoked with `new` to create the service instance.
      * Any type which was registered as a service is singleton.
      * @param {string} name - Module name.
      * @param {array} dependencies - Module dependencies. Optional.
@@ -464,7 +465,8 @@ var Namespace = function () {
         var args = (0, _utils.parseArgs)(name, dependencies, definition);
 
         if (!(0, _utils.isFunction)(args.definition)) {
-            throw new Error('Service supports only constructors.');
+            var path = (0, _utils.joinPath)(this._separator, this._name, name);
+            throw new Error('Service supports only constructors: ' + path);
         }
 
         this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
@@ -490,7 +492,8 @@ var Namespace = function () {
         var args = (0, _utils.parseArgs)(name, dependencies, definition);
 
         if (!(0, _utils.isFunction)(args.definition)) {
-            throw new Error('Factory supports only functions.');
+            var path = (0, _utils.joinPath)(this._separator, this._name, name);
+            throw new Error('Factory supports only functions: ' + path);
         }
 
         this._storage.addItem(new _module2.default(this._name, args.name, args.dependencies, function initialize(resolved) {
@@ -785,6 +788,8 @@ var Storage = function () {
     };
 
     Storage.prototype.forEachIn = function forEachIn(namespace, callback) {
+        var _this = this;
+
         if ((0, _utils.isNullOrUndefined)(namespace)) {
             throw new Error(MISSED_NAMESPACE);
         }
@@ -799,11 +804,9 @@ var Storage = function () {
             throw new Error(NAMESPACE_NOT_FOUND + ': ' + namespace + '!');
         }
 
-        for (var name in registry) {
-            if (registry.hasOwnProperty(name) && registry[name]) {
-                callback(registry[name], (0, _utils.joinPath)(this._separator, namespace, name));
-            }
-        }
+        (0, _utils.forEach)(registry, function (value, name) {
+            callback(value, (0, _utils.joinPath)(_this._separator, namespace, name));
+        });
     };
 
     return Storage;
@@ -844,6 +847,7 @@ exports.hasIn = hasIn;
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+/* eslint-disable no-restricted-syntax, no-param-reassign */
 var toString = Object.prototype.toString;
 
 function isUndefined(value) {
@@ -1091,6 +1095,8 @@ function getIn(target, path) {
         if (!prop) {
             return false;
         }
+
+        return true;
     });
 
     return result;

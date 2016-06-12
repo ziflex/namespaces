@@ -5,7 +5,8 @@ import {
     isString,
     isNullOrUndefined,
     isFunction,
-    isValidName
+    isValidName,
+    forEach
 } from './utils';
 
 const MISSED_MODULE = 'Missed module!';
@@ -61,7 +62,9 @@ export default class Storage {
         }
 
         if (!isValidName(this._separator, name)) {
-            throw new Error(`${INVALID_MODULE_PATH} Module is now alllowed to contain namespace separators.`);
+            throw new Error(
+                `${INVALID_MODULE_PATH} Module is now alllowed to contain namespace separators.`
+            );
         }
 
         let registry = this._namespaces[namespace];
@@ -146,10 +149,8 @@ export default class Storage {
             throw new Error(`${NAMESPACE_NOT_FOUND}: ${namespace}!`);
         }
 
-        for (const name in registry) {
-            if (registry.hasOwnProperty(name) && registry[name]) {
-                callback(registry[name], joinPath(this._separator, namespace, name));
-            }
-        }
+        forEach(registry, (value, name) => {
+            callback(value, joinPath(this._separator, namespace, name));
+        });
     }
 }

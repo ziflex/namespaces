@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax, no-param-reassign */
 const toString = Object.prototype.toString;
 
 export function isUndefined(value) {
@@ -230,6 +231,8 @@ export function getIn(target, path) {
         if (!prop) {
             return false;
         }
+
+        return true;
     });
 
     return result;
