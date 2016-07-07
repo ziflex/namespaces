@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.5
+### Changed
+* Updated 'npmignore' rules in order to ignore build related files.
+
 ## 0.5.4
 ### Fixed
 * Fixed build for IE
