@@ -1,11 +1,10 @@
-/* eslint-disable no-unused-expressions, func-names  */
-
-import {expect} from 'chai';
+/* eslint-disable no-unused-expressions, func-names, prefer-arrow-callback   */
+import { expect } from 'chai';
 import { isNull, isUndefined } from '../../src/utils';
 import Storage from '../../src/storage';
 import Module from '../../src/module';
 
-describe('Storage', function() {
+describe('Storage', function () {
     let storage = null;
 
     beforeEach(() => {
@@ -162,19 +161,37 @@ describe('Storage', function() {
                 expect(storage.contains('qaz/bar')).to.be.false;
             });
         });
+
+        context('when module name is not passed', () => {
+            it('should throw an error', () => {
+                expect(() => {
+                    storage.contains();
+                }).to.throw(Error);
+            });
+        });
     });
 
     describe('.forEachIn', () => {
-        context('invalid parameters', () => {
-            it('should throw an error when namespace not passed', () => {
-                expect(storage.forEachIn).to.throw;
-            });
+        context('When namespace not passed or not a string', () => {
+            it('should throw an error', () => {
+                expect(() => {
+                    storage.addItem(new Module('foo', 'bar'));
+                    storage.forEachIn(null, () => {});
+                }).to.throw(Error);
 
-            it('should throw an error when callback not passed', () => {
+                expect(() => {
+                    storage.addItem(new Module('foo', 'qaz'));
+                    storage.forEachIn(1, () => {});
+                }, 'namespace is not a string').to.throw(Error);
+            });
+        });
+
+        context('When callback not passed', () => {
+            it('should throw an error ', () => {
                 expect(() => {
                     storage.addItem(new Module('foo', 'bar'));
                     storage.forEachIn('foo');
-                }).to.throw;
+                }).to.throw(Error);
             });
         });
 
@@ -240,7 +257,7 @@ describe('Storage', function() {
                 return s.getItem(`foo${separator}bar`);
             };
 
-            expect(getItem).not.to.throw;
+            expect(getItem).not.to.throw(Error);
             const item = getItem();
             expect(isNull(item) || isUndefined(item)).to.be.not.true;
         });

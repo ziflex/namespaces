@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0
+
+### Changed
+* Dropped Bower support
+
 ## 0.5.5
 ### Changed
 * Updated 'npmignore' rules in order to ignore build related files.

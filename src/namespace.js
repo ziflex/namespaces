@@ -6,6 +6,9 @@ import {
 } from './utils';
 import Module from './module';
 
+const INVALID_CONSTRUCTOR = 'Service supports only constructors';
+const INVALID_FACTORY = 'Factory supports only functions';
+
 /**
  * Creates a new Namespace.
  * @class
@@ -58,7 +61,7 @@ export default class Namespace {
             this._name,
             args.name,
             args.dependencies,
-            function initialize() {
+            () => {
                 return function factory() {
                     return args.definition;
                 };
@@ -82,7 +85,7 @@ export default class Namespace {
             this._name,
             args.name,
             args.dependencies,
-            function initialize(resolved) {
+            (resolved) => {
                 // instances, simple types
                 if (!isFunction(args.definition)) {
                     return function factory() {
@@ -111,14 +114,14 @@ export default class Namespace {
 
         if (!isFunction(args.definition)) {
             const path = joinPath(this._separator, this._name, name);
-            throw new Error(`Service supports only constructors: ${path}`);
+            throw new Error(`${INVALID_CONSTRUCTOR}: ${path}`);
         }
 
         this._storage.addItem(new Module(
             this._name,
             args.name,
             args.dependencies,
-            function initialize(resolved) {
+            (resolved) => {
                 const value = create(args.definition, resolved);
 
                 return function factory() {
@@ -141,14 +144,14 @@ export default class Namespace {
 
         if (!isFunction(args.definition)) {
             const path = joinPath(this._separator, this._name, name);
-            throw new Error(`Factory supports only functions: ${path}`);
+            throw new Error(`${INVALID_FACTORY}: ${path}`);
         }
 
         this._storage.addItem(new Module(
             this._name,
             args.name,
             args.dependencies,
-            function initialize(resolved) {
+            (resolved) => {
                 const value = args.definition(...resolved);
 
                 return function factory() {

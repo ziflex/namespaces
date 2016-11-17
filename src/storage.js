@@ -9,14 +9,14 @@ import {
     forEach
 } from './utils';
 
-const MISSED_MODULE = 'Missed module!';
-const MISSED_MODULE_NAME = 'Missed module name!';
-const MISSED_NAMESPACE = 'Missed module namespace!';
+const MISSED_MODULE = 'Missed module';
+const MISSED_MODULE_NAME = 'Missed module name';
+const MISSED_NAMESPACE = 'Missed module namespace';
 const MISSED_CALLBACK = 'Missed callback';
-const INVALID_MODULE = 'Invalid module!';
-const INVALID_NAMESPACE = 'Invalid namespace!';
-const INVALID_MODULE_NAME = 'Invalid module name!';
-const INVALID_MODULE_PATH = 'Invalid module path!';
+const INVALID_MODULE = 'Invalid module';
+const INVALID_NAMESPACE = 'Invalid namespace';
+const INVALID_MODULE_NAME = 'Invalid module name';
+const INVALID_MODULE_PATH = 'Invalid module path';
 const NAMESPACE_NOT_FOUND = 'Namespace was not found';
 const MODULE_NOT_FOUND = 'Module with path was not found';
 
@@ -137,6 +137,10 @@ export default class Storage {
     forEachIn(namespace, callback) {
         if (isNullOrUndefined(namespace)) {
             throw new Error(MISSED_NAMESPACE);
+        }
+
+        if (!isString(namespace)) {
+            throw new Error(INVALID_NAMESPACE);
         }
 
         if (!isFunction(callback)) {

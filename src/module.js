@@ -1,3 +1,6 @@
+const NOT_INIT_YET = 'Module is not initialized';
+const ALREADY_INIT = 'Module has been already initialized';
+
 /**
  * Creates a new Module.
  * @class
@@ -44,7 +47,7 @@ export default class Module {
      */
     getValue() {
         if (!this.isInitialized()) {
-            throw new Error('Module is not initialized!');
+            throw new Error(NOT_INIT_YET);
         }
 
         return this._value();
@@ -65,7 +68,7 @@ export default class Module {
     initialize(dependencies) {
         if (this.isInitialized()) {
             throw new Error(
-                `Module has been already initialized: ${this._name} @ ${this._namespace}`
+                `${ALREADY_INIT}: ${this._name} @ ${this._namespace}`
             );
         }
 

@@ -1,6 +1,6 @@
 {
   "name": "namespaces-js",
-  "version": "0.5.5",
+  "version": "1.0.0",
   "description": "Angular-flavored DI container.",
   "main": "lib/index.js",
   "directories": {
@@ -14,51 +14,42 @@
     "Tim Voronov <ziflex@gmail.com>"
   ],
   "scripts": {
-    "build": "npm run lint && npm run build:bower && npm run build:npm && npm run build:doc",
-    "build:doc": "npm run clean:doc && esdoc -c ./esdoc.json",
-    "build:npm": "babel src --out-dir lib",
-    "build:bower": "browserify --entry src/index.js --outfile dist/namespaces.js --standalone Namespaces",
-    "clean:npm": "rimraf lib",
-    "clean:bower": "rimraf dist",
-    "clean:doc": "rimraf doc",
-    "package": "npm run package:npm && npm run package:bower",
-    "package:npm": "npm run lint && npm run clean:npm && npm run build:npm",
-    "package:bower": "npm run lint && npm run clean:bower && mkdir -p dist && npm run build:bower",
-    "prepublish": "npm run package",
     "lint": "eslint -c ./.eslintrc.json src",
-    "cover": "mochify --recursive ./test/unit --transform babelify  --reporter spec --plugin [ mochify-istanbul --report html --report text --instrumenter babel-istanbul --exclude '**/test/**/*' --exclude '**/node_modules/**/*' ] ",
-    "test": "mochify --recursive ./test/unit --transform babelify  --reporter spec"
+    "test": "npm run lint && mocha --reporter spec --compilers js:babel-register --recursive test",
+    "cover": "istanbul cover _mocha -- --compilers js:babel-register --recursive",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js  && rm -rf ./coverage",
+    "clean": "rimraf lib",
+    "build": "npm run test && npm run clean && babel src --out-dir lib",
+    "prepublish": "npm run build"
   },
   "license": "MIT",
   "keywords": [
     "di",
+    "container",
+    "registry",
     "dependency",
     "resolver",
-    "modules",
-    "angular"
+    "modules"
   ],
+  "dependencies": {
+    "toposort": "^1.0.0"
+  },
   "devDependencies": {
-    "babel-cli": "^6.10.1",
+    "babel-cli": "^6.18.0",
     "babel-eslint": "^6.0.4",
-    "babel-istanbul": "^0.8.0",
     "babel-preset-es2015-ie": "^6.6.2",
-    "babel-preset-stage-0": "^6.5.0",
-    "babelify": "^7.3.0",
-    "browserify": "^13.0.1",
+    "babel-preset-stage-0": "^6.16.0",
+    "babel-register": "^6.18.0",
     "chai": "^3.5.0",
-    "chai-spies": "^0.7.1",
-    "esdoc": "^0.4.7",
-    "esdoc-es7-plugin": "0.0.3",
+    "coveralls": "^2.11.14",
     "eslint": "^2.12.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-jsx-a11y": "^1.4.2",
     "eslint-plugin-mocha": "^3.0.0",
-    "mocha": "^2.5.3",
-    "mochify": "^2.18.0",
-    "mochify-istanbul": "^2.4.1",
-    "rimraf": "2.5.2",
-    "sinon": "^1.17.4"
+    "istanbul": "^1.0.0-alpha",
+    "mocha": "^3.1.2",
+    "sinon": "^1.17.6"
   },
   "browserify": {
     "transform": [
@@ -66,8 +57,5 @@
         "babelify"
       ]
     ]
-  },
-  "dependencies": {
-    "toposort": "^0.2.12"
   }
 }

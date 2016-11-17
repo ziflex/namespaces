@@ -1,5 +1,5 @@
-/* eslint-disable no-unused-expressions, func-names */
-import {expect} from 'chai';
+/* eslint-disable no-unused-expressions, func-names, prefer-arrow-callback  */
+import { expect } from 'chai';
 import Container from '../../src/index';
 
 describe('Container', () => {
@@ -13,16 +13,16 @@ describe('Container', () => {
         context('empty container', () => {
             it('should successfully register modules', () => {
                 const register = () => {
-                    container.value('value', {name: 'bar'});
+                    container.value('value', { name: 'bar' });
                     container.service('service', function Service() {
                         this.name = 'bar';
                     });
                     container.factory('factory', function Service() {
-                        return {value: new Date()};
+                        return { value: new Date() };
                     });
                 };
 
-                expect(register).to.not.throw();
+                expect(register).to.not.throw(Error);
             });
 
             it('should register object with predefines names', () => {
@@ -42,8 +42,8 @@ describe('Container', () => {
         context('not empty container', () => {
             it('should throw error when register module twice', () => {
                 const register = () => {
-                    container.value('value', {name: 'bar'});
-                    container.value('value', {name: 'bar'});
+                    container.value('value', { name: 'bar' });
+                    container.value('value', { name: 'bar' });
                 };
 
                 expect(register).to.throw();
@@ -95,6 +95,105 @@ describe('Container', () => {
             });
         });
 
+        describe('.service', () => {
+            context('When constructor not passed', () => {
+                it('should throw an error', () => {
+                    expect(() => {
+                        container.service('foo');
+                    }).to.throw(Error);
+
+                    expect(() => {
+                        container.service('foo', []);
+                    }).to.throw(Error);
+
+                    expect(() => {
+                        container.namespace('foo').service('bar');
+                    }).to.throw(Error);
+
+                    expect(() => {
+                        container.namespace('foo').service('bar', []);
+                    }).to.throw(Error);
+                });
+            });
+
+            context('When constructor is not a function', () => {
+                it('should throw an error', () => {
+                    expect(() => {
+                        container.service('foo', [], 1);
+                    }).to.throw(Error);
+
+                    expect(() => {
+                        container.namespace('foo').service('bar', [], []);
+                    }).to.throw(Error);
+                });
+            });
+        });
+
+        describe('.factory', () => {
+            context('When factory not passed', () => {
+                it('should throw an error', () => {
+                    expect(() => {
+                        container.factory('foo');
+                    }).to.throw(Error);
+
+                    expect(() => {
+                        container.factory('foo', []);
+                    }).to.throw(Error);
+
+                    expect(() => {
+                        container.namespace('foo').factory('bar');
+                    }).to.throw(Error);
+
+                    expect(() => {
+                        container.namespace('foo').factory('bar', []);
+                    }).to.throw(Error);
+                });
+            });
+
+            context('When constructor is not a function', () => {
+                it('should throw an error', () => {
+                    expect(() => {
+                        container.factory('foo', [], 1);
+                    }).to.throw(Error);
+
+                    expect(() => {
+                        container.namespace('foo').factory('bar', [], []);
+                    }).to.throw(Error);
+                });
+            });
+        });
+
+        describe('.contains', () => {
+            context('When module exists', () => {
+                it('should return "true"', () => {
+                    container.const('foo', 'bar');
+                    container.namespace('foo').const('bar', 'qaz');
+
+                    expect(container.contains('foo')).to.be.true;
+                    expect(container.contains('foo/bar')).to.be.true;
+                });
+            });
+
+            context('When module does not exist', () => {
+                it('should return "false"', () => {
+                    container.const('foo', 'bar');
+
+                    expect(container.contains('foo')).to.be.true;
+                    expect(container.contains('bar')).to.be.false;
+                    expect(container.contains('foo/bar')).to.be.false;
+                });
+            });
+        });
+
+        describe('.getName', () => {
+            it('should return a namespace name', () => {
+                expect(container.getName()).to.eql('');
+
+                expect(container.namespace('foo').getName()).to.eql('foo');
+                expect(container.namespace('foo').namespace('bar').getName()).to.eql('foo/bar');
+            });
+        });
+
         describe('.namespace', () => {
             it('should support chain', () => {
                 let namespace = container.namespace('foo').namespace('bar');
@@ -134,7 +233,7 @@ describe('Container', () => {
                     return Container.map({
                         core: 'core'
                     });
-                }).to.not.throw;
+                }).to.not.throw(Error);
             });
         });
     });

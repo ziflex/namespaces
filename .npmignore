@@ -81,6 +81,7 @@ test
 
 doc
 dist
+src
 html-report
 
 .babelrc

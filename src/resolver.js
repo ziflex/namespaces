@@ -8,7 +8,7 @@ import {
 } from './utils';
 
 const DEFAULT_DEPENDENCIES = [];
-
+const CIRC_REF = 'Circular dependency is detected';
 
 /**
  * Creates a new Resolver.
@@ -37,7 +37,7 @@ export default class Resolver {
             try {
                 toposort(graph);
             } catch (e) {
-                throw new ReferenceError(`Circular dependency: ${path} -> ${chain.join(' -> ')}`);
+                throw new ReferenceError(`${CIRC_REF}: ${path} -> ${chain.join(' -> ')}`);
             }
         };
         const resolveModule = (targetPath) => {

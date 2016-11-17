@@ -1,48 +1,50 @@
 /* eslint-disable no-unused-expressions, func-names */
-
-import {expect} from 'chai';
+import { expect } from 'chai';
 import Module from '../../src/module';
 
-describe('Module', function() {
-    describe('.getNamespace', function() {
-        it('should return module namespace', function() {
+describe('Module', () => {
+    describe('.getNamespace', () => {
+        it('should return module namespace', () => {
             const namespace = 'foo';
             const module = new Module(namespace);
 
-            expect(module.getNamespace).to.not.throw;
+            expect(() => module.getNamespace()).to.not.throw(Error);
             expect(module.getNamespace()).to.be.equal(namespace);
         });
     });
-    describe('.getName', function() {
-        it('should return module name', function() {
+    describe('.getName', () => {
+        it('should return module name', () => {
             const namespace = 'foo';
             const name = 'bar';
             const module = new Module(namespace, name);
 
-            expect(module.getName).to.not.throw;
+            expect(() => module.getName()).to.not.throw(Error);
             expect(module.getName()).to.be.equal(name);
         });
     });
-    describe('.getDependencies', function() {
-        it('should return module dependencies', function() {
+    describe('.getDependencies', () => {
+        it('should return module dependencies', () => {
             const namespace = 'foo';
             const name = 'bar';
             const dependencies = ['foo/qaz', 'foo/wsx'];
             const module = new Module(namespace, name, dependencies);
 
-            expect(module.getDependencies).to.not.throw;
+            expect(() => module.getDependencies()).to.not.throw(Error);
             expect(module.getDependencies()).to.be.equal(dependencies);
         });
     });
-    describe('.getValue', function() {
-        context('when is initialized', function() {
-            it('should return value', function() {
+    describe('.getValue', () => {
+        context('When is initialized', () => {
+            it('should return value', () => {
                 const values = [
                     1,
-                    'string',
-                    {foo: 'bar'},
-                    ['foo', 'bar'],
-                    function() {
+                    'string', {
+                        foo: 'bar'
+                    },
+                    [
+                        'foo', 'bar'
+                    ],
+                    () => {
                         return 'function';
                     }
                 ];
@@ -56,22 +58,22 @@ describe('Module', function() {
                     });
 
                     module.initialize();
-                    expect(module.getValue).to.not.throw;
+                    expect(() => module.getValue()).to.not.throw(Error);
                     expect(module.getValue()).to.be.equal(value);
                 });
             });
         });
-        context('when is not initialized', function() {
-            it('should throw an error', function() {
+        context('When is not initialized', () => {
+            it('should throw an error', () => {
                 const module = new Module('foo', 'bar', []);
 
-                expect(module.getValue).to.throw;
+                expect(() => module.getValue()).to.throw(Error);
             });
         });
     });
-    describe('.isInitialized', function() {
-        context('when is initialized', function() {
-            it('should return "true"', function() {
+    describe('.isInitialized', () => {
+        context('When is initialized', () => {
+            it('should return "true"', () => {
                 const namespace = 'foo';
                 const name = 'bar';
                 const dependencies = [];
@@ -83,8 +85,8 @@ describe('Module', function() {
                 expect(module.isInitialized()).to.equal(true);
             });
         });
-        context('when is not initialized', function() {
-            it('should return "false"', function() {
+        context('When is not initialized', () => {
+            it('should return "false"', () => {
                 const namespace = 'foo';
                 const name = 'bar';
                 const dependencies = [];
@@ -96,9 +98,9 @@ describe('Module', function() {
             });
         });
     });
-    describe('initialize', function() {
-        context('when is initialized', function() {
-            it('should not throw an error', function() {
+    describe('initialize', () => {
+        context('When is initialized', () => {
+            it('should not throw an error', () => {
                 const namespace = 'foo';
                 const name = 'bar';
                 const dependencies = [];
@@ -106,11 +108,11 @@ describe('Module', function() {
                     return 1;
                 });
 
-                expect(module.initialize).to.not.throw;
+                expect(() => module.initialize()).to.not.throw(Error);
             });
         });
-        context('when is not initialized', function() {
-            it('should throw an error', function() {
+        context('When is not initialized', () => {
+            it('should throw an error', () => {
                 const namespace = 'foo';
                 const name = 'bar';
                 const dependencies = [];
@@ -119,7 +121,7 @@ describe('Module', function() {
                 });
 
                 module.initialize();
-                expect(module.initialize).to.throw;
+                expect(() => module.initialize()).to.throw(Error);
             });
         });
     });
