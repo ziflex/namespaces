@@ -65,7 +65,7 @@ export default class Storage {
 
         if (!path.isValidName(this[FIELDS.separator], name)) {
             throw new Error(
-                `${INVALID_MODULE_PATH} Module is now alllowed to contain namespace separators.`
+                `${INVALID_MODULE_PATH} Module is not alllowed to contain namespace separators.`
             );
         }
 
