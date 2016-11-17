@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions, func-names  */
 
 import { expect } from 'chai';
-import Container from '../../src/container';
+import Container from '../../src/index';
 
 describe('Resolver', function() {
     let container = null;

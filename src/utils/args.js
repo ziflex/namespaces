@@ -1,6 +1,6 @@
 import isNil from 'is-nil';
 
-export default function parseArgs(...args) {
+function parseArgs(...args) {
     const name = args[0];
     let dependencies = args[1];
     let definition = args[2];
@@ -12,3 +12,5 @@ export default function parseArgs(...args) {
 
     return { name, dependencies, definition };
 }
+
+export default parseArgs;

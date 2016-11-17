@@ -12,7 +12,7 @@ export function reduce(collection, iteratee, initialValue, context = this) {
     return result;
 }
 
-export default function setIn(target, path, value) {
+function setIn(target, path, value) {
     if (!isArray(path)) {
         return target;
     }
@@ -38,3 +38,5 @@ export default function setIn(target, path, value) {
 
     return result;
 }
+
+export default setIn;

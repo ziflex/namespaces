@@ -23,20 +23,23 @@ const FIELDS = {
 };
 
 /**
- * Creates a new Storage.
- * @class
- * @classdesc Represents a modules storage.
+ * Represents a modules storage.
  */
-export default class Storage {
-    constructor(pathSeparator = '/') {
-        this[FIELDS.separator] = pathSeparator;
+class Storage {
+
+    /**
+     * Creates a new instance of Storage.
+     * @param separator - Namespace separator.
+     */
+    constructor(separator = '/') {
+        this[FIELDS.separator] = separator;
         this[FIELDS.namespaces] = {};
     }
 
     /**
-     * Adds module to storage.
+     * Adds a module to a storage.
      * @param {Module} module - Target module to add.
-     * @throws {Error} Throws an error if module with same path already exists.
+     * @throws {Error} If a module with a same path already exists.
      */
     addItem(module) {
         if (!module) {
@@ -84,10 +87,10 @@ export default class Storage {
     }
 
     /**
-     * Tries to find a module with passed path.
-     * @param {string} fullPath - Module's full path.
-     * @return {Module} found module.
-     * @throws {Error} Throws error in module wasn't found.
+     * Finds a module by a given path.
+     * @param {string} fullPath - Module full path.
+     * @return {Module} Found module.
+     * @throws {Error} If module was not found.
      */
     getItem(fullPath) {
         if (!isString(fullPath)) {
@@ -111,9 +114,9 @@ export default class Storage {
     }
 
     /**
-     * Determines whether a module with passed path exists.
-     * @param {string} path - Module's full path.
-     * @return {boolean} Value that determines whether a module with passed path exists.
+     * Determines whether a module exists by a given path.
+     * @param {string} path - Module full path.
+     * @return {boolean} Value that determines whether a module exists by a given path.
      */
     contains(fullPath) {
         if (!isString(fullPath)) {
@@ -136,6 +139,11 @@ export default class Storage {
         return true;
     }
 
+    /**
+     * Iterates over modules in a given namespace.
+     * @param {string} namespace - Namespace name.
+     * @returns {Namespace} Returns current instance on Storage.
+     */
     forEachIn(namespace, callback) {
         if (isNil(namespace)) {
             throw new Error(MISSED_NAMESPACE);
@@ -158,5 +166,9 @@ export default class Storage {
         forEach(registry, (value, name) => {
             callback(value, path.join(this[FIELDS.separator], namespace, name));
         });
+
+        return this;
     }
 }
+
+export default Storage;

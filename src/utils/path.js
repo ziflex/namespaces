@@ -103,9 +103,11 @@ function mapPaths(target, separator = '/') {
     return result;
 }
 
-export default {
+const path = {
     split,
     join,
     map: mapPaths,
     isValidName
 };
+
+export default path;

@@ -13,13 +13,12 @@ const FIELDS = {
 };
 
 /**
- * Creates a new Resolver.
- * @class
- * @classdesc Represents a dependency resolver for particular module.
+ * Represents a dependency resolver.
  */
-export default class Resolver {
+class Resolver {
+
     /**
-     * @constructor
+     * Creates a new instance of Namespace.
      * @param storage - Module's storage.
      */
     constructor(storage) {
@@ -27,19 +26,21 @@ export default class Resolver {
     }
 
     /**
-     * Resolves particular module.
-     * @returns {any} Module's value.
+     * Resolves a module by given full path.
+     * @param {string} fullPath - Full path of a module.
+     * @returns {any} Value of resolved module.
      */
-    resolve(path) {
+    resolve(fullPath) {
         const graph = [];
         const chain = [];
         const checkCircularDependency = (targetPath, dependencies) => {
             forEach(dependencies, i => graph.push([targetPath, i]));
             chain.push(...dependencies);
+
             try {
                 toposort(graph);
             } catch (e) {
-                throw new ReferenceError(`${CIRC_REF}: ${path} -> ${chain.join(' -> ')}`);
+                throw new ReferenceError(`${CIRC_REF}: ${fullPath} -> ${chain.join(' -> ')}`);
             }
         };
         const resolveModule = (targetPath) => {
@@ -80,13 +81,13 @@ export default class Resolver {
             return module.getValue();
         };
 
-        return resolveModule(path);
+        return resolveModule(fullPath);
     }
 
     /**
-     * Resolves all modules from particular namespace.
-     * @param {string} namespace - Target namespace.
-     * @returns {Map<string, any>} Map of module values, where key is module name.
+     * Resolves all modules by a given namespace name.
+     * @param {string} namespace - Target namespace name.
+     * @returns {Map<string, any>} Map of module values, where key is a module name.
      */
     resolveAll(namespace) {
         const result = {};
@@ -98,3 +99,5 @@ export default class Resolver {
         return result;
     }
 }
+
+export default Resolver;
