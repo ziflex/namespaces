@@ -1,10 +1,8 @@
 import Symbol from 'es6-symbol';
-import {
-    isFunction,
-    create,
-    parseArgs,
-    joinPath
-} from './utils';
+import isFunction from 'is-function';
+import path from './utils/path';
+import create from './utils/create';
+import parseArgs from './utils/args';
 import Module from './module';
 
 const INVALID_CONSTRUCTOR = 'Service supports only constructors';
@@ -44,11 +42,11 @@ export default class Namespace {
 
     /**
      * Determines whether a module with passed path exists.
-     * @param {string} path - Module's path.
-     * @return {boolean} Value that determines whether a module with passed path exists.
+     * @param {string} fullPath - Module full path.
+     * @return {boolean} Value that determines whether a module with a given full path exists.
      */
-    contains(path) {
-        return this[FIELDS.storage].contains(path);
+    contains(fullPath) {
+        return this[FIELDS.storage].contains(fullPath);
     }
 
     /**
@@ -59,7 +57,7 @@ export default class Namespace {
     namespace(name) {
         return new Namespace(
             this[FIELDS.separator],
-            joinPath(this[FIELDS.separator], this[FIELDS.name], name),
+            path.join(this[FIELDS.separator], this[FIELDS.name], name),
             this[FIELDS.storage]
         );
     }
@@ -129,8 +127,8 @@ export default class Namespace {
         const args = parseArgs(name, dependencies, definition);
 
         if (!isFunction(args.definition)) {
-            const path = joinPath(this[FIELDS.separator], this[FIELDS.name], name);
-            throw new Error(`${INVALID_CONSTRUCTOR}: ${path}`);
+            const fullPath = path.join(this[FIELDS.separator], this[FIELDS.name], name);
+            throw new Error(`${INVALID_CONSTRUCTOR}: ${fullPath}`);
         }
 
         this[FIELDS.storage].addItem(new Module(
@@ -159,8 +157,8 @@ export default class Namespace {
         const args = parseArgs(name, dependencies, definition);
 
         if (!isFunction(args.definition)) {
-            const path = joinPath(this[FIELDS.separator], this[FIELDS.name], name);
-            throw new Error(`${INVALID_FACTORY}: ${path}`);
+            const fullPath = path.join(this[FIELDS.separator], this[FIELDS.name], name);
+            throw new Error(`${INVALID_FACTORY}: ${fullPath}`);
         }
 
         this[FIELDS.storage].addItem(new Module(

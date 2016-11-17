@@ -1,14 +1,10 @@
 import Symbol from 'es6-symbol';
+import isNil from 'is-nil';
+import isString from 'is-string';
+import isFunction from 'is-function';
+import forEach from 'for-each';
 import Module from './module';
-import {
-    splitPath,
-    joinPath,
-    isString,
-    isNullOrUndefined,
-    isFunction,
-    isValidName,
-    forEach
-} from './utils';
+import path from './utils/path';
 
 const MISSED_MODULE = 'Missed module';
 const MISSED_MODULE_NAME = 'Missed module name';
@@ -67,7 +63,7 @@ export default class Storage {
             throw new Error(INVALID_MODULE_NAME);
         }
 
-        if (!isValidName(this[FIELDS.separator], name)) {
+        if (!path.isValidName(this[FIELDS.separator], name)) {
             throw new Error(
                 `${INVALID_MODULE_PATH} Module is now alllowed to contain namespace separators.`
             );
@@ -89,26 +85,26 @@ export default class Storage {
 
     /**
      * Tries to find a module with passed path.
-     * @param {string} path - Module's path.
+     * @param {string} fullPath - Module's full path.
      * @return {Module} found module.
      * @throws {Error} Throws error in module wasn't found.
      */
-    getItem(path) {
-        if (!isString(path)) {
+    getItem(fullPath) {
+        if (!isString(fullPath)) {
             throw new Error(INVALID_MODULE_PATH);
         }
 
-        const parts = splitPath(this[FIELDS.separator], path);
+        const parts = path.split(this[FIELDS.separator], fullPath);
         const namespace = this[FIELDS.namespaces][parts.namespace];
 
         if (!namespace) {
-            throw new Error(`${MODULE_NOT_FOUND}: ${path}!`);
+            throw new Error(`${MODULE_NOT_FOUND}: ${fullPath}!`);
         }
 
         const module = namespace[parts.name];
 
         if (!module) {
-            throw new Error(`${MODULE_NOT_FOUND}: ${path}!`);
+            throw new Error(`${MODULE_NOT_FOUND}: ${fullPath}!`);
         }
 
         return module;
@@ -116,15 +112,15 @@ export default class Storage {
 
     /**
      * Determines whether a module with passed path exists.
-     * @param {string} path - Module's path.
+     * @param {string} path - Module's full path.
      * @return {boolean} Value that determines whether a module with passed path exists.
      */
-    contains(path) {
-        if (!isString(path)) {
+    contains(fullPath) {
+        if (!isString(fullPath)) {
             throw new Error(INVALID_MODULE_PATH);
         }
 
-        const parts = splitPath(this[FIELDS.separator], path);
+        const parts = path.split(this[FIELDS.separator], fullPath);
         const namespace = this[FIELDS.namespaces][parts.namespace];
 
         if (!namespace) {
@@ -141,7 +137,7 @@ export default class Storage {
     }
 
     forEachIn(namespace, callback) {
-        if (isNullOrUndefined(namespace)) {
+        if (isNil(namespace)) {
             throw new Error(MISSED_NAMESPACE);
         }
 
@@ -160,7 +156,7 @@ export default class Storage {
         }
 
         forEach(registry, (value, name) => {
-            callback(value, joinPath(this[FIELDS.separator], namespace, name));
+            callback(value, path.join(this[FIELDS.separator], namespace, name));
         });
     }
 }

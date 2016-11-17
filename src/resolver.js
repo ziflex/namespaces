@@ -1,12 +1,9 @@
 import Symbol from 'es6-symbol';
+import isString from 'is-string';
+import isFunction from 'is-function';
+import isArray from 'is-array';
+import forEach from 'for-each';
 import toposort from 'toposort';
-import {
-    isString,
-    isArray,
-    isFunction,
-    forEach,
-    map
-} from './utils';
 
 const DEFAULT_DEPENDENCIES = [];
 const CIRC_REF = 'Circular dependency is detected';
@@ -55,7 +52,7 @@ export default class Resolver {
             const resolveDependencies = (dependencies) => {
                 if (isArray(dependencies)) {
                     checkCircularDependency(targetPath, dependencies);
-                    return map(dependencies, (currentPath) => {
+                    return dependencies.map((currentPath) => {
                         if (isString(currentPath)) {
                             return resolveModule(currentPath);
                         } else if (isFunction(currentPath)) {

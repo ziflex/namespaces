@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-expressions, func-names, prefer-arrow-callback   */
 import { expect } from 'chai';
-import { isNull, isUndefined } from '../../src/utils';
+import isNil from 'is-nil';
 import Storage from '../../src/storage';
 import Module from '../../src/module';
 
@@ -232,6 +232,7 @@ describe('Storage', function () {
                 barModules.forEach(module => storage.addItem(module));
 
                 const found = [];
+
                 storage.forEachIn('foo', (module, path) => found.push(path));
                 expect(found).to.eql([
                     'foo/qaz',
@@ -259,7 +260,7 @@ describe('Storage', function () {
 
             expect(getItem).not.to.throw(Error);
             const item = getItem();
-            expect(isNull(item) || isUndefined(item)).to.be.not.true;
+            expect(isNil(item)).to.be.not.true;
         });
     });
 });

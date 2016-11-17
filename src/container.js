@@ -2,7 +2,7 @@ import Symbol from 'es6-symbol';
 import Namespace from './namespace';
 import Storage from './storage';
 import Resolver from './resolver';
-import mapPath from './map-path';
+import path from './utils/path';
 
 const FIELDS = {
     resolver: Symbol('resolver')
@@ -17,7 +17,7 @@ export default class Container extends Namespace {
     /**
      * Converts object/array to a function chain that's help to use namespaces.
      */
-    static map = mapPath;
+    static map = path.map;
 
     /** @constructs
      * @param {string} separator - Namespace separator. Optional. Default '/'.
@@ -32,11 +32,11 @@ export default class Container extends Namespace {
 
     /**
      * Resolve a module.
-     * @param {string} path - Module namespace.
-     * @returns {Module} new Module.
+     * @param {string} fullPath - Module full path.
+     * @returns {any} module value.
      */
-    resolve(path) {
-        return this[FIELDS.resolver].resolve(path);
+    resolve(fullPath) {
+        return this[FIELDS.resolver].resolve(fullPath);
     }
 
     /**
