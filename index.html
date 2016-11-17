@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Home - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#contains">contains</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    <!--container.tmpl-->
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+    
+
+
+    <section class="readme">
+        <article><h1>namespaces</h1><blockquote>
+<p>Universal registry</p>
+</blockquote>
+<p>Angular-flavored DI container.</p>
+<p><a href="https://www.npmjs.com/package/namespaces-js"><img src="https://badge.fury.io/js/namespaces-js.svg" alt="npm version"></a>
+<a href="http://travis-ci.org/ziflex/namespaces"><img src="https://secure.travis-ci.org/ziflex/namespaces.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/github/ziflex/namespaces-js"><img src="https://coveralls.io/repos/github/ziflex/namespaces-js/badge.svg?branch=master" alt="Coverage Status"></a></p>
+<h2>Install</h2><p>via npm</p>
+<pre class="prettyprint source lang-sh"><code>
+    $ npm install --save namespaces-js</code></pre><h2>Usage</h2><h3>Basic</h3><pre class="prettyprint source lang-javascript"><code>
+    var Container = require('namespaces-js');
+    var container = new Container();
+
+    container.factory('a', () => 'a');
+    container.factory('b', ['a'] (a) => a + 'b');
+
+    const b = container.resolve('b'); // -> 'ab'
+    const a = container.resolve('a'); // -> 'a'</code></pre><h3>Namespaces</h3><pre class="prettyprint source lang-javascript"><code>
+    var Container = require('namespaces-js');
+    var container = new Container();
+
+    container.namespace('a').value('foo', 'bar');
+    container.namespace('b').service('foo', function Bar() { this.name = 'bar'; });
+    container.namespace('c/d').factory('foo', () => 'bar');    
+
+    const aFoo = container.resolve('a/foo'); // -> 'bar'
+    const bFoo = container.resolve('b/foo'); // -> instance of Bar
+    const cdFoo = container.resolve('c/d/foo'); // -> 'bar'</code></pre><p>Also, you can define custom namespace separator:</p>
+<pre class="prettyprint source lang-javascript"><code>
+    var Container = require('namespaces-js');
+    var container = new Container('.');
+
+    container.namespace('a.b.c').value('foo', 'bar');
+    container.namespace('d.e.f').service('foo', function Bar() { this.name = 'bar'; });</code></pre><h4>Modular</h4><pre class="prettyprint source lang-javascript"><code>
+    var Container = require('namespaces-js');    
+    var container = new Container();   
+
+    var ui = container.namespace('ui');
+    var actions = ui.namespace('actions');
+    actions.service('user', require('./ui/flux/actions/user'));
+    actions.service('users', require('./ui/flux/actions/users'));
+
+    var stores = ui.namespace('stores');
+    stores.service('users', ['ui/actions/users', 'ui/actions/user'], require('./ui/flux/stores/users'));</code></pre><h3>Resolving</h3><h4>Basic</h4><pre class="prettyprint source lang-javascript"><code>
+    var Container = require('namespaces-js');
+    var container = new Container();
+
+    container.value('foo', 'bar');
+
+    const foo = container.resolve('foo'); // -> 'bar'</code></pre><h4>Group</h4><pre class="prettyprint source lang-javascript"><code>
+    var Container = require('namespaces-js');
+    var container = new Container();
+
+    var services = container.namespace('services');
+    services.service('users', UsersService);
+    services.service('accounts', AccountsService);
+
+    var actions = container.namespace('ui/actions');
+    actions.service('user', ['services/users', 'services/accounts'], UserActions);
+    actions.service('users', ['services/users'], UsersActions);
+
+    var allActions = container.resolveAll('ui/actions');</code></pre><h4>Custom</h4><pre class="prettyprint source lang-javascript"><code>
+    var Container = require('namespaces-js');
+    var container = new Container();
+
+    container.factory('a', () => 'a');
+    container.factory('b', [
+        'a',
+        function customResolver() {
+            return { foo: 'bar' };
+        }
+    ], (a, c) => [a, c]);</code></pre><h3>Namespace Helper</h3><pre class="prettyprint source lang-javascript"><code>
+    var namespaces = Container.map({
+        a: 'b',
+        c: ['d', 'e', { f: ['g', 'h'] }]
+    });
+
+    var container = new Container();
+
+    container.namespace(namespaces.a()).value('foo', 'bar');
+    container.namespace(namespaces.b()).factory('foo', () => 'bar');
+    container.namespace(namespaces.c()).factory('foo', () => 'bar');
+    container.namespace(namespaces.c.f.g()).value('foo', 'bar');
+
+    container.resolve(namespaces.a('foo'));
+    container.resolve(namespaces.c.f.g('foo'));</code></pre><h4>Multiple paths</h4><pre class="prettyprint source lang-js"><code>    const namespaces = Container.map({
+        core: {
+            infrastructure: [
+                'item1',
+                'item2'
+            ],
+            domain: 'foo'
+        },
+        system: [
+            'component1',
+            'component2'
+        ]
+    });
+
+    const paths = result.system([
+        'component1',
+        'component2'
+    ]);
+
+    // ['system/component1', 'system/component2']</code></pre><h2>API</h2><h3>new Container([namespaceSeparator: string = '/'])</h3><p>Creates new container.
+Arguments: namespaces separator. Optional. Default '/'.</p>
+<h3>container.namespace([namespaceName: string]): Namespace</h3><p>Returns or creates new namespace.    </p>
+<h3>container.resolve(modulePath: string): any</h3><p>Returns registered module's value.   </p>
+<h3>container.resolveAll(namespace: string): Map<string, any></h3><p>Returns all values from registered modules in particular namespace.      </p>
+<h3>namespace.const(name: string, value: number | string | array | object | function): void</h3><p>Registers a value, such as a string, a number, an array, an object or a function.    </p>
+<h3>namespace.value(name: string, [dependencies: string[]], value: number | string | array | object | function): void</h3><p>Registers a value, such as a string, a number, an array, an object or a constructor.<br>Note: If passed value is function type, it will be treated as constructor and every time when it's injected, new instance will be created.</p>
+<h3>namespace.service(name: string, [dependencies: string[]], value: function): void</h3><p>Registers a service constructor, which will be invoked with <code>new</code> to create the service instance.<br>Any type which was registered as a service is singleton.</p>
+<h3>namespace.factory(name: string, [dependencies: string[]], value: function): void</h3><p>Register a service factory, which will be called to return the service instance.<br>Any function's value will be registered as a singleton.</p>
+<h3>namespace.getName(): string</h3><p>Returns name of current namespace.   </p>
+<h3>Container.map</h3><p>Helper function that converts object / array to chain of functions in order to easily use namespace paths.      </p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Nov 17 2016 16:03:17 GMT-0500 (EST) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

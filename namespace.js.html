@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>namespace.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#contains">contains</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">namespace.js</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+    <!--source.tmpl-->
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Symbol from 'es6-symbol';
+import isFunction from 'is-function';
+import path from './utils/path';
+import create from './utils/create';
+import parseArgs from './utils/args';
+import Module from './module';
+
+const INVALID_CONSTRUCTOR = 'Service supports only constructors';
+const INVALID_FACTORY = 'Factory supports only functions';
+
+const FIELDS = {
+    separator: Symbol('separator'),
+    name: Symbol('name'),
+    storage: Symbol('storage')
+};
+
+/**
+ * Represents a module namespace.
+ */
+class Namespace {
+
+    /**
+     * Creates a new instance of Namespace.
+     * @param {Storage} storage - Modules storage.
+     * @param {string} [name] - Namespace name.
+     * @param {string} [separator] - Namespace separator.
+     */
+    constructor(storage, name = '', separator = '/') {
+        this[FIELDS.storage] = storage;
+        this[FIELDS.name] = name;
+        this[FIELDS.separator] = separator;
+    }
+
+    /**
+     * Returns a namespace name.
+     * @returns {string} Namespace name.
+     */
+    getName() {
+        return this[FIELDS.name];
+    }
+
+    /**
+     * Determines whether a module exists by a given path.
+     * @param {string} fullPath - Module full path.
+     * @return {boolean} Value that determines whether a module exists by a given path.
+     */
+    contains(fullPath) {
+        return this[FIELDS.storage].contains(fullPath);
+    }
+
+    /**
+     * Returns a sub namespace.
+     * @param {string} name - Name of a sub namespace.
+     * @returns {Namespace} Sub namespace.
+     */
+    namespace(name) {
+        return new Namespace(
+            this[FIELDS.storage],
+            path.join(this[FIELDS.separator], this[FIELDS.name], name),
+            this[FIELDS.separator]
+        );
+    }
+
+    /**
+     * Register a value, such as a string, a number, an array, an object or a function.
+     * @param {string} name - Module name.
+     * @param {(string|number|object|array|function)} definition - Module value.
+     * @returns {Namespace} Returns current instance on Namespace.
+     */
+    const(name, definition) {
+        const args = parseArgs(name, definition);
+
+        this[FIELDS.storage].addItem(new Module(
+            this[FIELDS.name],
+            args.name,
+            args.dependencies,
+            () => {
+                return function factory() {
+                    return args.definition;
+                };
+            }
+        ));
+
+        return this;
+    }
+
+    /**
+     * Registers a value, such as a string, a number, an array, an object or a function.
+     * If passed value is a function, it will be invoked
+     * with a `new` keyword everytime when it gets resolved.
+     * @param {string} name - Module name.
+     * @param {array} [dependencies = []] - Module dependencies.
+     * @param {(string|number|object|array|function)} definition - Module value.
+     * @returns {Namespace} Returns current instance on Namespace.
+     */
+    value(name, dependencies, definition) {
+        const args = parseArgs(name, dependencies, definition);
+
+        this[FIELDS.storage].addItem(new Module(
+            this[FIELDS.name],
+            args.name,
+            args.dependencies,
+            (resolved) => {
+                // instances, simple types
+                if (!isFunction(args.definition)) {
+                    return function factory() {
+                        return args.definition;
+                    };
+                }
+
+                return function factory() {
+                    return create(args.definition, resolved);
+                };
+            }
+        ));
+
+        return this;
+    }
+
+    /**
+     * Registers a constructor of a singleton.
+     * Given function will be invoked with a `new` keyword when it gets resolved.
+     * @param {string} name - Module name.
+     * @param {array} [dependencies=[]] - Module dependencies.
+     * @param {function} definition - Module constructor that will be instantiated.
+     * @returns {Namespace} Returns current instance on Namespace.
+     */
+    service(name, dependencies, definition) {
+        const args = parseArgs(name, dependencies, definition);
+
+        if (!isFunction(args.definition)) {
+            const fullPath = path.join(this[FIELDS.separator], this[FIELDS.name], name);
+            throw new Error(`${INVALID_CONSTRUCTOR}: ${fullPath}`);
+        }
+
+        this[FIELDS.storage].addItem(new Module(
+            this[FIELDS.name],
+            args.name,
+            args.dependencies,
+            (resolved) => {
+                const value = create(args.definition, resolved);
+
+                return function factory() {
+                    return value;
+                };
+            }
+        ));
+
+        return this;
+    }
+
+    /**
+     * Registers a factory of a singleton.
+     * @param {string} name - Module name.
+     * @param {array} [dependencies=[]] - Module dependencies.
+     * @param {function} definition - Module factory.
+     * @returns {Namespace} Returns current instance on Namespace.
+     */
+    factory(name, dependencies, definition) {
+        const args = parseArgs(name, dependencies, definition);
+
+        if (!isFunction(args.definition)) {
+            const fullPath = path.join(this[FIELDS.separator], this[FIELDS.name], name);
+            throw new Error(`${INVALID_FACTORY}: ${fullPath}`);
+        }
+
+        this[FIELDS.storage].addItem(new Module(
+            this[FIELDS.name],
+            args.name,
+            args.dependencies,
+            (resolved) => {
+                const value = args.definition(...resolved);
+
+                return function factory() {
+                    return value;
+                };
+            }
+        ));
+    }
+}
+
+export default Namespace;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Nov 17 2016 16:03:17 GMT-0500 (EST) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

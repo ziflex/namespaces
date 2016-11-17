@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>storage.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#contains">contains</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">storage.js</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+    <!--source.tmpl-->
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Symbol from 'es6-symbol';
+import isNil from 'is-nil';
+import isString from 'is-string';
+import isFunction from 'is-function';
+import forEach from 'for-each';
+import Module from './module';
+import path from './utils/path';
+
+const MISSED_MODULE = 'Missed module';
+const MISSED_MODULE_NAME = 'Missed module name';
+const MISSED_NAMESPACE = 'Missed module namespace';
+const MISSED_CALLBACK = 'Missed callback';
+const INVALID_MODULE = 'Invalid module';
+const INVALID_NAMESPACE = 'Invalid namespace';
+const INVALID_MODULE_NAME = 'Invalid module name';
+const INVALID_MODULE_PATH = 'Invalid module path';
+const NAMESPACE_NOT_FOUND = 'Namespace was not found';
+const MODULE_NOT_FOUND = 'Module with path was not found';
+
+const FIELDS = {
+    separator: Symbol('separator'),
+    namespaces: Symbol('namespaces')
+};
+
+/**
+ * Represents a modules storage.
+ */
+class Storage {
+
+    /**
+     * Creates a new instance of Storage.
+     * @param separator - Namespace separator.
+     */
+    constructor(separator = '/') {
+        this[FIELDS.separator] = separator;
+        this[FIELDS.namespaces] = {};
+    }
+
+    /**
+     * Adds a module to a storage.
+     * @param {Module} module - Target module to add.
+     * @throws {Error} If a module with a same path already exists.
+     */
+    addItem(module) {
+        if (!module) {
+            throw new Error(MISSED_MODULE);
+        }
+
+        if (!(module instanceof Module)) {
+            throw new Error(INVALID_MODULE);
+        }
+
+        const namespace = module.getNamespace();
+
+        if (!isString(namespace)) {
+            throw new Error(INVALID_NAMESPACE);
+        }
+
+        const name = module.getName();
+
+        if (!name) {
+            throw new Error(MISSED_MODULE_NAME);
+        }
+
+        if (!isString(name)) {
+            throw new Error(INVALID_MODULE_NAME);
+        }
+
+        if (!path.isValidName(this[FIELDS.separator], name)) {
+            throw new Error(
+                `${INVALID_MODULE_PATH} Module is not alllowed to contain namespace separators.`
+            );
+        }
+
+        let registry = this[FIELDS.namespaces][namespace];
+
+        if (!registry) {
+            registry = {};
+            this[FIELDS.namespaces][namespace] = registry;
+        }
+
+        if (registry.hasOwnProperty(name)) {
+            throw new Error(`${name} is already registered.`);
+        }
+
+        registry[name] = module;
+    }
+
+    /**
+     * Finds a module by a given path.
+     * @param {string} fullPath - Module full path.
+     * @return {Module} Found module.
+     * @throws {Error} If module was not found.
+     */
+    getItem(fullPath) {
+        if (!isString(fullPath)) {
+            throw new Error(INVALID_MODULE_PATH);
+        }
+
+        const parts = path.split(this[FIELDS.separator], fullPath);
+        const namespace = this[FIELDS.namespaces][parts.namespace];
+
+        if (!namespace) {
+            throw new Error(`${MODULE_NOT_FOUND}: ${fullPath}!`);
+        }
+
+        const module = namespace[parts.name];
+
+        if (!module) {
+            throw new Error(`${MODULE_NOT_FOUND}: ${fullPath}!`);
+        }
+
+        return module;
+    }
+
+    /**
+     * Determines whether a module exists by a given path.
+     * @param {string} path - Module full path.
+     * @return {boolean} Value that determines whether a module exists by a given path.
+     */
+    contains(fullPath) {
+        if (!isString(fullPath)) {
+            throw new Error(INVALID_MODULE_PATH);
+        }
+
+        const parts = path.split(this[FIELDS.separator], fullPath);
+        const namespace = this[FIELDS.namespaces][parts.namespace];
+
+        if (!namespace) {
+            return false;
+        }
+
+        const module = namespace[parts.name];
+
+        if (!module) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Iterates over modules in a given namespace.
+     * @param {string} namespace - Namespace name.
+     * @returns {Namespace} Returns current instance on Storage.
+     */
+    forEachIn(namespace, callback) {
+        if (isNil(namespace)) {
+            throw new Error(MISSED_NAMESPACE);
+        }
+
+        if (!isString(namespace)) {
+            throw new Error(INVALID_NAMESPACE);
+        }
+
+        if (!isFunction(callback)) {
+            throw new Error(MISSED_CALLBACK);
+        }
+
+        const registry = this[FIELDS.namespaces][namespace];
+
+        if (!registry) {
+            throw new Error(`${NAMESPACE_NOT_FOUND}: ${namespace}!`);
+        }
+
+        forEach(registry, (value, name) => {
+            callback(value, path.join(this[FIELDS.separator], namespace, name));
+        });
+
+        return this;
+    }
+}
+
+export default Storage;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Nov 17 2016 16:03:17 GMT-0500 (EST) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

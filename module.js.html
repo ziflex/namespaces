@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>module.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav class="nav">
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#contains">contains</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">module.js</h1>
+    
+
+    <!--container.tmpl-->
+
+
+
+
+    <!--source.tmpl-->
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Symbol from 'es6-symbol';
+
+const NOT_INIT_YET = 'Module is not initialized';
+const ALREADY_INIT = 'Module has been already initialized';
+
+const FIELDS = {
+    namespace: Symbol('namespace'),
+    name: Symbol('name'),
+    initializer: Symbol('initializer'),
+    dependencies: Symbol('dependencies'),
+    isInitialized: Symbol('isInitialized'),
+    value: Symbol('value')
+};
+
+/**
+ * Represents a namespace module.
+ */
+class Module {
+
+    /**
+     * Creates a new instance of Module.
+     * @param {string} namespace - Namespace name.
+     * @param {string} name - Module name.
+     * @param {Array&lt;string>} [dependencies=undefined] - Module dependencies.
+     * @param {function} initializer - Module initializer.
+     */
+    constructor(namespace, name, dependencies, initializer) {
+        this[FIELDS.namespace] = namespace;
+        this[FIELDS.name] = name;
+        this[FIELDS.initializer] = initializer;
+        this[FIELDS.dependencies] = dependencies;
+        this[FIELDS.isInitialized] = false;
+        this[FIELDS.value] = null;
+    }
+
+    /**
+     * Returns a module namespace name.
+     * @returns {string} Module namespace.
+     */
+    getNamespace() {
+        return this[FIELDS.namespace];
+    }
+
+    /**
+     * Returns a module name.
+     * @returns {string} Module name.
+     */
+    getName() {
+        return this[FIELDS.name];
+    }
+
+    /**
+     * Returns a list of module dependencies.
+     * @returns {(Array&lt;string>|undefined)} List of module dependencies.
+     */
+    getDependencies() {
+        return this[FIELDS.dependencies];
+    }
+
+    /**
+     * Returns initialized module value.
+     * @returns {any} Modules value.
+     * @throws {Error} If a module is not initialized.
+     */
+    getValue() {
+        if (!this.isInitialized()) {
+            throw new Error(NOT_INIT_YET);
+        }
+
+        return this[FIELDS.value]();
+    }
+
+    /**
+     * Returns a value that determines whether a module is initialized.
+     * @returns {boolean} Value that determines whether a module is initialized.
+     */
+    isInitialized() {
+        return this[FIELDS.isInitialized];
+    }
+
+    /**
+     * Initializes a module.
+     * @returns {Module} Returns current instance on Module.
+     * @throws {Error} If a module is already initialized.
+     */
+    initialize(dependencies) {
+        if (this.isInitialized()) {
+            throw new Error(
+                `${ALREADY_INIT}: ${this[FIELDS.name]} @ ${this[FIELDS.namespace]}`
+            );
+        }
+
+        this[FIELDS.value] = this[FIELDS.initializer](dependencies);
+        this[FIELDS.isInitialized] = true;
+
+        return this;
+    }
+}
+
+export default Module;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Nov 17 2016 16:03:17 GMT-0500 (EST) using the LOKE theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
