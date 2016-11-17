@@ -32,6 +32,7 @@
     "modules"
   ],
   "dependencies": {
+    "es6-symbol": "^3.1.0",
     "toposort": "^1.0.0"
   },
   "devDependencies": {

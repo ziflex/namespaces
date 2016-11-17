@@ -4,6 +4,7 @@
 
 ### Changed
 * Dropped Bower support
+* Moved to Symbols. All internals are secured.
 
 ## 0.5.5
 ### Changed

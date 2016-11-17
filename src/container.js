@@ -1,7 +1,12 @@
+import Symbol from 'es6-symbol';
 import Namespace from './namespace';
 import Storage from './storage';
 import Resolver from './resolver';
 import mapPath from './map-path';
+
+const FIELDS = {
+    resolver: Symbol('resolver')
+};
 
 /**
  * Creates a new Container.
@@ -18,17 +23,11 @@ export default class Container extends Namespace {
      * @param {string} separator - Namespace separator. Optional. Default '/'.
      */
     constructor(separator = '/') {
-        super(separator, '', new Storage(separator));
-        this._resolver = new Resolver(this._storage);
-    }
+        const storage = new Storage(separator);
 
-    /**
-     * Determines whether a module with passed path exists.
-     * @param {string} path - Module's path.
-     * @return {boolean} Value that determines whether a module with passed path exists.
-     */
-    contains(path) {
-        return this._storage.contains(path);
+        super(separator, '', storage);
+
+        this[FIELDS.resolver] = new Resolver(storage);
     }
 
     /**
@@ -37,7 +36,7 @@ export default class Container extends Namespace {
      * @returns {Module} new Module.
      */
     resolve(path) {
-        return this._resolver.resolve(path);
+        return this[FIELDS.resolver].resolve(path);
     }
 
     /**
@@ -46,6 +45,6 @@ export default class Container extends Namespace {
      * @returns {Map<string, any>} Map of module values, where key is module name.
      */
     resolveAll(namespace) {
-        return this._resolver.resolveAll(namespace);
+        return this[FIELDS.resolver].resolveAll(namespace);
     }
 }

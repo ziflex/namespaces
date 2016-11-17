@@ -1,5 +1,16 @@
+import Symbol from 'es6-symbol';
+
 const NOT_INIT_YET = 'Module is not initialized';
 const ALREADY_INIT = 'Module has been already initialized';
+
+const FIELDS = {
+    namespace: Symbol('namespace'),
+    name: Symbol('name'),
+    initialize: Symbol('initialize'),
+    dependencies: Symbol('dependencies'),
+    isInitialized: Symbol('isInitialized'),
+    value: Symbol('value')
+};
 
 /**
  * Creates a new Module.
@@ -8,12 +19,12 @@ const ALREADY_INIT = 'Module has been already initialized';
  */
 export default class Module {
     constructor(namespace, name, dependencies, initialize) {
-        this._namespace = namespace;
-        this._name = name;
-        this._initialize = initialize;
-        this._dependencies = dependencies;
-        this._isInitialized = false;
-        this._value = null;
+        this[FIELDS.namespace] = namespace;
+        this[FIELDS.name] = name;
+        this[FIELDS.initialize] = initialize;
+        this[FIELDS.dependencies] = dependencies;
+        this[FIELDS.isInitialized] = false;
+        this[FIELDS.value] = null;
     }
 
     /**
@@ -21,7 +32,7 @@ export default class Module {
      * @returns {string} Module namespace.
      */
     getNamespace() {
-        return this._namespace;
+        return this[FIELDS.namespace];
     }
 
     /**
@@ -29,7 +40,7 @@ export default class Module {
      * @returns {string} Module name.
      */
     getName() {
-        return this._name;
+        return this[FIELDS.name];
     }
 
     /**
@@ -37,7 +48,7 @@ export default class Module {
      * @returns {(Array<string>|undefined)} List of module dependencies.
      */
     getDependencies() {
-        return this._dependencies;
+        return this[FIELDS.dependencies];
     }
 
     /**
@@ -50,7 +61,7 @@ export default class Module {
             throw new Error(NOT_INIT_YET);
         }
 
-        return this._value();
+        return this[FIELDS.value]();
     }
 
     /**
@@ -58,7 +69,7 @@ export default class Module {
      * @returns {boolean} Value that determines whether module is initialized.
      */
     isInitialized() {
-        return this._isInitialized;
+        return this[FIELDS.isInitialized];
     }
 
     /**
@@ -68,11 +79,11 @@ export default class Module {
     initialize(dependencies) {
         if (this.isInitialized()) {
             throw new Error(
-                `${ALREADY_INIT}: ${this._name} @ ${this._namespace}`
+                `${ALREADY_INIT}: ${this[FIELDS.name]} @ ${this[FIELDS.namespace]}`
             );
         }
 
-        this._value = this._initialize(dependencies);
-        this._isInitialized = true;
+        this[FIELDS.value] = this[FIELDS.initialize](dependencies);
+        this[FIELDS.isInitialized] = true;
     }
 }

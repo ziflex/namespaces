@@ -1,3 +1,4 @@
+import Symbol from 'es6-symbol';
 import Module from './module';
 import {
     splitPath,
@@ -20,6 +21,11 @@ const INVALID_MODULE_PATH = 'Invalid module path';
 const NAMESPACE_NOT_FOUND = 'Namespace was not found';
 const MODULE_NOT_FOUND = 'Module with path was not found';
 
+const FIELDS = {
+    separator: Symbol('separator'),
+    namespaces: Symbol('namespaces')
+};
+
 /**
  * Creates a new Storage.
  * @class
@@ -27,8 +33,8 @@ const MODULE_NOT_FOUND = 'Module with path was not found';
  */
 export default class Storage {
     constructor(pathSeparator = '/') {
-        this._separator = pathSeparator;
-        this._namespaces = {};
+        this[FIELDS.separator] = pathSeparator;
+        this[FIELDS.namespaces] = {};
     }
 
     /**
@@ -61,17 +67,17 @@ export default class Storage {
             throw new Error(INVALID_MODULE_NAME);
         }
 
-        if (!isValidName(this._separator, name)) {
+        if (!isValidName(this[FIELDS.separator], name)) {
             throw new Error(
                 `${INVALID_MODULE_PATH} Module is now alllowed to contain namespace separators.`
             );
         }
 
-        let registry = this._namespaces[namespace];
+        let registry = this[FIELDS.namespaces][namespace];
 
         if (!registry) {
             registry = {};
-            this._namespaces[namespace] = registry;
+            this[FIELDS.namespaces][namespace] = registry;
         }
 
         if (registry.hasOwnProperty(name)) {
@@ -92,8 +98,8 @@ export default class Storage {
             throw new Error(INVALID_MODULE_PATH);
         }
 
-        const parts = splitPath(this._separator, path);
-        const namespace = this._namespaces[parts.namespace];
+        const parts = splitPath(this[FIELDS.separator], path);
+        const namespace = this[FIELDS.namespaces][parts.namespace];
 
         if (!namespace) {
             throw new Error(`${MODULE_NOT_FOUND}: ${path}!`);
@@ -118,8 +124,8 @@ export default class Storage {
             throw new Error(INVALID_MODULE_PATH);
         }
 
-        const parts = splitPath(this._separator, path);
-        const namespace = this._namespaces[parts.namespace];
+        const parts = splitPath(this[FIELDS.separator], path);
+        const namespace = this[FIELDS.namespaces][parts.namespace];
 
         if (!namespace) {
             return false;
@@ -147,14 +153,14 @@ export default class Storage {
             throw new Error(MISSED_CALLBACK);
         }
 
-        const registry = this._namespaces[namespace];
+        const registry = this[FIELDS.namespaces][namespace];
 
         if (!registry) {
             throw new Error(`${NAMESPACE_NOT_FOUND}: ${namespace}!`);
         }
 
         forEach(registry, (value, name) => {
-            callback(value, joinPath(this._separator, namespace, name));
+            callback(value, joinPath(this[FIELDS.separator], namespace, name));
         });
     }
 }

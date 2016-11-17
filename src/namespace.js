@@ -1,3 +1,4 @@
+import Symbol from 'es6-symbol';
 import {
     isFunction,
     create,
@@ -8,6 +9,12 @@ import Module from './module';
 
 const INVALID_CONSTRUCTOR = 'Service supports only constructors';
 const INVALID_FACTORY = 'Factory supports only functions';
+
+const FIELDS = {
+    separator: Symbol('separator'),
+    name: Symbol('name'),
+    storage: Symbol('storage')
+};
 
 /**
  * Creates a new Namespace.
@@ -22,9 +29,9 @@ export default class Namespace {
      * @param {Storage} storage - Global modules storage.
      */
     constructor(separator = '/', name = '', storage) {
-        this._separator = separator;
-        this._name = name;
-        this._storage = storage;
+        this[FIELDS.separator] = separator;
+        this[FIELDS.name] = name;
+        this[FIELDS.storage] = storage;
     }
 
     /**
@@ -32,7 +39,16 @@ export default class Namespace {
      * @returns {string} Namespace name.
      */
     getName() {
-        return this._name;
+        return this[FIELDS.name];
+    }
+
+    /**
+     * Determines whether a module with passed path exists.
+     * @param {string} path - Module's path.
+     * @return {boolean} Value that determines whether a module with passed path exists.
+     */
+    contains(path) {
+        return this[FIELDS.storage].contains(path);
     }
 
     /**
@@ -42,9 +58,9 @@ export default class Namespace {
      */
     namespace(name) {
         return new Namespace(
-            this._separator,
-            joinPath(this._separator, this._name, name),
-            this._storage
+            this[FIELDS.separator],
+            joinPath(this[FIELDS.separator], this[FIELDS.name], name),
+            this[FIELDS.storage]
         );
     }
 
@@ -57,8 +73,8 @@ export default class Namespace {
     const(name, definition) {
         const args = parseArgs(name, definition);
 
-        this._storage.addItem(new Module(
-            this._name,
+        this[FIELDS.storage].addItem(new Module(
+            this[FIELDS.name],
             args.name,
             args.dependencies,
             () => {
@@ -81,8 +97,8 @@ export default class Namespace {
     value(name, dependencies, definition) {
         const args = parseArgs(name, dependencies, definition);
 
-        this._storage.addItem(new Module(
-            this._name,
+        this[FIELDS.storage].addItem(new Module(
+            this[FIELDS.name],
             args.name,
             args.dependencies,
             (resolved) => {
@@ -113,12 +129,12 @@ export default class Namespace {
         const args = parseArgs(name, dependencies, definition);
 
         if (!isFunction(args.definition)) {
-            const path = joinPath(this._separator, this._name, name);
+            const path = joinPath(this[FIELDS.separator], this[FIELDS.name], name);
             throw new Error(`${INVALID_CONSTRUCTOR}: ${path}`);
         }
 
-        this._storage.addItem(new Module(
-            this._name,
+        this[FIELDS.storage].addItem(new Module(
+            this[FIELDS.name],
             args.name,
             args.dependencies,
             (resolved) => {
@@ -143,12 +159,12 @@ export default class Namespace {
         const args = parseArgs(name, dependencies, definition);
 
         if (!isFunction(args.definition)) {
-            const path = joinPath(this._separator, this._name, name);
+            const path = joinPath(this[FIELDS.separator], this[FIELDS.name], name);
             throw new Error(`${INVALID_FACTORY}: ${path}`);
         }
 
-        this._storage.addItem(new Module(
-            this._name,
+        this[FIELDS.storage].addItem(new Module(
+            this[FIELDS.name],
             args.name,
             args.dependencies,
             (resolved) => {

@@ -1,3 +1,4 @@
+import Symbol from 'es6-symbol';
 import toposort from 'toposort';
 import {
     isString,
@@ -10,6 +11,10 @@ import {
 const DEFAULT_DEPENDENCIES = [];
 const CIRC_REF = 'Circular dependency is detected';
 
+const FIELDS = {
+    storage: Symbol('storage')
+};
+
 /**
  * Creates a new Resolver.
  * @class
@@ -21,7 +26,7 @@ export default class Resolver {
      * @param storage - Module's storage.
      */
     constructor(storage) {
-        this._storage = storage;
+        this[FIELDS.storage] = storage;
     }
 
     /**
@@ -41,7 +46,7 @@ export default class Resolver {
             }
         };
         const resolveModule = (targetPath) => {
-            const module = this._storage.getItem(targetPath);
+            const module = this[FIELDS.storage].getItem(targetPath);
 
             if (module.isInitialized()) {
                 return module.getValue();
@@ -89,7 +94,7 @@ export default class Resolver {
     resolveAll(namespace) {
         const result = {};
 
-        this._storage.forEachIn(namespace, (module, path) => {
+        this[FIELDS.storage].forEachIn(namespace, (module, path) => {
             result[module.getName()] = this.resolve(path);
         });
 
