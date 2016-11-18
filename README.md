@@ -24,7 +24,7 @@ We all love testable and modular code. In most cases it means that every piece o
 depends on other pieces and these dependencies should be injected if we want to make our system testable and flexible. But wiring everything up might be a very tedious task with creating multiple instances, passing them into others and then, once requirements or designed changed, finding, replacing, updating and etc...
 So, that's why ``namespaces`` package was created - to solve this issue. It allows you organize your system parts and easily define their dependencies by creating an application container with namespaces.
 
-Its design is inspired by Angular v1 DI, therefore most of the concept might be familiar for those of you who are familiar with Angular v1, but some are new.
+Its design is inspired by Angular v1 DI, therefore most of the concepts might be familiar for those of you who are familiar with Angular v1, but some are new.
 
 ## Usage
 
