@@ -4,6 +4,7 @@ import path from './utils/path';
 import create from './utils/create';
 import parseArgs from './utils/args';
 import Module from './module';
+import { requires, assert } from './utils/assertions';
 
 const INVALID_CONSTRUCTOR = 'Service supports only constructors';
 const INVALID_FACTORY = 'Factory supports only functions';
@@ -26,6 +27,8 @@ class Namespace {
      * @param {string} [separator] - Namespace separator.
      */
     constructor(storage, name = '', separator = '/') {
+        requires(storage, 'storage');
+
         this[FIELDS.storage] = storage;
         this[FIELDS.name] = name;
         this[FIELDS.separator] = separator;
@@ -59,6 +62,8 @@ class Namespace {
      * @returns {Namespace} Returns current instance of Namespace.
      */
     const(name, definition) {
+        requires(name, 'module name');
+
         const args = parseArgs(name, definition);
 
         this[FIELDS.storage].addItem(new Module(
@@ -85,6 +90,8 @@ class Namespace {
      * @returns {Namespace} Returns current instance of Namespace.
      */
     value(name, dependencies, definition) {
+        requires(name, 'module name');
+
         const args = parseArgs(name, dependencies, definition);
 
         this[FIELDS.storage].addItem(new Module(
@@ -117,12 +124,14 @@ class Namespace {
      * @returns {Namespace} Returns current instance of Namespace.
      */
     service(name, dependencies, definition) {
+        requires(name, 'module name');
+
         const args = parseArgs(name, dependencies, definition);
 
-        if (!isFunction(args.definition)) {
-            const fullPath = path.join(this[FIELDS.separator], this[FIELDS.name], name);
-            throw new Error(`${INVALID_CONSTRUCTOR}: ${fullPath}`);
-        }
+        assert(
+            isFunction(args.definition),
+            `${INVALID_CONSTRUCTOR}: ${path.join(this[FIELDS.separator], this[FIELDS.name], name)}`
+        );
 
         this[FIELDS.storage].addItem(new Module(
             this[FIELDS.name],
@@ -148,12 +157,14 @@ class Namespace {
      * @returns {Namespace} Returns current instance of Namespace.
      */
     factory(name, dependencies, definition) {
+        requires(name, 'module name');
+
         const args = parseArgs(name, dependencies, definition);
 
-        if (!isFunction(args.definition)) {
-            const fullPath = path.join(this[FIELDS.separator], this[FIELDS.name], name);
-            throw new Error(`${INVALID_FACTORY}: ${fullPath}`);
-        }
+        assert(
+            isFunction(args.definition),
+            `${INVALID_FACTORY}: ${path.join(this[FIELDS.separator], this[FIELDS.name], name)}`
+        );
 
         this[FIELDS.storage].addItem(new Module(
             this[FIELDS.name],
