@@ -7,6 +7,9 @@ Angular-flavored DI container.
 [![Build Status](https://secure.travis-ci.org/ziflex/namespaces.svg?branch=master)](http://travis-ci.org/ziflex/namespaces)
 [![Coverage Status](https://coveralls.io/repos/github/ziflex/namespaces-js/badge.svg?branch=master)](https://coveralls.io/github/ziflex/namespaces-js)
 
+## API
+You can find API [here](http://ziflex.github.io/namespaces)
+
 ## Install
 
 via npm
@@ -17,121 +20,124 @@ via npm
 
 ```
 
+## Motivation
+
+We all love testable and modular code. In most cases it means that every piece of you system
+depends on other pieces and these dependencies should be injected if we want to make our system testable and flexible. But wiring everything up might be very tedious task with creating multiple instances, passing them into others and then, once requirements or designed changed, finding and replacing..
+So, that's why ``namespaces`` package was created - to solve this issue.
+Its design is highly inspired by Angular v1 DI, therefore most of the concept might be familiar for those of you who are familiar with Angular v1.
+
 ## Usage
 
-### Basic
+### Just as a container
+
+#### Stores values
+
+```javascript
+
+var Container = require('namespaces-js');
+var container = new Container();
+
+container.const('foo', 'bar');
+
+const foo = container.resolve('foo');
+
+console.log(foo); // -> 'bar'
+
+```
+
+#### Creates singletons
+
+```javascript
+
+var Container = require('namespaces-js');
+var container = new Container();
+
+container.factory('foo', () => {
+    return { do: => 'bar' };
+});
+
+const foo1 = container.resolve('foo');
+const foo2 = container.resolve('foo');
+
+console.log(foo1 === foo2); // -> true
+
+```
+
+### As a container with dependencies
+
+#### By module name
+
+```javascript
+
+var Container = require('namespaces-js');
+var container = new Container();
+
+container.factory('foo', () => 'bar');
+container.factory('qaz', ['foo'], (foo) => `${foo}-fighter`);
+
+const qaz = container.resolve('qaz');
+
+console.log(qaz); // 'bar-fighter';
+
+```
+
+#### By custom resolver
+
+```javascript
+
+var Container = require('namespaces-js');
+var container = new Container();
+
+container.factory('foo', () => 'bar');
+container.factory('qaz', [
+    'foo',
+    function customResolver() {
+        return 'wsx';
+    }
+], (foo, something) => {
+    return `${foo}-${something}`;
+});
+
+const qaz = container.resolve('qaz');
+
+console.log(qaz); // 'bar-wsx';
+
+```
+
+### Container with namespaces
 
 ```javascript
 
     var Container = require('namespaces-js');
     var container = new Container();
 
-    container.factory('a', () => 'a');
-    container.factory('b', ['a'] (a) => a + 'b');
+    container.value('foo', 'bar');;
+    container.namespace('my-namespace').value('foo', 'qaz');
 
-    const b = container.resolve('b'); // -> 'ab'
-    const a = container.resolve('a'); // -> 'a'
+    const foo = container.resolve('foo');
+    const foo2 = container.resolve('my-namespace/foo');
 
-```
+    console.log(foo === foo2); // false
 
-### Namespaces
 
-```javascript
+    container.namespace('my-namespace').namespace('sub-namespace').factory('foobar', [
+        'foo',
+        'my-namespace/foo'
+    ], (foo, foo2) => {
+        return `${foo} !== ${foo2}`;
+    });
 
-    var Container = require('namespaces-js');
-    var container = new Container();
+    const foobar = container.resolve('my-namespace/sub-namespace/foobar');
 
-    container.namespace('a').value('foo', 'bar');
-    container.namespace('b').service('foo', function Bar() { this.name = 'bar'; });
-    container.namespace('c/d').factory('foo', () => 'bar');    
-
-    const aFoo = container.resolve('a/foo'); // -> 'bar'
-    const bFoo = container.resolve('b/foo'); // -> instance of Bar
-    const cdFoo = container.resolve('c/d/foo'); // -> 'bar'
+    console.log(foobar); // 'bar !== qaz';
 
 ```
-
-Also, you can define custom namespace separator:
-
-```javascript
-
-    var Container = require('namespaces-js');
-    var container = new Container('.');
-
-    container.namespace('a.b.c').value('foo', 'bar');
-    container.namespace('d.e.f').service('foo', function Bar() { this.name = 'bar'; });
-
-```
-
-#### Modular
-
-```javascript
-
-    var Container = require('namespaces-js');    
-    var container = new Container();   
-
-    var ui = container.namespace('ui');
-    var actions = ui.namespace('actions');
-    actions.service('user', require('./ui/flux/actions/user'));
-    actions.service('users', require('./ui/flux/actions/users'));
-
-    var stores = ui.namespace('stores');
-    stores.service('users', ['ui/actions/users', 'ui/actions/user'], require('./ui/flux/stores/users'));
-
-```
-
-### Resolving
-#### Basic
-
-````javascript
-
-    var Container = require('namespaces-js');
-    var container = new Container();
-
-    container.value('foo', 'bar');
-
-    const foo = container.resolve('foo'); // -> 'bar'
-
-````
-
-#### Group
-
-````javascript
-
-    var Container = require('namespaces-js');
-    var container = new Container();
-
-    var services = container.namespace('services');
-    services.service('users', UsersService);
-    services.service('accounts', AccountsService);
-
-    var actions = container.namespace('ui/actions');
-    actions.service('user', ['services/users', 'services/accounts'], UserActions);
-    actions.service('users', ['services/users'], UsersActions);
-
-    var allActions = container.resolveAll('ui/actions');
-
-````
-
-#### Custom
-
-````javascript
-
-    var Container = require('namespaces-js');
-    var container = new Container();
-
-    container.factory('a', () => 'a');
-    container.factory('b', [
-        'a',
-        function customResolver() {
-            return { foo: 'bar' };
-        }
-    ], (a, c) => [a, c]);
-
-````
-
 
 ### Namespace Helper
+
+It comes with a handy utility function that converts a given namespace tree into function tree.
+Each function-node of the tree recieves a module name and returns a full path of it.
 
 ````javascript
 
@@ -150,65 +156,4 @@ Also, you can define custom namespace separator:
     container.resolve(namespaces.a('foo'));
     container.resolve(namespaces.c.f.g('foo'));
 
-````
-
-#### Multiple paths   
-````js
-    const namespaces = Container.map({
-        core: {
-            infrastructure: [
-                'item1',
-                'item2'
-            ],
-            domain: 'foo'
-        },
-        system: [
-            'component1',
-            'component2'
-        ]
-    });
-
-    const paths = result.system([
-        'component1',
-        'component2'
-    ]);
-
-    // ['system/component1', 'system/component2']
-````
-
-## API
-
-### new Container([namespaceSeparator: string = '/'])
-
-Creates new container.
-Arguments: namespaces separator. Optional. Default '/'.
-
-### container.namespace([namespaceName: string]): Namespace
-Returns or creates new namespace.    
-
-### container.resolve(modulePath: string): any
-Returns registered module's value.   
-
-### container.resolveAll(namespace: string): Map<string, any>
-Returns all values from registered modules in particular namespace.      
-
-### namespace.const(name: string, value: number | string | array | object | function): void
-Registers a value, such as a string, a number, an array, an object or a function.    
-
-### namespace.value(name: string, [dependencies: string[]], value: number | string | array | object | function): void
-Registers a value, such as a string, a number, an array, an object or a constructor.    
-Note: If passed value is function type, it will be treated as constructor and every time when it's injected, new instance will be created.
-
-### namespace.service(name: string, [dependencies: string[]], value: function): void
-Registers a service constructor, which will be invoked with `new` to create the service instance.    
-Any type which was registered as a service is singleton.
-
-### namespace.factory(name: string, [dependencies: string[]], value: function): void
-Register a service factory, which will be called to return the service instance.    
-Any function's value will be registered as a singleton.
-
-### namespace.getName(): string      
-Returns name of current namespace.   
-
-### Container.map     
-Helper function that converts object / array to chain of functions in order to easily use namespace paths.      
+````     
