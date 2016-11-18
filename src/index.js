@@ -4,6 +4,7 @@ import Storage from './storage';
 import Resolver from './resolver';
 import parseSettings from './utils/settings';
 import path from './utils/path';
+import { requires } from './utils/assertions';
 
 const FIELDS = {
     resolver: Symbol('resolver'),
@@ -48,6 +49,8 @@ class Container extends Namespace {
      * @return {boolean} Value that determines whether a module exists by a given path.
      */
     contains(fullPath) {
+        requires('full path', fullPath);
+
         return this[FIELDS.storage].contains(fullPath);
     }
 
@@ -79,6 +82,8 @@ class Container extends Namespace {
      * @returns {any} Module value.
      */
     resolve(fullPath) {
+        requires('full path', fullPath);
+
         return this[FIELDS.resolver].resolve(fullPath);
     }
 
@@ -88,6 +93,8 @@ class Container extends Namespace {
      * @returns {Map<string, any>} Map of module values, where key is module name.
      */
     resolveAll(namespace) {
+        requires('namespace', namespace);
+
         return this[FIELDS.resolver].resolveAll(namespace);
     }
 }

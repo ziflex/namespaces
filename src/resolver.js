@@ -5,9 +5,12 @@ import isFunction from 'is-function';
 import isArray from 'is-array';
 import forEach from 'for-each';
 import toposort from 'toposort';
+import { requires, assert } from './utils/assertions';
 
 const DEFAULT_DEPENDENCIES = [];
 const CIRC_REF = 'Circular dependency is detected';
+const INVALID_NAMESPACE_TYPE = 'Invalid namespace name type, expected "string", but got';
+const INVALID_PATH_TYPE = 'Invalid path type, expected "string", but got';
 
 const FIELDS = {
     storage: Symbol('storage')
@@ -23,6 +26,8 @@ class Resolver {
      * @param storage - Module's storage.
      */
     constructor(storage) {
+        requires(storage, 'storage');
+
         this[FIELDS.storage] = storage;
     }
 
@@ -32,6 +37,9 @@ class Resolver {
      * @returns {any} Value of resolved module.
      */
     resolve(fullPath) {
+        requires(fullPath, 'module\'s path');
+        assert(isString(fullPath), `${INVALID_PATH_TYPE} "${typeof fullPath}"`);
+
         const graph = [];
         const chain = [];
         const checkCircularDependency = (targetPath, dependencies) => {
@@ -95,6 +103,9 @@ class Resolver {
      * @returns {Map<string, any>} Map of module values, where key is a module name.
      */
     resolveAll(namespace) {
+        requires(namespace, 'namespace name');
+        assert(isString(namespace), `${INVALID_NAMESPACE_TYPE} "${typeof namespace}"`);
+
         const result = {};
 
         this[FIELDS.storage].forEachIn(namespace, (module, path) => {

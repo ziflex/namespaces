@@ -2,17 +2,40 @@
 
 import { expect } from 'chai';
 import Container from '../../src/index';
+import Resolver from '../../src/resolver';
+import Storage from '../../src/storage';
 
-describe('Resolver', function() {
+describe('Resolver', () => {
     let container = null;
 
-    beforeEach(function() {
+    beforeEach(() => {
         container = new Container();
     });
 
+    describe('#constructor', () => {
+        context('When storage is not passed', () => {
+            it('should throw an error', () => {
+                expect(() => new Resolver()).to.throw(Error);
+            });
+        });
+    });
+
     describe('.resolve', () => {
-        context('empty container', () => {
-            it('should throw error', () => {
+        context('When path is not passed or is not a string', () => {
+            it('should throw an error', () => {
+                const resolver = new Resolver(new Storage('/', false));
+                expect(() => {
+                    resolver.resolve();
+                });
+
+                expect(() => {
+                    resolver.resolve(1);
+                });
+            });
+        });
+
+        context('When container is empty and panic="true"', () => {
+            it('should throw an error', () => {
                 const resolve = () => {
                     container.resolve('foo');
                 };
@@ -70,13 +93,13 @@ describe('Resolver', function() {
                 container.factory('my-service2', [
                     'my-val',
                     () => {
-                        return [{ foo: 'bar' }, { qaz: 'wsx'}];
+                        return [{ foo: 'bar' }, { qaz: 'wsx' }];
                     }
                 ], (arg1, arg2) => {
                     expect(arg1, 'arg1 exists').to.exist;
                     expect(arg2, 'arg1 exists').to.exist;
                     expect(arg1, 'arg2 equals to "value"').to.equal('value');
-                    expect(arg2, 'arg2 equals to "[{ foo: \'bar\' }, { qaz: \'wsx\'}]"').to.eql([{ foo: 'bar' }, { qaz: 'wsx'}]);
+                    expect(arg2, 'arg2 equals to "[{ foo: \'bar\' }, { qaz: \'wsx\'}]"').to.eql([{ foo: 'bar' }, { qaz: 'wsx' }]);
                 });
 
                 container.resolve('my-service');
@@ -449,6 +472,19 @@ describe('Resolver', function() {
         });
     });
     describe('.resolveAll', () => {
+        context('When path is not passed or is not a string', () => {
+            it('should throw an error', () => {
+                const resolver = new Resolver(new Storage('/', false));
+                expect(() => {
+                    resolver.resolveAll();
+                });
+
+                expect(() => {
+                    resolver.resolveAll(1);
+                });
+            });
+        });
+
         context('empty container', () => {
             it('should throw error', () => {
                 expect(() => {

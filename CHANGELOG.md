@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0
+
+### Added
+* Better type check for all input args.
+
 ## 1.0.0
 
 ### Added
