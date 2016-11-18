@@ -52,23 +52,17 @@ class Storage {
      * @returns {number} Size of a storage/namespace.
      */
     size(namespace) {
-        let result = 0;
-
-        const count = () => {
-            result += 1;
-        };
-
         if (isString(namespace)) {
             const registry = this[FIELDS.namespaces][namespace];
 
-            forEach(registry, count);
-        } else {
-            forEach(this[FIELDS.namespaces], (registry) => {
-                forEach(registry, count);
-            });
+            if (isNil(registry)) {
+                return 0;
+            }
+
+            return registry[REGISTRY_FIELDS.size];
         }
 
-        return result;
+        return this[FIELDS.size];
     }
 
     /**
@@ -177,11 +171,15 @@ class Storage {
             return this;
         }
 
-        const registry = this[FIELDS.namespaces][namespace];
+        let registry = this[FIELDS.namespaces][namespace];
 
         if (!isNil(registry)) {
             this[FIELDS.size] -= registry[REGISTRY_FIELDS.size];
-            this[FIELDS.namespaces][namespace] = {};
+
+            registry = {};
+            registry[REGISTRY_FIELDS.size] = 0;
+
+            this[FIELDS.namespaces][namespace] = registry;
         }
 
         return this;
