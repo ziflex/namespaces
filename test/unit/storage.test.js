@@ -94,10 +94,18 @@ describe('Storage', function () {
 
     describe('.getItem', () => {
         context('invalid parameters', () => {
-            it('should throw error when module path is missed', () => {
+            it('should throw error when module path is missed or is not a string', () => {
                 expect(() => {
                     storage.getItem();
-                }).to.throw();
+                }).to.throw(Error);
+
+                expect(() => {
+                    storage.getItem(1);
+                }).to.throw(Error);
+
+                expect(() => {
+                    storage.getItem([]);
+                }).to.throw(Error);
             });
 
             it('should throw error when module path is not string', () => {
@@ -189,10 +197,14 @@ describe('Storage', function () {
             });
         });
 
-        context('when module name is not passed', () => {
+        context('when module name is not passed or is not a string', () => {
             it('should throw an error', () => {
                 expect(() => {
                     storage.contains();
+                }).to.throw(Error);
+
+                expect(() => {
+                    storage.contains(1);
                 }).to.throw(Error);
             });
         });
@@ -241,6 +253,19 @@ describe('Storage', function () {
     });
 
     describe('.clear', () => {
+        context('When namespace is not a string', () => {
+            it('should throw an error', () => {
+                storage = new Storage('/', false);
+
+                expect(() => {
+                    storage.clear(1);
+                }).to.throw(Error);
+
+                expect(() => {
+                    storage.clear([]);
+                }).to.throw(Error);
+            });
+        });
         context('When namespace is not passed', () => {
             it('should clear whole storage', () => {
                 storage = new Storage('/', false);

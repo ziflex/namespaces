@@ -26,11 +26,11 @@ describe('Resolver', () => {
                 const resolver = new Resolver(new Storage('/', false));
                 expect(() => {
                     resolver.resolve();
-                });
+                }).to.throw(Error);
 
                 expect(() => {
                     resolver.resolve(1);
-                });
+                }).to.throw(Error);
             });
         });
 
@@ -477,11 +477,11 @@ describe('Resolver', () => {
                 const resolver = new Resolver(new Storage('/', false));
                 expect(() => {
                     resolver.resolveAll();
-                });
+                }).to.throw(Error);
 
                 expect(() => {
                     resolver.resolveAll(1);
-                });
+                }).to.throw(Error);
             });
         });
 
@@ -489,7 +489,7 @@ describe('Resolver', () => {
             it('should throw error', () => {
                 expect(() => {
                     container.resolveAll('foo');
-                }).to.throw();
+                }).to.throw(Error);
             });
         });
 
@@ -511,7 +511,7 @@ describe('Resolver', () => {
                 for (const name in resolved) {
                     if (resolved.hasOwnProperty(name)) {
                         arr.push({
-                            name: name,
+                            name,
                             value: resolved[name]
                         });
                     }
