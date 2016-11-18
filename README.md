@@ -5,7 +5,7 @@ Angular-flavored DI container.
 
 [![npm version](https://badge.fury.io/js/namespaces-js.svg)](https://www.npmjs.com/package/namespaces-js)
 [![Build Status](https://secure.travis-ci.org/ziflex/namespaces.svg?branch=master)](http://travis-ci.org/ziflex/namespaces)
-[![Coverage Status](https://coveralls.io/repos/github/ziflex/namespaces-js/badge.svg?branch=master)](https://coveralls.io/github/ziflex/namespaces-js)
+[![Coverage Status](https://coveralls.io/repos/github/ziflex/namespaces/badge.svg?branch=master)](https://coveralls.io/github/ziflex/namespaces)
 
 ## API
 You can find API [here](http://ziflex.github.io/namespaces)
