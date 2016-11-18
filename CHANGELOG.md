@@ -5,6 +5,9 @@
 ### Added
 * Better type check for all input args.
 
+### Fixed
+* Stoarge size calculation (now it tracks changes)
+
 ## 1.0.0
 
 ### Added
