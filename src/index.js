@@ -2,6 +2,7 @@ import Symbol from 'es6-symbol';
 import Namespace from './namespace';
 import Storage from './storage';
 import Resolver from './resolver';
+import parseSettings from './utils/settings';
 import path from './utils/path';
 
 const FIELDS = {
@@ -24,12 +25,16 @@ class Container extends Namespace {
 
     /**
      * Creates a new instance of Container.
-     * @param {string} [separator] - Namespace separator. Optional.
+     * @param {string} [params="/"] - Namespace separator.
+     * @param {object} [params=null] - Container settings.
+     * @param {string} [params.separator="/"] - Namespace separator.
+     * @param {boolean} [params.panic=false] - Indicates whether it needs to throw an error when module not found.
      */
-    constructor(separator = '/') {
-        const storage = new Storage(separator);
+    constructor(params) {
+        const settings = parseSettings(params);
+        const storage = new Storage(settings.separator, settings.panic);
 
-        super(storage, '', separator);
+        super(storage, '', settings.separator);
 
         this[FIELDS.resolver] = new Resolver(storage);
     }

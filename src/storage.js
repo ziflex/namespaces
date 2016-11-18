@@ -19,6 +19,7 @@ const MODULE_NOT_FOUND = 'Module with path was not found';
 
 const FIELDS = {
     separator: Symbol('separator'),
+    panic: Symbol('panic'),
     namespaces: Symbol('namespaces')
 };
 
@@ -29,10 +30,12 @@ class Storage {
 
     /**
      * Creates a new instance of Storage.
-     * @param separator - Namespace separator.
+     * @param {string} [separator] - Namespace separator.
+     * @param {boolean} [panic] - Indicates whether it needs to throw an error when module not found.
      */
-    constructor(separator = '/') {
+    constructor(separator = '/', panic = true) {
         this[FIELDS.separator] = separator;
+        this[FIELDS.panic] = panic;
         this[FIELDS.namespaces] = {};
     }
 
@@ -90,7 +93,7 @@ class Storage {
      * Finds a module by a given path.
      * @param {string} fullPath - Module full path.
      * @return {Module} Found module.
-     * @throws {Error} If module was not found.
+     * @throws {Error} If panic="true" and module not found.
      */
     getItem(fullPath) {
         if (!isString(fullPath)) {
@@ -99,15 +102,24 @@ class Storage {
 
         const parts = path.split(this[FIELDS.separator], fullPath);
         const namespace = this[FIELDS.namespaces][parts.namespace];
+        const panic = this[FIELDS.panic];
 
         if (!namespace) {
-            throw new Error(`${MODULE_NOT_FOUND}: ${fullPath}!`);
+            if (panic) {
+                throw new Error(`${MODULE_NOT_FOUND}: ${fullPath}!`);
+            } else {
+                return null;
+            }
         }
 
         const module = namespace[parts.name];
 
         if (!module) {
-            throw new Error(`${MODULE_NOT_FOUND}: ${fullPath}!`);
+            if (panic) {
+                throw new Error(`${MODULE_NOT_FOUND}: ${fullPath}!`);
+            } else {
+                return null;
+            }
         }
 
         return module;
@@ -143,6 +155,7 @@ class Storage {
      * Iterates over modules in a given namespace.
      * @param {string} namespace - Namespace name.
      * @returns {Namespace} Returns current instance on Storage.
+     * @throws {Error} If panic="true" and namespace not found.
      */
     forEachIn(namespace, callback) {
         if (isNil(namespace)) {
@@ -158,9 +171,14 @@ class Storage {
         }
 
         const registry = this[FIELDS.namespaces][namespace];
+        const panic = this[FIELDS.panic];
 
         if (!registry) {
-            throw new Error(`${NAMESPACE_NOT_FOUND}: ${namespace}!`);
+            if (panic) {
+                throw new Error(`${NAMESPACE_NOT_FOUND}: ${namespace}!`);
+            } else {
+                return this;
+            }
         }
 
         forEach(registry, (value, name) => {

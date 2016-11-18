@@ -1,4 +1,5 @@
 import Symbol from 'es6-symbol';
+import isNil from 'is-nil';
 import isString from 'is-string';
 import isFunction from 'is-function';
 import isArray from 'is-array';
@@ -45,6 +46,10 @@ class Resolver {
         };
         const resolveModule = (targetPath) => {
             const module = this[FIELDS.storage].getItem(targetPath);
+
+            if (isNil(module)) {
+                return null;
+            }
 
             if (module.isInitialized()) {
                 return module.getValue();

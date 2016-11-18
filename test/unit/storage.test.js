@@ -141,6 +141,33 @@ describe('Storage', function () {
                 expect(storage.getItem('foo/bar')).to.exist;
             });
         });
+
+        context('When panic="true"', () => {
+            it('should throw an error when module does not exist', () => {
+                storage = storage = new Storage('/', true);
+                storage.addItem(new Module('foo', 'bar', [], function init() {}));
+
+                expect(() => {
+                    storage.getItem('foo/qaz');
+                }).to.throw(Error);
+            });
+        });
+
+        context('When panic="false"', () => {
+            it('should return null when namespace does not exist', () => {
+                storage = storage = new Storage('/', false);
+                storage.addItem(new Module('foo', 'bar', [], function init() {}));
+
+                expect(storage.getItem('bar/qaz')).to.be.null;
+            });
+
+            it('should return null when module does not exist', () => {
+                storage = storage = new Storage('/', false);
+                storage.addItem(new Module('foo', 'bar', [], function init() {}));
+
+                expect(storage.getItem('foo/qaz')).to.be.null;
+            });
+        });
     });
 
     describe('.contains', () => {
@@ -239,6 +266,24 @@ describe('Storage', function () {
                     'foo/wsx',
                     'foo/rfv'
                 ]);
+            });
+        });
+
+        context('When panic="true"', () => {
+            it('should throw an error when namespace not found', () => {
+                expect(() => {
+                    storage.forEachIn('foo', () => {});
+                }).to.throw(Error);
+            });
+        });
+
+        context('When panic="false"', () => {
+            it('should not throw an error when namespace not found', () => {
+                storage = new Storage('/', false);
+
+                expect(() => {
+                    storage.forEachIn('foo', () => {});
+                }).to.not.throw(Error);
             });
         });
     });

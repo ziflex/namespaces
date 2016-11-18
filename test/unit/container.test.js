@@ -227,6 +227,23 @@ describe('Container', () => {
             });
         });
 
+        describe('.resolve', () => {
+            context('When panic="false"', () => {
+                it('should return a null when module does not exist', () => {
+                    container = new Container({ panic: false });
+
+                    expect(container.resolve('foo')).to.be.null;
+                });
+
+                it('should return a null when namespace does not exist', () => {
+                    container = new Container({ panic: false });
+                    container.namespace('foo').const('bar', 'qaz');
+
+                    expect(container.resolve('wsx/bar')).to.be.null;
+                });
+            });
+        });
+
         describe('#map', () => {
             it('should exist', () => {
                 expect(() => {
