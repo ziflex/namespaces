@@ -12,8 +12,6 @@ You can find API [here](http://ziflex.github.io/namespaces)
 
 ## Install
 
-via npm
-
 ```sh
 
     $ npm install --save namespaces-js
@@ -23,9 +21,10 @@ via npm
 ## Motivation
 
 We all love testable and modular code. In most cases it means that every piece of you system
-depends on other pieces and these dependencies should be injected if we want to make our system testable and flexible. But wiring everything up might be very tedious task with creating multiple instances, passing them into others and then, once requirements or designed changed, finding and replacing..
-So, that's why ``namespaces`` package was created - to solve this issue.
-Its design is highly inspired by Angular v1 DI, therefore most of the concept might be familiar for those of you who are familiar with Angular v1.
+depends on other pieces and these dependencies should be injected if we want to make our system testable and flexible. But wiring everything up might be a very tedious task with creating multiple instances, passing them into others and then, once requirements or designed changed, finding, replacing, updating and etc...
+So, that's why ``namespaces`` package was created - to solve this issue. It allows you organize your system parts and easily define their dependencies by creating an application container with namespaces.
+
+Its design is inspired by Angular v1 DI, therefore most of the concept might be familiar for those of you who are familiar with Angular v1, but some are new.
 
 ## Usage
 
