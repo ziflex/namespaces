@@ -22,7 +22,8 @@
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js  && rm -rf ./coverage",
     "clean": "rimraf lib",
     "build": "npm run test && npm run clean && babel src --out-dir lib && npm run doc",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "benchmark": "node --expose-gc ./benchmarks/index.js"
   },
   "license": "MIT",
   "keywords": [
@@ -49,6 +50,7 @@
     "babel-preset-es2015-ie": "^6.6.2",
     "babel-preset-stage-0": "^6.16.0",
     "babel-register": "^6.18.0",
+    "benchmark": "^2.1.2",
     "chai": "^3.5.0",
     "coveralls": "^2.11.14",
     "eslint": "^2.12.0",
