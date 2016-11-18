@@ -198,6 +198,103 @@ describe('Storage', function () {
         });
     });
 
+    describe('.size', () => {
+        context('When namespace is not passed', () => {
+            it('should return size of whole storage', () => {
+                expect(storage.size()).to.eql(0);
+
+                storage.addItem(new Module('', 'bar', [], function init() {}));
+
+                expect(storage.size()).to.eql(1);
+
+                storage.addItem(new Module('foo', 'bar', [], function init() {}));
+
+                expect(storage.size()).to.eql(2);
+
+                storage.addItem(new Module('foo/bar', 'bar', [], function init() {}));
+
+                expect(storage.size()).to.eql(3);
+
+                storage.addItem(new Module('foo/bar', 'qaz', [], function init() {}));
+
+                expect(storage.size()).to.eql(4);
+            });
+        });
+
+        context('When namespace is passed', () => {
+            it('should return size of namespace', () => {
+                expect(storage.size('foo')).to.eql(0);
+
+                storage.addItem(new Module('foo', 'bar', [], function init() {}));
+
+                expect(storage.size('foo')).to.eql(1);
+
+                storage.addItem(new Module('foo/bar', 'bar', [], function init() {}));
+
+                expect(storage.size('foo')).to.eql(1);
+
+                storage.addItem(new Module('foo', 'qaz', [], function init() {}));
+
+                expect(storage.size('foo')).to.eql(2);
+            });
+        });
+    });
+
+    describe('.clear', () => {
+        context('When namespace is not passed', () => {
+            it('should clear whole storage', () => {
+                storage = new Storage('/', false);
+
+                expect(storage.size()).to.eql(0);
+
+                storage.addItem(new Module('', 'bar', [], function init() {}));
+                storage.addItem(new Module('foo', 'bar', [], function init() {}));
+                storage.addItem(new Module('foo/qaz', 'bar', [], function init() {}));
+                storage.addItem(new Module('foo/qaz/wsx', 'bar', [], function init() {}));
+
+                expect(storage.size()).to.eql(4);
+
+                storage.clear();
+
+                expect(storage.size()).to.eql(0);
+
+                expect(storage.getItem('bar')).to.be.null;
+                expect(storage.getItem('foo/bar')).to.be.null;
+                expect(storage.getItem('foo/qaz/bar')).to.be.null;
+                expect(storage.getItem('foo/qaz/wsx/bar')).to.be.null;
+            });
+        });
+
+        context('When namespace is passed', () => {
+            it('should clear a namespace', () => {
+                storage = new Storage('/', false);
+
+                expect(storage.size()).to.eql(0);
+                expect(storage.size('foo')).to.eql(0);
+
+                storage.addItem(new Module('', 'bar', [], function init() {}));
+                storage.addItem(new Module('foo', 'bar', [], function init() {}));
+                storage.addItem(new Module('foo', 'qaz', [], function init() {}));
+                storage.addItem(new Module('foo/qaz', 'bar', [], function init() {}));
+                storage.addItem(new Module('foo/qaz/wsx', 'bar', [], function init() {}));
+
+                expect(storage.size('foo')).to.eql(2);
+                expect(storage.size()).to.eql(5);
+
+                storage.clear('foo');
+
+                expect(storage.size('foo')).to.eql(0);
+                expect(storage.size()).to.eql(3);
+
+                expect(storage.getItem('bar')).to.not.be.null;
+                expect(storage.getItem('foo/bar')).to.be.null;
+                expect(storage.getItem('foo/qaz')).to.be.null;
+                expect(storage.getItem('foo/qaz/bar')).to.not.be.null;
+                expect(storage.getItem('foo/qaz/wsx/bar')).to.not.be.null;
+            });
+        });
+    });
+
     describe('.forEachIn', () => {
         context('When namespace not passed or not a string', () => {
             it('should throw an error', () => {

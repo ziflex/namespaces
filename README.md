@@ -113,21 +113,23 @@ console.log(qaz); // 'bar-wsx';
 
     container.value('foo', 'bar');;
     container.namespace('my-namespace').value('foo', 'qaz');
+    container.namespace('my-namespace/sub-namespace-1').value('foo', 'qaz');
 
     const foo = container.resolve('foo');
     const foo2 = container.resolve('my-namespace/foo');
+    const foo3 = container.resolve('my-namespace/sub-namespace/foo');
 
     console.log(foo === foo2); // false
 
 
-    container.namespace('my-namespace').namespace('sub-namespace').factory('foobar', [
+    container.namespace('my-namespace').namespace('sub-namespace-2').factory('foobar', [
         'foo',
-        'my-namespace/foo'
+        'my-namespace-1/foo'
     ], (foo, foo2) => {
         return `${foo} !== ${foo2}`;
     });
 
-    const foobar = container.resolve('my-namespace/sub-namespace/foobar');
+    const foobar = container.resolve('my-namespace/sub-namespace-2/foobar');
 
     console.log(foobar); // 'bar !== qaz';
 

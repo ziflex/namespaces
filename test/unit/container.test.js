@@ -244,6 +244,36 @@ describe('Container', () => {
             });
         });
 
+        describe('.clear', () => {
+            it('should clear container', () => {
+                expect(container.size()).to.eql(0);
+
+                container.const('foo', 'bar');
+                container.namespace('foo').const('bar', 'qaz');
+                container.namespace('foo').namespace('bar').const('qaz', 'wsx');
+
+                expect(container.size()).to.eql(3);
+
+                container.clear();
+
+                expect(container.size()).to.eql(0);
+            });
+
+            it('should clear a given namespace', () => {
+                expect(container.size()).to.eql(0);
+
+                container.const('foo', 'bar');
+                container.namespace('foo').const('bar', 'qaz');
+                container.namespace('foo').namespace('bar').const('qaz', 'wsx');
+
+                expect(container.size()).to.eql(3);
+
+                container.clear();
+
+                expect(container.size()).to.eql(0);
+            });
+        });
+
         describe('#map', () => {
             it('should exist', () => {
                 expect(() => {

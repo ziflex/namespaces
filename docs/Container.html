@@ -29,7 +29,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#contains">contains</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#clear">clear</a></li><li data-type='method'><a href="Container.html#contains">contains</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li><li data-type='method'><a href="Container.html#size">size</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#clear">clear</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li><li data-type='method'><a href="Storage.html#size">size</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -65,9 +65,15 @@
         <dt>Methods</dt><dd><ul>
             <li><a href="#map">map</a></li>
             
+            <li><a href="#clear">clear</a></li>
+            
+            <li><a href="#contains">contains</a></li>
+            
             <li><a href="#resolve">resolve</a></li>
             
             <li><a href="#resolveAll">resolveAll</a></li>
+            
+            <li><a href="#size">size</a></li>
             </ul></dd></dl></div>
 </header>
 
@@ -92,7 +98,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="index.js.html">index.js</a>:<a href="index.js.html#line15">15</a>
+    <a href="index.js.html">index.js</a>:<a href="index.js.html#line16">16</a>
   </code>
 </div>
 
@@ -419,7 +425,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n * Represents a container for registered modules.\n */","meta":{"range":[330,1978],"filename":"index.js","lineno":15,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000033","name":"Container","type":"ClassDeclaration","paramnames":["params"]},"shortpath":"index.js"},"classdesc":"Represents a container for registered modules.","name":"Container","longname":"Container","kind":"class","scope":"global","description":"Creates a new instance of Container.","params":[{"type":{"names":["string"]},"optional":true,"defaultvalue":"\"/\"","description":"Namespace separator.","name":"params"},{"type":{"names":["object"]},"optional":true,"defaultvalue":null,"description":"Container settings.","name":"params","subparams":[{"type":{"names":["string"]},"optional":true,"defaultvalue":"\"/\"","description":"Namespace separator.","name":"separator"},{"type":{"names":["boolean"]},"optional":true,"defaultvalue":false,"description":"Indicates whether it needs to throw an error when module not found.","name":"panic"}]},null,null],"___id":"T000003R000002","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Container","signature":"<span class=\"signature\">(params<span class=\"signature-attributes\">opt</span>, params<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"></span>","ancestors":[]}
+{"comment":"/**\n * Represents a container for registered modules.\n */","meta":{"range":[362,3138],"filename":"index.js","lineno":16,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000037","name":"Container","type":"ClassDeclaration","paramnames":["params"]},"shortpath":"index.js"},"classdesc":"Represents a container for registered modules.","name":"Container","longname":"Container","kind":"class","scope":"global","description":"Creates a new instance of Container.","params":[{"type":{"names":["string"]},"optional":true,"defaultvalue":"\"/\"","description":"Namespace separator.","name":"params"},{"type":{"names":["object"]},"optional":true,"defaultvalue":null,"description":"Container settings.","name":"params","subparams":[{"type":{"names":["string"]},"optional":true,"defaultvalue":"\"/\"","description":"Namespace separator.","name":"separator"},{"type":{"names":["boolean"]},"optional":true,"defaultvalue":false,"description":"Indicates whether it needs to throw an error when module not found.","name":"panic"}]},null,null],"___id":"T000003R000002","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Container","signature":"<span class=\"signature\">(params<span class=\"signature-attributes\">opt</span>, params<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"></span>","ancestors":[]}
 </pre>
 -->
 </div>
@@ -454,7 +460,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="index.js.html">index.js</a>:<a href="index.js.html#line22">22</a>
+    <a href="index.js.html">index.js</a>:<a href="index.js.html#line23">23</a>
   </code>
 </div>
 
@@ -701,7 +707,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n     * Converts object/array to a function chain that's help to use namespaces.\n     * @param {(Object|Array<any>)} namespaces - An object or an array of nested namespace names.\n     * @param {string} [separator] - Namespace separator.\n     * @returns {function} Chain of functions that converts a module name into a full module path.\n     */","meta":{"range":[721,816],"filename":"index.js","lineno":22,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000037","name":"Container.map","type":"MethodDefinition","paramnames":["namespaces","separator"]},"vars":{"":null},"shortpath":"index.js"},"description":"Converts object/array to a function chain that's help to use namespaces.","params":[{"type":{"names":["Object","Array.<any>"]},"description":"An object or an array of nested namespace names.","name":"namespaces"},{"type":{"names":["string"]},"optional":true,"description":"Namespace separator.","name":"separator","defaultvalue":"/"}],"returns":[{"type":{"names":["function"]},"description":"Chain of functions that converts a module name into a full module path."}],"name":"map","longname":"Container.map","kind":"function","memberof":"Container","scope":"static","___id":"T000002R000005","___s":true,"attribs":"<span class=\"type-signature\">(static) </span>","id":".map","signature":"<span class=\"signature\">(namespaces, separator<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"> &rarr; {function}</span>","ancestors":["<a href=\"Container.html\">Container</a>."]}
+{"comment":"/**\n     * Converts object/array to a function chain that's help to use namespaces.\n     * @param {(Object|Array<any>)} namespaces - An object or an array of nested namespace names.\n     * @param {string} [separator] - Namespace separator.\n     * @returns {function} Chain of functions that converts a module name into a full module path.\n     */","meta":{"range":[753,848],"filename":"index.js","lineno":23,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000041","name":"Container.map","type":"MethodDefinition","paramnames":["namespaces","separator"]},"vars":{"":null},"shortpath":"index.js"},"description":"Converts object/array to a function chain that's help to use namespaces.","params":[{"type":{"names":["Object","Array.<any>"]},"description":"An object or an array of nested namespace names.","name":"namespaces"},{"type":{"names":["string"]},"optional":true,"description":"Namespace separator.","name":"separator","defaultvalue":"/"}],"returns":[{"type":{"names":["function"]},"description":"Chain of functions that converts a module name into a full module path."}],"name":"map","longname":"Container.map","kind":"function","memberof":"Container","scope":"static","___id":"T000002R000006","___s":true,"attribs":"<span class=\"type-signature\">(static) </span>","id":".map","signature":"<span class=\"signature\">(namespaces, separator<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"> &rarr; {function}</span>","ancestors":["<a href=\"Container.html\">Container</a>."]}
 </pre>
 -->
 </div>
@@ -718,7 +724,440 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="index.js.html">index.js</a>:<a href="index.js.html#line47">47</a>
+    <a href="index.js.html">index.js</a>:<a href="index.js.html#line70">70</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="clear">
+      <a href="#params-clear"><span class="type-signature"></span>clear</a><span class="signature">(namespace<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Container.html">Container</a>}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Clears a container or a given namespace.
+If namespace name is passed - removes all modules in the namespace.
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-clear">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-clear" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>namespace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">Namespace name to clear.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    Returns current instance of Container.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Container.html">Container</a></span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Clears a container or a given namespace.\n     * If namespace name is passed - removes all modules in the namespace.\n     * @param {string} [namespace=null] - Namespace name to clear.\n     * @returns {Container} Returns current instance of Container.\n     */","meta":{"range":[2504,2597],"filename":"index.js","lineno":70,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000138","name":"Container#clear","type":"MethodDefinition","paramnames":["namespace"]},"vars":{"":null},"shortpath":"index.js"},"description":"Clears a container or a given namespace.\nIf namespace name is passed - removes all modules in the namespace.","params":[{"type":{"names":["string"]},"optional":true,"defaultvalue":null,"description":"Namespace name to clear.","name":"namespace"}],"returns":[{"type":{"names":["Container"]},"description":"Returns current instance of Container."}],"name":"clear","longname":"Container#clear","kind":"function","memberof":"Container","scope":"instance","___id":"T000002R000014","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"clear","signature":"<span class=\"signature\">(namespace<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"> &rarr; {<a href=\"Container.html\">Container</a>}</span>","ancestors":["<a href=\"Container.html\">Container</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="index.js.html">index.js</a>:<a href="index.js.html#line50">50</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="contains">
+      <a href="#params-contains"><span class="type-signature"></span>contains</a><span class="signature">(fullPath)</span><span class="type-signature"> &rarr; {boolean}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Determines whether a module exists by a given path.
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-contains">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-contains" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fullPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Module full path.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    Value that determines whether a module exists by a given path.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Determines whether a module exists by a given path.\n     * @param {string} fullPath - Module full path.\n     * @return {boolean} Value that determines whether a module exists by a given path.\n     */","meta":{"range":[1789,1871],"filename":"index.js","lineno":50,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000108","name":"Container#contains","type":"MethodDefinition","paramnames":["fullPath"]},"vars":{"":null},"shortpath":"index.js"},"description":"Determines whether a module exists by a given path.","params":[{"type":{"names":["string"]},"description":"Module full path.","name":"fullPath"}],"returns":[{"type":{"names":["boolean"]},"description":"Value that determines whether a module exists by a given path."}],"name":"contains","longname":"Container#contains","kind":"function","memberof":"Container","scope":"instance","___id":"T000002R000012","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"contains","signature":"<span class=\"signature\">(fullPath)</span><span class=\"type-signature\"> &rarr; {boolean}</span>","ancestors":["<a href=\"Container.html\">Container</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="index.js.html">index.js</a>:<a href="index.js.html#line81">81</a>
   </code>
 </div>
 
@@ -907,7 +1346,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n     * Resolves a module by a given full path.\n     * @param {string} fullPath - Module's full path.\n     * @returns {any} Module value.\n     */","meta":{"range":[1596,1677],"filename":"index.js","lineno":47,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000092","name":"Container#resolve","type":"MethodDefinition","paramnames":["fullPath"]},"vars":{"":null},"shortpath":"index.js"},"description":"Resolves a module by a given full path.","params":[{"type":{"names":["string"]},"description":"Module's full path.","name":"fullPath"}],"returns":[{"type":{"names":["any"]},"description":"Module value."}],"name":"resolve","longname":"Container#resolve","kind":"function","memberof":"Container","scope":"instance","___id":"T000002R000010","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resolve","signature":"<span class=\"signature\">(fullPath)</span><span class=\"type-signature\"> &rarr; {any}</span>","ancestors":["<a href=\"Container.html\">Container</a>#"]}
+{"comment":"/**\n     * Resolves a module by a given full path.\n     * @param {string} fullPath - Module's full path.\n     * @returns {any} Module value.\n     */","meta":{"range":[2756,2837],"filename":"index.js","lineno":81,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000155","name":"Container#resolve","type":"MethodDefinition","paramnames":["fullPath"]},"vars":{"":null},"shortpath":"index.js"},"description":"Resolves a module by a given full path.","params":[{"type":{"names":["string"]},"description":"Module's full path.","name":"fullPath"}],"returns":[{"type":{"names":["any"]},"description":"Module value."}],"name":"resolve","longname":"Container#resolve","kind":"function","memberof":"Container","scope":"instance","___id":"T000002R000015","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resolve","signature":"<span class=\"signature\">(fullPath)</span><span class=\"type-signature\"> &rarr; {any}</span>","ancestors":["<a href=\"Container.html\">Container</a>#"]}
 </pre>
 -->
 </div>
@@ -924,7 +1363,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="index.js.html">index.js</a>:<a href="index.js.html#line56">56</a>
+    <a href="index.js.html">index.js</a>:<a href="index.js.html#line90">90</a>
   </code>
 </div>
 
@@ -1113,7 +1552,234 @@
 
 <!--
 <pre>
-{"comment":"/**\n     * Resolves all modules from a given namespace.\n     * @param {string} namespace - Target namespace.\n     * @returns {Map<string, any>} Map of module values, where key is module name.\n     */","meta":{"range":[1887,1976],"filename":"index.js","lineno":56,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000107","name":"Container#resolveAll","type":"MethodDefinition","paramnames":["namespace"]},"vars":{"":null},"shortpath":"index.js"},"description":"Resolves all modules from a given namespace.","params":[{"type":{"names":["string"]},"description":"Target namespace.","name":"namespace"}],"returns":[{"type":{"names":["Map.<string, any>"]},"description":"Map of module values, where key is module name."}],"name":"resolveAll","longname":"Container#resolveAll","kind":"function","memberof":"Container","scope":"instance","___id":"T000002R000011","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resolveAll","signature":"<span class=\"signature\">(namespace)</span><span class=\"type-signature\"> &rarr; {Map.&lt;string, any>}</span>","ancestors":["<a href=\"Container.html\">Container</a>#"]}
+{"comment":"/**\n     * Resolves all modules from a given namespace.\n     * @param {string} namespace - Target namespace.\n     * @returns {Map<string, any>} Map of module values, where key is module name.\n     */","meta":{"range":[3047,3136],"filename":"index.js","lineno":90,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000170","name":"Container#resolveAll","type":"MethodDefinition","paramnames":["namespace"]},"vars":{"":null},"shortpath":"index.js"},"description":"Resolves all modules from a given namespace.","params":[{"type":{"names":["string"]},"description":"Target namespace.","name":"namespace"}],"returns":[{"type":{"names":["Map.<string, any>"]},"description":"Map of module values, where key is module name."}],"name":"resolveAll","longname":"Container#resolveAll","kind":"function","memberof":"Container","scope":"instance","___id":"T000002R000016","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resolveAll","signature":"<span class=\"signature\">(namespace)</span><span class=\"type-signature\"> &rarr; {Map.&lt;string, any>}</span>","ancestors":["<a href=\"Container.html\">Container</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="index.js.html">index.js</a>:<a href="index.js.html#line60">60</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="size">
+      <a href="#params-size"><span class="type-signature"></span>size</a><span class="signature">(namespace<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Returns size of whole container or a namespace.
+If namespace was given, count of items inside this namespace will be returned.
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-size">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-size" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>namespace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    undefine
+                
+                </td>
+            
+
+            <td class="description last">Namespace name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    Size of a container/namespace.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\n     * Returns size of whole container or a namespace.\n     * If namespace was given, count of items inside this namespace will be returned.\n     * @param {string} [namespace=undefine] Namespace name\n     * @returns {number} Size of a container/namespace.\n     */","meta":{"range":[2149,2225],"filename":"index.js","lineno":60,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000123","name":"Container#size","type":"MethodDefinition","paramnames":["namespace"]},"vars":{"":null},"shortpath":"index.js"},"description":"Returns size of whole container or a namespace.\nIf namespace was given, count of items inside this namespace will be returned.","params":[{"type":{"names":["string"]},"optional":true,"defaultvalue":"undefine","description":"Namespace name","name":"namespace"}],"returns":[{"type":{"names":["number"]},"description":"Size of a container/namespace."}],"name":"size","longname":"Container#size","kind":"function","memberof":"Container","scope":"instance","___id":"T000002R000013","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"size","signature":"<span class=\"signature\">(namespace<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"> &rarr; {number}</span>","ancestors":["<a href=\"Container.html\">Container</a>#"]}
 </pre>
 -->
 </div>
@@ -1136,7 +1802,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Nov 17 2016 23:14:19 GMT-0500 (EST) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Nov 18 2016 12:14:42 GMT-0500 (EST) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

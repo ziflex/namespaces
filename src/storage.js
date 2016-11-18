@@ -17,10 +17,15 @@ const INVALID_MODULE_PATH = 'Invalid module path';
 const NAMESPACE_NOT_FOUND = 'Namespace was not found';
 const MODULE_NOT_FOUND = 'Module with path was not found';
 
+const REGISTRY_FIELDS = {
+    size: Symbol('size')
+};
+
 const FIELDS = {
     separator: Symbol('separator'),
     panic: Symbol('panic'),
-    namespaces: Symbol('namespaces')
+    namespaces: Symbol('namespaces'),
+    size: Symbol('size')
 };
 
 /**
@@ -37,12 +42,40 @@ class Storage {
         this[FIELDS.separator] = separator;
         this[FIELDS.panic] = panic;
         this[FIELDS.namespaces] = {};
+        this[FIELDS.size] = 0;
+    }
+
+    /**
+     * Returns size of a storage or namespace.
+     * If namespace was given, count of items inside this namespace will be returned.
+     * @param {string} [namespace=undefine] Namespace name
+     * @returns {number} Size of a storage/namespace.
+     */
+    size(namespace) {
+        let result = 0;
+
+        const count = () => {
+            result += 1;
+        };
+
+        if (isString(namespace)) {
+            const registry = this[FIELDS.namespaces][namespace];
+
+            forEach(registry, count);
+        } else {
+            forEach(this[FIELDS.namespaces], (registry) => {
+                forEach(registry, count);
+            });
+        }
+
+        return result;
     }
 
     /**
      * Adds a module to a storage.
      * @param {Module} module - Target module to add.
      * @throws {Error} If a module with a same path already exists.
+     * @returns {Storage} Returns current instance of Storage.
      */
     addItem(module) {
         if (!module) {
@@ -79,6 +112,7 @@ class Storage {
 
         if (!registry) {
             registry = {};
+            registry[REGISTRY_FIELDS.size] = 0;
             this[FIELDS.namespaces][namespace] = registry;
         }
 
@@ -87,6 +121,10 @@ class Storage {
         }
 
         registry[name] = module;
+        registry[REGISTRY_FIELDS.size] += 1;
+        this[FIELDS.size] += 1;
+
+        return this;
     }
 
     /**
@@ -126,6 +164,30 @@ class Storage {
     }
 
     /**
+     * Clears a storage.
+     * If namespace name is passed - clears a namespace by a given name.
+     * @param {string} [namespace=null] - Namespace name to clear.
+     * @returns {Storage} Returns current instance of Storage.
+     */
+    clear(namespace) {
+        if (!isString(namespace)) {
+            this[FIELDS.namespaces] = {};
+            this[FIELDS.size] = 0;
+
+            return this;
+        }
+
+        const registry = this[FIELDS.namespaces][namespace];
+
+        if (!isNil(registry)) {
+            this[FIELDS.size] -= registry[REGISTRY_FIELDS.size];
+            this[FIELDS.namespaces][namespace] = {};
+        }
+
+        return this;
+    }
+
+    /**
      * Determines whether a module exists by a given path.
      * @param {string} path - Module full path.
      * @return {boolean} Value that determines whether a module exists by a given path.
@@ -154,7 +216,7 @@ class Storage {
     /**
      * Iterates over modules in a given namespace.
      * @param {string} namespace - Namespace name.
-     * @returns {Namespace} Returns current instance on Storage.
+     * @returns {Storage} Returns current instance on Storage.
      * @throws {Error} If panic="true" and namespace not found.
      */
     forEachIn(namespace, callback) {

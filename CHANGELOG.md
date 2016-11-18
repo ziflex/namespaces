@@ -2,9 +2,15 @@
 
 ## 1.0.0
 
+### Added
+* ``panic`` params that prevents throwing an error on resolving not existing module.
+* ``clear([namespace])`` method that allows to clear either a whole container or a given namespace.
+* ``size([namespace])`` method that returns a size of either a whole container or a given namespace.
+
 ### Changed
 * Dropped Bower support
 * Moved to Symbols. All internals are secured.
+* Code clean up.
 
 ## 0.5.5
 ### Changed

@@ -29,7 +29,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#contains">contains</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#clear">clear</a></li><li data-type='method'><a href="Container.html#contains">contains</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li><li data-type='method'><a href="Container.html#size">size</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#clear">clear</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li><li data-type='method'><a href="Storage.html#size">size</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -64,8 +64,6 @@
         <dl class="dl-horizontal methods-members">
         <dt>Methods</dt><dd><ul>
             <li><a href="#const">const</a></li>
-            
-            <li><a href="#contains">contains</a></li>
             
             <li><a href="#factory">factory</a></li>
             
@@ -351,7 +349,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n * Represents a module namespace.\n */","meta":{"range":[493,5634],"filename":"namespace.js","lineno":20,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000391","name":"Namespace","type":"ClassDeclaration","paramnames":["storage","name","separator"]},"shortpath":"namespace.js"},"classdesc":"Represents a module namespace.","name":"Namespace","longname":"Namespace","kind":"class","scope":"global","description":"Creates a new instance of Namespace.","params":[{"type":{"names":["Storage"]},"description":"Modules storage.","name":"storage"},{"type":{"names":["string"]},"optional":true,"description":"Namespace name.","name":"name"},{"type":{"names":["string"]},"optional":true,"description":"Namespace separator.","name":"separator","defaultvalue":"/"}],"___id":"T000003R000004","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Namespace","signature":"<span class=\"signature\">(storage, name<span class=\"signature-attributes\">opt</span>, separator<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"></span>","ancestors":[]}
+{"comment":"/**\n * Represents a module namespace.\n */","meta":{"range":[493,5353],"filename":"namespace.js","lineno":20,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000454","name":"Namespace","type":"ClassDeclaration","paramnames":["storage","name","separator"]},"shortpath":"namespace.js"},"classdesc":"Represents a module namespace.","name":"Namespace","longname":"Namespace","kind":"class","scope":"global","description":"Creates a new instance of Namespace.","params":[{"type":{"names":["Storage"]},"description":"Modules storage.","name":"storage"},{"type":{"names":["string"]},"optional":true,"description":"Namespace name.","name":"name"},{"type":{"names":["string"]},"optional":true,"description":"Namespace separator.","name":"separator","defaultvalue":"/"}],"___id":"T000003R000004","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Namespace","signature":"<span class=\"signature\">(storage, name<span class=\"signature-attributes\">opt</span>, separator<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"></span>","ancestors":[]}
 </pre>
 -->
 </div>
@@ -386,7 +384,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line70">70</a>
+    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line61">61</a>
   </code>
 </div>
 
@@ -580,7 +578,7 @@
 
         
 <div class="param-desc">
-    Returns current instance on Namespace.
+    Returns current instance of Namespace.
 </div>
 
 
@@ -610,7 +608,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n     * Register a value, such as a string, a number, an array, an object or a function.\n     * @param {string} name - Module name.\n     * @param {(string|number|object|array|function)} definition - Module value.\n     * @returns {Namespace} Returns current instance on Namespace.\n     */","meta":{"range":[2015,2406],"filename":"namespace.js","lineno":70,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000487","name":"Namespace#const","type":"MethodDefinition","paramnames":["name","definition"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Register a value, such as a string, a number, an array, an object or a function.","params":[{"type":{"names":["string"]},"description":"Module name.","name":"name"},{"type":{"names":["string","number","object","array","function"]},"description":"Module value.","name":"definition"}],"returns":[{"type":{"names":["Namespace"]},"description":"Returns current instance on Namespace."}],"name":"const","longname":"Namespace#const","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000053","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"const","signature":"<span class=\"signature\">(name, definition)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
+{"comment":"/**\n     * Register a value, such as a string, a number, an array, an object or a function.\n     * @param {string} name - Module name.\n     * @param {(string|number|object|array|function)} definition - Module value.\n     * @returns {Namespace} Returns current instance of Namespace.\n     */","meta":{"range":[1712,2103],"filename":"namespace.js","lineno":61,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000535","name":"Namespace#const","type":"MethodDefinition","paramnames":["name","definition"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Register a value, such as a string, a number, an array, an object or a function.","params":[{"type":{"names":["string"]},"description":"Module name.","name":"name"},{"type":{"names":["string","number","object","array","function"]},"description":"Module value.","name":"definition"}],"returns":[{"type":{"names":["Namespace"]},"description":"Returns current instance of Namespace."}],"name":"const","longname":"Namespace#const","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000057","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"const","signature":"<span class=\"signature\">(name, definition)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
 </pre>
 -->
 </div>
@@ -627,213 +625,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line47">47</a>
-  </code>
-</div>
-
-
-
-
-    
-
-    
-
-    <h4 class="name" id="contains">
-      <a href="#params-contains"><span class="type-signature"></span>contains</a><span class="signature">(fullPath)</span><span class="type-signature"> &rarr; {boolean}</span>
-
-    </h4>
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="description">
-    Determines whether a module exists by a given path.
-</div>
-
-
-
-
-
-
-
-
-<div class="collapse_" id="methodCollapse-contains">
-
-  
-
-  
-
-<!-- details.tmpl -->
-
-
-
-
-
-
-
-
-<dl class="dl-horizontal">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-  <div id="params-contains" class="bs-callout bs-callout-primary">
-    <h5>Parameters</h5>
-    <!--params.tmpl-->
-
-
-<table class="table table-bordered">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fullPath</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Module full path.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-  </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <div class="bs-callout bs-callout-success">
-    <h5>Returns </h5>
-
-        
-<div class="param-desc">
-    Value that determines whether a module exists by a given path.
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-</div>
-  
-
-
-
-
-
-
-</div>
-
-<!--
-<pre>
-{"comment":"/**\n     * Determines whether a module exists by a given path.\n     * @param {string} fullPath - Module full path.\n     * @return {boolean} Value that determines whether a module exists by a given path.\n     */","meta":{"range":[1275,1357],"filename":"namespace.js","lineno":47,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000439","name":"Namespace#contains","type":"MethodDefinition","paramnames":["fullPath"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Determines whether a module exists by a given path.","params":[{"type":{"names":["string"]},"description":"Module full path.","name":"fullPath"}],"returns":[{"type":{"names":["boolean"]},"description":"Value that determines whether a module exists by a given path."}],"name":"contains","longname":"Namespace#contains","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000051","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"contains","signature":"<span class=\"signature\">(fullPath)</span><span class=\"type-signature\"> &rarr; {boolean}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
-</pre>
--->
-</div>
-
-        
-            <!--method.tmpl-->
-<div class="method-details">
-
-
-
-  <!--source-link.tmpl-->
-
-
-<div class="pull-right source-link-container">
-  <code class="source-link" data-tmpl="method-tmpl(1)">
-    <i class="fa fa-file-o"></i>
-    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line159">159</a>
+    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line150">150</a>
   </code>
 </div>
 
@@ -1082,7 +874,7 @@
 
         
 <div class="param-desc">
-    Returns current instance on Namespace.
+    Returns current instance of Namespace.
 </div>
 
 
@@ -1112,7 +904,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n     * Registers a factory of a singleton.\n     * @param {string} name - Module name.\n     * @param {array} [dependencies=[]] - Module dependencies.\n     * @param {function} definition - Module factory.\n     * @returns {Namespace} Returns current instance on Namespace.\n     */","meta":{"range":[4966,5632],"filename":"namespace.js","lineno":159,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000695","name":"Namespace#factory","type":"MethodDefinition","paramnames":["name","dependencies","definition"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Registers a factory of a singleton.","params":[{"type":{"names":["string"]},"description":"Module name.","name":"name"},{"type":{"names":["array"]},"optional":true,"defaultvalue":"[]","description":"Module dependencies.","name":"dependencies"},{"type":{"names":["function"]},"description":"Module factory.","name":"definition"}],"returns":[{"type":{"names":["Namespace"]},"description":"Returns current instance on Namespace."}],"name":"factory","longname":"Namespace#factory","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000061","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"factory","signature":"<span class=\"signature\">(name, dependencies<span class=\"signature-attributes\">opt</span>, definition)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
+{"comment":"/**\n     * Registers a factory of a singleton.\n     * @param {string} name - Module name.\n     * @param {array} [dependencies=[]] - Module dependencies.\n     * @param {function} definition - Module factory.\n     * @returns {Namespace} Returns current instance of Namespace.\n     */","meta":{"range":[4663,5351],"filename":"namespace.js","lineno":150,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000743","name":"Namespace#factory","type":"MethodDefinition","paramnames":["name","dependencies","definition"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Registers a factory of a singleton.","params":[{"type":{"names":["string"]},"description":"Module name.","name":"name"},{"type":{"names":["array"]},"optional":true,"defaultvalue":"[]","description":"Module dependencies.","name":"dependencies"},{"type":{"names":["function"]},"description":"Module factory.","name":"definition"}],"returns":[{"type":{"names":["Namespace"]},"description":"Returns current instance of Namespace."}],"name":"factory","longname":"Namespace#factory","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000065","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"factory","signature":"<span class=\"signature\">(name, dependencies<span class=\"signature-attributes\">opt</span>, definition)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
 </pre>
 -->
 </div>
@@ -1266,7 +1058,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n     * Returns a namespace name.\n     * @returns {string} Namespace name.\n     */","meta":{"range":[1003,1054],"filename":"namespace.js","lineno":38,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000429","name":"Namespace#getName","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Returns a namespace name.","returns":[{"type":{"names":["string"]},"description":"Namespace name."}],"name":"getName","longname":"Namespace#getName","kind":"function","memberof":"Namespace","scope":"instance","params":[],"___id":"T000002R000050","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getName","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"> &rarr; {string}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
+{"comment":"/**\n     * Returns a namespace name.\n     * @returns {string} Namespace name.\n     */","meta":{"range":[1003,1054],"filename":"namespace.js","lineno":38,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000492","name":"Namespace#getName","type":"MethodDefinition","paramnames":[]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Returns a namespace name.","returns":[{"type":{"names":["string"]},"description":"Namespace name."}],"name":"getName","longname":"Namespace#getName","kind":"function","memberof":"Namespace","scope":"instance","params":[],"___id":"T000002R000055","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getName","signature":"<span class=\"signature\">()</span><span class=\"type-signature\"> &rarr; {string}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
 </pre>
 -->
 </div>
@@ -1283,7 +1075,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line56">56</a>
+    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line47">47</a>
   </code>
 </div>
 
@@ -1472,7 +1264,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n     * Returns a sub namespace.\n     * @param {string} name - Name of a sub namespace.\n     * @returns {Namespace} Sub namespace.\n     */","meta":{"range":[1509,1714],"filename":"namespace.js","lineno":56,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000454","name":"Namespace#namespace","type":"MethodDefinition","paramnames":["name"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Returns a sub namespace.","params":[{"type":{"names":["string"]},"description":"Name of a sub namespace.","name":"name"}],"returns":[{"type":{"names":["Namespace"]},"description":"Sub namespace."}],"name":"namespace","longname":"Namespace#namespace","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000052","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"namespace","signature":"<span class=\"signature\">(name)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
+{"comment":"/**\n     * Returns a sub namespace.\n     * @param {string} name - Name of a sub namespace.\n     * @returns {Namespace} Sub namespace.\n     */","meta":{"range":[1206,1411],"filename":"namespace.js","lineno":47,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000502","name":"Namespace#namespace","type":"MethodDefinition","paramnames":["name"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Returns a sub namespace.","params":[{"type":{"names":["string"]},"description":"Name of a sub namespace.","name":"name"}],"returns":[{"type":{"names":["Namespace"]},"description":"Sub namespace."}],"name":"namespace","longname":"Namespace#namespace","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000056","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"namespace","signature":"<span class=\"signature\">(name)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
 </pre>
 -->
 </div>
@@ -1489,7 +1281,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line128">128</a>
+    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line119">119</a>
   </code>
 </div>
 
@@ -1739,7 +1531,7 @@ Given function will be invoked with a `new` keyword when it gets resolved.
 
         
 <div class="param-desc">
-    Returns current instance on Namespace.
+    Returns current instance of Namespace.
 </div>
 
 
@@ -1769,7 +1561,7 @@ Given function will be invoked with a `new` keyword when it gets resolved.
 
 <!--
 <pre>
-{"comment":"/**\n     * Registers a constructor of a singleton.\n     * Given function will be invoked with a `new` keyword when it gets resolved.\n     * @param {string} name - Module name.\n     * @param {array} [dependencies=[]] - Module dependencies.\n     * @param {function} definition - Module constructor that will be instantiated.\n     * @returns {Namespace} Returns current instance on Namespace.\n     */","meta":{"range":[3977,4674],"filename":"namespace.js","lineno":128,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000603","name":"Namespace#service","type":"MethodDefinition","paramnames":["name","dependencies","definition"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Registers a constructor of a singleton.\nGiven function will be invoked with a `new` keyword when it gets resolved.","params":[{"type":{"names":["string"]},"description":"Module name.","name":"name"},{"type":{"names":["array"]},"optional":true,"defaultvalue":"[]","description":"Module dependencies.","name":"dependencies"},{"type":{"names":["function"]},"description":"Module constructor that will be instantiated.","name":"definition"}],"returns":[{"type":{"names":["Namespace"]},"description":"Returns current instance on Namespace."}],"name":"service","longname":"Namespace#service","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000057","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"service","signature":"<span class=\"signature\">(name, dependencies<span class=\"signature-attributes\">opt</span>, definition)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
+{"comment":"/**\n     * Registers a constructor of a singleton.\n     * Given function will be invoked with a `new` keyword when it gets resolved.\n     * @param {string} name - Module name.\n     * @param {array} [dependencies=[]] - Module dependencies.\n     * @param {function} definition - Module constructor that will be instantiated.\n     * @returns {Namespace} Returns current instance of Namespace.\n     */","meta":{"range":[3674,4371],"filename":"namespace.js","lineno":119,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000651","name":"Namespace#service","type":"MethodDefinition","paramnames":["name","dependencies","definition"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Registers a constructor of a singleton.\nGiven function will be invoked with a `new` keyword when it gets resolved.","params":[{"type":{"names":["string"]},"description":"Module name.","name":"name"},{"type":{"names":["array"]},"optional":true,"defaultvalue":"[]","description":"Module dependencies.","name":"dependencies"},{"type":{"names":["function"]},"description":"Module constructor that will be instantiated.","name":"definition"}],"returns":[{"type":{"names":["Namespace"]},"description":"Returns current instance of Namespace."}],"name":"service","longname":"Namespace#service","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000061","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"service","signature":"<span class=\"signature\">(name, dependencies<span class=\"signature-attributes\">opt</span>, definition)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
 </pre>
 -->
 </div>
@@ -1786,7 +1578,7 @@ Given function will be invoked with a `new` keyword when it gets resolved.
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line96">96</a>
+    <a href="namespace.js.html">namespace.js</a>:<a href="namespace.js.html#line87">87</a>
   </code>
 </div>
 
@@ -2049,7 +1841,7 @@ with a `new` keyword everytime when it gets resolved.
 
         
 <div class="param-desc">
-    Returns current instance on Namespace.
+    Returns current instance of Namespace.
 </div>
 
 
@@ -2079,7 +1871,7 @@ with a `new` keyword everytime when it gets resolved.
 
 <!--
 <pre>
-{"comment":"/**\n     * Registers a value, such as a string, a number, an array, an object or a function.\n     * If passed value is a function, it will be invoked\n     * with a `new` keyword everytime when it gets resolved.\n     * @param {string} name - Module name.\n     * @param {array} [dependencies = []] - Module dependencies.\n     * @param {(string|number|object|array|function)} definition - Module value.\n     * @returns {Namespace} Returns current instance on Namespace.\n     */","meta":{"range":[2891,3569],"filename":"namespace.js","lineno":96,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000534","name":"Namespace#value","type":"MethodDefinition","paramnames":["name","dependencies","definition"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Registers a value, such as a string, a number, an array, an object or a function.\nIf passed value is a function, it will be invoked\nwith a `new` keyword everytime when it gets resolved.","params":[{"type":{"names":["string"]},"description":"Module name.","name":"name"},{"type":{"names":["array"]},"optional":true,"defaultvalue":"[]","description":"Module dependencies.","name":"dependencies"},{"type":{"names":["string","number","object","array","function"]},"description":"Module value.","name":"definition"}],"returns":[{"type":{"names":["Namespace"]},"description":"Returns current instance on Namespace."}],"name":"value","longname":"Namespace#value","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000055","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"value","signature":"<span class=\"signature\">(name, dependencies<span class=\"signature-attributes\">opt</span>, definition)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
+{"comment":"/**\n     * Registers a value, such as a string, a number, an array, an object or a function.\n     * If passed value is a function, it will be invoked\n     * with a `new` keyword everytime when it gets resolved.\n     * @param {string} name - Module name.\n     * @param {array} [dependencies = []] - Module dependencies.\n     * @param {(string|number|object|array|function)} definition - Module value.\n     * @returns {Namespace} Returns current instance of Namespace.\n     */","meta":{"range":[2588,3266],"filename":"namespace.js","lineno":87,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000582","name":"Namespace#value","type":"MethodDefinition","paramnames":["name","dependencies","definition"]},"vars":{"":null},"shortpath":"namespace.js"},"description":"Registers a value, such as a string, a number, an array, an object or a function.\nIf passed value is a function, it will be invoked\nwith a `new` keyword everytime when it gets resolved.","params":[{"type":{"names":["string"]},"description":"Module name.","name":"name"},{"type":{"names":["array"]},"optional":true,"defaultvalue":"[]","description":"Module dependencies.","name":"dependencies"},{"type":{"names":["string","number","object","array","function"]},"description":"Module value.","name":"definition"}],"returns":[{"type":{"names":["Namespace"]},"description":"Returns current instance of Namespace."}],"name":"value","longname":"Namespace#value","kind":"function","memberof":"Namespace","scope":"instance","___id":"T000002R000059","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"value","signature":"<span class=\"signature\">(name, dependencies<span class=\"signature-attributes\">opt</span>, definition)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Namespace.html\">Namespace</a>#"]}
 </pre>
 -->
 </div>
@@ -2102,7 +1894,7 @@ with a `new` keyword everytime when it gets resolved.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Nov 17 2016 23:14:19 GMT-0500 (EST) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Nov 18 2016 12:14:42 GMT-0500 (EST) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

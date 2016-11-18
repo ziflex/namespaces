@@ -29,7 +29,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#contains">contains</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#clear">clear</a></li><li data-type='method'><a href="Container.html#contains">contains</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li><li data-type='method'><a href="Container.html#size">size</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#clear">clear</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li><li data-type='method'><a href="Storage.html#size">size</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -65,11 +65,15 @@
         <dt>Methods</dt><dd><ul>
             <li><a href="#addItem">addItem</a></li>
             
+            <li><a href="#clear">clear</a></li>
+            
             <li><a href="#contains">contains</a></li>
             
             <li><a href="#forEachIn">forEachIn</a></li>
             
             <li><a href="#getItem">getItem</a></li>
+            
+            <li><a href="#size">size</a></li>
             </ul></dd></dl></div>
 </header>
 
@@ -94,7 +98,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line29">29</a>
+    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line34">34</a>
   </code>
 </div>
 
@@ -312,7 +316,7 @@
 
 <!--
 <pre>
-{"comment":"/**\r\n * Represents a modules storage.\r\n */","meta":{"range":[909,5436],"filename":"storage.js","lineno":29,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001157","name":"Storage","type":"ClassDeclaration","paramnames":["separator","panic"]},"shortpath":"storage.js"},"classdesc":"Represents a modules storage.","name":"Storage","longname":"Storage","kind":"class","scope":"global","description":"Creates a new instance of Storage.","params":[{"type":{"names":["string"]},"optional":true,"description":"Namespace separator.","name":"separator","defaultvalue":"/"},{"type":{"names":["boolean"]},"optional":true,"description":"Indicates whether it needs to throw an error when module not found.","name":"panic","defaultvalue":true}],"___id":"T000003R000006","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Storage","signature":"<span class=\"signature\">(separator<span class=\"signature-attributes\">opt</span>, panic<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"></span>","ancestors":[]}
+{"comment":"/**\r\n * Represents a modules storage.\r\n */","meta":{"range":[995,7178],"filename":"storage.js","lineno":34,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001219","name":"Storage","type":"ClassDeclaration","paramnames":["separator","panic"]},"shortpath":"storage.js"},"classdesc":"Represents a modules storage.","name":"Storage","longname":"Storage","kind":"class","scope":"global","description":"Creates a new instance of Storage.","params":[{"type":{"names":["string"]},"optional":true,"description":"Namespace separator.","name":"separator","defaultvalue":"/"},{"type":{"names":["boolean"]},"optional":true,"description":"Indicates whether it needs to throw an error when module not found.","name":"panic","defaultvalue":true}],"___id":"T000003R000006","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Storage","signature":"<span class=\"signature\">(separator<span class=\"signature-attributes\">opt</span>, panic<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"></span>","ancestors":[]}
 </pre>
 -->
 </div>
@@ -347,7 +351,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line47">47</a>
+    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line80">80</a>
   </code>
 </div>
 
@@ -359,7 +363,7 @@
     
 
     <h4 class="name" id="addItem">
-      <a href="#params-addItem"><span class="type-signature"></span>addItem</a><span class="signature">(module)</span><span class="type-signature"></span>
+      <a href="#params-addItem"><span class="type-signature"></span>addItem</a><span class="signature">(module)</span><span class="type-signature"> &rarr; {<a href="Storage.html">Storage</a>}</span>
 
     </h4>
 
@@ -524,6 +528,31 @@
 
 
 
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    Returns current instance of Storage.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Storage.html">Storage</a></span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
 
 
 
@@ -534,7 +563,7 @@
 
 <!--
 <pre>
-{"comment":"/**\r\n     * Adds a module to a storage.\r\n     * @param {Module} module - Target module to add.\r\n     * @throws {Error} If a module with a same path already exists.\r\n     */","meta":{"range":[1513,2663],"filename":"storage.js","lineno":47,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001194","name":"Storage#addItem","type":"MethodDefinition","paramnames":["module"]},"vars":{"":null},"shortpath":"storage.js"},"description":"Adds a module to a storage.","params":[{"type":{"names":["Module"]},"description":"Target module to add.","name":"module"}],"exceptions":[{"type":{"names":["Error"]},"description":"If a module with a same path already exists."}],"name":"addItem","longname":"Storage#addItem","kind":"function","memberof":"Storage","scope":"instance","___id":"T000002R000104","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"addItem","signature":"<span class=\"signature\">(module)</span><span class=\"type-signature\"></span>","ancestors":["<a href=\"Storage.html\">Storage</a>#"]}
+{"comment":"/**\r\n     * Adds a module to a storage.\r\n     * @param {Module} module - Target module to add.\r\n     * @throws {Error} If a module with a same path already exists.\r\n     * @returns {Storage} Returns current instance of Storage.\r\n     */","meta":{"range":[2413,3715],"filename":"storage.js","lineno":80,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001321","name":"Storage#addItem","type":"MethodDefinition","paramnames":["module"]},"vars":{"":null},"shortpath":"storage.js"},"description":"Adds a module to a storage.","params":[{"type":{"names":["Module"]},"description":"Target module to add.","name":"module"}],"exceptions":[{"type":{"names":["Error"]},"description":"If a module with a same path already exists."}],"returns":[{"type":{"names":["Storage"]},"description":"Returns current instance of Storage."}],"name":"addItem","longname":"Storage#addItem","kind":"function","memberof":"Storage","scope":"instance","___id":"T000002R000117","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"addItem","signature":"<span class=\"signature\">(module)</span><span class=\"type-signature\"> &rarr; {<a href=\"Storage.html\">Storage</a>}</span>","ancestors":["<a href=\"Storage.html\">Storage</a>#"]}
 </pre>
 -->
 </div>
@@ -551,7 +580,233 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line133">133</a>
+    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line172">172</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="clear">
+      <a href="#params-clear"><span class="type-signature"></span>clear</a><span class="signature">(namespace<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Storage.html">Storage</a>}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Clears a storage.If namespace name is passed - clears a namespace by a given name.
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-clear">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-clear" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>namespace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">Namespace name to clear.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    Returns current instance of Storage.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Storage.html">Storage</a></span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Clears a storage.\r\n     * If namespace name is passed - clears a namespace by a given name.\r\n     * @param {string} [namespace=null] - Namespace name to clear.\r\n     * @returns {Storage} Returns current instance of Storage.\r\n     */","meta":{"range":[4980,5414],"filename":"storage.js","lineno":172,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001576","name":"Storage#clear","type":"MethodDefinition","paramnames":["namespace"]},"vars":{"":null},"shortpath":"storage.js"},"description":"Clears a storage.\rIf namespace name is passed - clears a namespace by a given name.","params":[{"type":{"names":["string"]},"optional":true,"defaultvalue":null,"description":"Namespace name to clear.","name":"namespace"}],"returns":[{"type":{"names":["Storage"]},"description":"Returns current instance of Storage."}],"name":"clear","longname":"Storage#clear","kind":"function","memberof":"Storage","scope":"instance","___id":"T000002R000132","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"clear","signature":"<span class=\"signature\">(namespace<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"> &rarr; {<a href=\"Storage.html\">Storage</a>}</span>","ancestors":["<a href=\"Storage.html\">Storage</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line195">195</a>
   </code>
 </div>
 
@@ -740,7 +995,7 @@
 
 <!--
 <pre>
-{"comment":"/**\r\n     * Determines whether a module exists by a given path.\r\n     * @param {string} path - Module full path.\r\n     * @return {boolean} Value that determines whether a module exists by a given path.\r\n     */","meta":{"range":[3894,4363],"filename":"storage.js","lineno":133,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001423","name":"Storage#contains","type":"MethodDefinition","paramnames":["fullPath"]},"vars":{"":null},"shortpath":"storage.js"},"description":"Determines whether a module exists by a given path.","params":[{"type":{"names":["string"]},"description":"Module full path.","name":"path"}],"returns":[{"type":{"names":["boolean"]},"description":"Value that determines whether a module exists by a given path."}],"name":"contains","longname":"Storage#contains","kind":"function","memberof":"Storage","scope":"instance","___id":"T000002R000116","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"contains","signature":"<span class=\"signature\">(path)</span><span class=\"type-signature\"> &rarr; {boolean}</span>","ancestors":["<a href=\"Storage.html\">Storage</a>#"]}
+{"comment":"/**\r\n     * Determines whether a module exists by a given path.\r\n     * @param {string} path - Module full path.\r\n     * @return {boolean} Value that determines whether a module exists by a given path.\r\n     */","meta":{"range":[5638,6107],"filename":"storage.js","lineno":195,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001645","name":"Storage#contains","type":"MethodDefinition","paramnames":["fullPath"]},"vars":{"":null},"shortpath":"storage.js"},"description":"Determines whether a module exists by a given path.","params":[{"type":{"names":["string"]},"description":"Module full path.","name":"path"}],"returns":[{"type":{"names":["boolean"]},"description":"Value that determines whether a module exists by a given path."}],"name":"contains","longname":"Storage#contains","kind":"function","memberof":"Storage","scope":"instance","___id":"T000002R000138","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"contains","signature":"<span class=\"signature\">(path)</span><span class=\"type-signature\"> &rarr; {boolean}</span>","ancestors":["<a href=\"Storage.html\">Storage</a>#"]}
 </pre>
 -->
 </div>
@@ -757,7 +1012,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line160">160</a>
+    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line222">222</a>
   </code>
 </div>
 
@@ -769,7 +1024,7 @@
     
 
     <h4 class="name" id="forEachIn">
-      <a href="#params-forEachIn"><span class="type-signature"></span>forEachIn</a><span class="signature">(namespace)</span><span class="type-signature"> &rarr; {<a href="Namespace.html">Namespace</a>}</span>
+      <a href="#params-forEachIn"><span class="type-signature"></span>forEachIn</a><span class="signature">(namespace)</span><span class="type-signature"> &rarr; {<a href="Storage.html">Storage</a>}</span>
 
     </h4>
 
@@ -950,7 +1205,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="Namespace.html">Namespace</a></span>
+<span class="param-type"><a href="Storage.html">Storage</a></span>
 
 
     </dd>
@@ -969,7 +1224,7 @@
 
 <!--
 <pre>
-{"comment":"/**\r\n     * Iterates over modules in a given namespace.\r\n     * @param {string} namespace - Namespace name.\r\n     * @returns {Namespace} Returns current instance on Storage.\r\n     * @throws {Error} If panic=\"true\" and namespace not found.\r\n     */","meta":{"range":[4624,5433],"filename":"storage.js","lineno":160,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001485","name":"Storage#forEachIn","type":"MethodDefinition","paramnames":["namespace","callback"]},"vars":{"":null},"shortpath":"storage.js"},"description":"Iterates over modules in a given namespace.","params":[{"type":{"names":["string"]},"description":"Namespace name.","name":"namespace"}],"returns":[{"type":{"names":["Namespace"]},"description":"Returns current instance on Storage."}],"exceptions":[{"type":{"names":["Error"]},"description":"If panic=\"true\" and namespace not found."}],"name":"forEachIn","longname":"Storage#forEachIn","kind":"function","memberof":"Storage","scope":"instance","___id":"T000002R000120","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"forEachIn","signature":"<span class=\"signature\">(namespace)</span><span class=\"type-signature\"> &rarr; {<a href=\"Namespace.html\">Namespace</a>}</span>","ancestors":["<a href=\"Storage.html\">Storage</a>#"]}
+{"comment":"/**\r\n     * Iterates over modules in a given namespace.\r\n     * @param {string} namespace - Namespace name.\r\n     * @returns {Storage} Returns current instance on Storage.\r\n     * @throws {Error} If panic=\"true\" and namespace not found.\r\n     */","meta":{"range":[6366,7175],"filename":"storage.js","lineno":222,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001707","name":"Storage#forEachIn","type":"MethodDefinition","paramnames":["namespace","callback"]},"vars":{"":null},"shortpath":"storage.js"},"description":"Iterates over modules in a given namespace.","params":[{"type":{"names":["string"]},"description":"Namespace name.","name":"namespace"}],"returns":[{"type":{"names":["Storage"]},"description":"Returns current instance on Storage."}],"exceptions":[{"type":{"names":["Error"]},"description":"If panic=\"true\" and namespace not found."}],"name":"forEachIn","longname":"Storage#forEachIn","kind":"function","memberof":"Storage","scope":"instance","___id":"T000002R000142","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"forEachIn","signature":"<span class=\"signature\">(namespace)</span><span class=\"type-signature\"> &rarr; {<a href=\"Storage.html\">Storage</a>}</span>","ancestors":["<a href=\"Storage.html\">Storage</a>#"]}
 </pre>
 -->
 </div>
@@ -986,7 +1241,7 @@
 <div class="pull-right source-link-container">
   <code class="source-link" data-tmpl="method-tmpl(1)">
     <i class="fa fa-file-o"></i>
-    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line98">98</a>
+    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line136">136</a>
   </code>
 </div>
 
@@ -1198,7 +1453,233 @@
 
 <!--
 <pre>
-{"comment":"/**\r\n     * Finds a module by a given path.\r\n     * @param {string} fullPath - Module full path.\r\n     * @return {Module} Found module.\r\n     * @throws {Error} If panic=\"true\" and module not found.\r\n     */","meta":{"range":[2883,3670],"filename":"storage.js","lineno":98,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001327","name":"Storage#getItem","type":"MethodDefinition","paramnames":["fullPath"]},"vars":{"":null},"shortpath":"storage.js"},"description":"Finds a module by a given path.","params":[{"type":{"names":["string"]},"description":"Module full path.","name":"fullPath"}],"returns":[{"type":{"names":["Module"]},"description":"Found module."}],"exceptions":[{"type":{"names":["Error"]},"description":"If panic=\"true\" and module not found."}],"name":"getItem","longname":"Storage#getItem","kind":"function","memberof":"Storage","scope":"instance","___id":"T000002R000111","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getItem","signature":"<span class=\"signature\">(fullPath)</span><span class=\"type-signature\"> &rarr; {<a href=\"Module.html\">Module</a>}</span>","ancestors":["<a href=\"Storage.html\">Storage</a>#"]}
+{"comment":"/**\r\n     * Finds a module by a given path.\r\n     * @param {string} fullPath - Module full path.\r\n     * @return {Module} Found module.\r\n     * @throws {Error} If panic=\"true\" and module not found.\r\n     */","meta":{"range":[3935,4722],"filename":"storage.js","lineno":136,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001480","name":"Storage#getItem","type":"MethodDefinition","paramnames":["fullPath"]},"vars":{"":null},"shortpath":"storage.js"},"description":"Finds a module by a given path.","params":[{"type":{"names":["string"]},"description":"Module full path.","name":"fullPath"}],"returns":[{"type":{"names":["Module"]},"description":"Found module."}],"exceptions":[{"type":{"names":["Error"]},"description":"If panic=\"true\" and module not found."}],"name":"getItem","longname":"Storage#getItem","kind":"function","memberof":"Storage","scope":"instance","___id":"T000002R000127","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"getItem","signature":"<span class=\"signature\">(fullPath)</span><span class=\"type-signature\"> &rarr; {<a href=\"Module.html\">Module</a>}</span>","ancestors":["<a href=\"Storage.html\">Storage</a>#"]}
+</pre>
+-->
+</div>
+
+        
+            <!--method.tmpl-->
+<div class="method-details">
+
+
+
+  <!--source-link.tmpl-->
+
+
+<div class="pull-right source-link-container">
+  <code class="source-link" data-tmpl="method-tmpl(1)">
+    <i class="fa fa-file-o"></i>
+    <a href="storage.js.html">storage.js</a>:<a href="storage.js.html#line54">54</a>
+  </code>
+</div>
+
+
+
+
+    
+
+    
+
+    <h4 class="name" id="size">
+      <a href="#params-size"><span class="type-signature"></span>size</a><span class="signature">(namespace<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span>
+
+    </h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="description">
+    Returns size of a storage or namespace.If namespace was given, count of items inside this namespace will be returned.
+</div>
+
+
+
+
+
+
+
+
+<div class="collapse_" id="methodCollapse-size">
+
+  
+
+  
+
+<!-- details.tmpl -->
+
+
+
+
+
+
+
+
+<dl class="dl-horizontal">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+  <div id="params-size" class="bs-callout bs-callout-primary">
+    <h5>Parameters</h5>
+    <!--params.tmpl-->
+
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>namespace</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    undefine
+                
+                </td>
+            
+
+            <td class="description last">Namespace name</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="bs-callout bs-callout-success">
+    <h5>Returns </h5>
+
+        
+<div class="param-desc">
+    Size of a storage/namespace.
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+</div>
+  
+
+
+
+
+
+
+</div>
+
+<!--
+<pre>
+{"comment":"/**\r\n     * Returns size of a storage or namespace.\r\n     * If namespace was given, count of items inside this namespace will be returned.\r\n     * @param {string} [namespace=undefine] Namespace name\r\n     * @returns {number} Size of a storage/namespace.\r\n     */","meta":{"range":[1721,2163],"filename":"storage.js","lineno":54,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001264","name":"Storage#size","type":"MethodDefinition","paramnames":["namespace"]},"vars":{"":null},"shortpath":"storage.js"},"description":"Returns size of a storage or namespace.\rIf namespace was given, count of items inside this namespace will be returned.","params":[{"type":{"names":["string"]},"optional":true,"defaultvalue":"undefine","description":"Namespace name","name":"namespace"}],"returns":[{"type":{"names":["number"]},"description":"Size of a storage/namespace."}],"name":"size","longname":"Storage#size","kind":"function","memberof":"Storage","scope":"instance","___id":"T000002R000112","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"size","signature":"<span class=\"signature\">(namespace<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"> &rarr; {number}</span>","ancestors":["<a href=\"Storage.html\">Storage</a>#"]}
 </pre>
 -->
 </div>
@@ -1221,7 +1702,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Nov 17 2016 23:14:19 GMT-0500 (EST) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Nov 18 2016 12:14:42 GMT-0500 (EST) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

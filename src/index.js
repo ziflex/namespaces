@@ -6,7 +6,8 @@ import parseSettings from './utils/settings';
 import path from './utils/path';
 
 const FIELDS = {
-    resolver: Symbol('resolver')
+    resolver: Symbol('resolver'),
+    storage: Symbol('storage')
 };
 
 /**
@@ -36,7 +37,40 @@ class Container extends Namespace {
 
         super(storage, '', settings.separator);
 
-        this[FIELDS.resolver] = new Resolver(storage);
+        // Ouch! We have to keep ref twice :(
+        this[FIELDS.storage] = storage;
+        this[FIELDS.resolver] = new Resolver(this[FIELDS.storage]);
+    }
+
+    /**
+     * Determines whether a module exists by a given path.
+     * @param {string} fullPath - Module full path.
+     * @return {boolean} Value that determines whether a module exists by a given path.
+     */
+    contains(fullPath) {
+        return this[FIELDS.storage].contains(fullPath);
+    }
+
+    /**
+     * Returns size of whole container or a namespace.
+     * If namespace was given, count of items inside this namespace will be returned.
+     * @param {string} [namespace=undefine] Namespace name
+     * @returns {number} Size of a container/namespace.
+     */
+    size(namespace) {
+        return this[FIELDS.storage].size(namespace);
+    }
+
+    /**
+     * Clears a container or a given namespace.
+     * If namespace name is passed - removes all modules in the namespace.
+     * @param {string} [namespace=null] - Namespace name to clear.
+     * @returns {Container} Returns current instance of Container.
+     */
+    clear(namespace) {
+        this[FIELDS.storage].clear(namespace);
+
+        return this;
     }
 
     /**

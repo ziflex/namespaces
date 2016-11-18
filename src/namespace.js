@@ -40,15 +40,6 @@ class Namespace {
     }
 
     /**
-     * Determines whether a module exists by a given path.
-     * @param {string} fullPath - Module full path.
-     * @return {boolean} Value that determines whether a module exists by a given path.
-     */
-    contains(fullPath) {
-        return this[FIELDS.storage].contains(fullPath);
-    }
-
-    /**
      * Returns a sub namespace.
      * @param {string} name - Name of a sub namespace.
      * @returns {Namespace} Sub namespace.
@@ -65,7 +56,7 @@ class Namespace {
      * Register a value, such as a string, a number, an array, an object or a function.
      * @param {string} name - Module name.
      * @param {(string|number|object|array|function)} definition - Module value.
-     * @returns {Namespace} Returns current instance on Namespace.
+     * @returns {Namespace} Returns current instance of Namespace.
      */
     const(name, definition) {
         const args = parseArgs(name, definition);
@@ -91,7 +82,7 @@ class Namespace {
      * @param {string} name - Module name.
      * @param {array} [dependencies = []] - Module dependencies.
      * @param {(string|number|object|array|function)} definition - Module value.
-     * @returns {Namespace} Returns current instance on Namespace.
+     * @returns {Namespace} Returns current instance of Namespace.
      */
     value(name, dependencies, definition) {
         const args = parseArgs(name, dependencies, definition);
@@ -123,7 +114,7 @@ class Namespace {
      * @param {string} name - Module name.
      * @param {array} [dependencies=[]] - Module dependencies.
      * @param {function} definition - Module constructor that will be instantiated.
-     * @returns {Namespace} Returns current instance on Namespace.
+     * @returns {Namespace} Returns current instance of Namespace.
      */
     service(name, dependencies, definition) {
         const args = parseArgs(name, dependencies, definition);
@@ -154,7 +145,7 @@ class Namespace {
      * @param {string} name - Module name.
      * @param {array} [dependencies=[]] - Module dependencies.
      * @param {function} definition - Module factory.
-     * @returns {Namespace} Returns current instance on Namespace.
+     * @returns {Namespace} Returns current instance of Namespace.
      */
     factory(name, dependencies, definition) {
         const args = parseArgs(name, dependencies, definition);
@@ -176,6 +167,8 @@ class Namespace {
                 };
             }
         ));
+
+        return this;
     }
 }
 

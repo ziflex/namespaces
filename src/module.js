@@ -80,7 +80,7 @@ class Module {
 
     /**
      * Initializes a module.
-     * @returns {Module} Returns current instance on Module.
+     * @returns {Module} Returns current instance of Module.
      * @throws {Error} If a module is already initialized.
      */
     initialize(dependencies) {
