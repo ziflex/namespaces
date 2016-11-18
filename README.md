@@ -65,7 +65,7 @@ console.log(foo1 === foo2); // -> true
 
 ### As a container with dependencies
 
-#### By module name
+#### Resolves dependencies by module name
 
 ```javascript
 
@@ -81,7 +81,7 @@ console.log(qaz); // 'bar-fighter';
 
 ```
 
-#### By custom resolver
+#### Resolves dependencies by custom resolver
 
 ```javascript
 
@@ -104,7 +104,7 @@ console.log(qaz); // 'bar-wsx';
 
 ```
 
-### Container with namespaces
+### Creates nested containers with namespaces
 
 ```javascript
 
