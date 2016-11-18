@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "doc": "jsdoc src -c jsdoc.json -r -d docs -R README.md",
-    "gh-pages": "git subtree push --prefix dist origin gh-pages",
+    "gh-pages": "git subtree push --prefix docs origin gh-pages",
     "lint": "eslint -c ./.eslintrc.json src",
     "test": "npm run lint && mocha --reporter spec --compilers js:babel-register --recursive test",
     "cover": "istanbul cover _mocha -- --compilers js:babel-register --recursive",
