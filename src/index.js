@@ -92,4 +92,4 @@ class Container extends Namespace {
     }
 }
 
-export default Container;
+module.exports = Container;
