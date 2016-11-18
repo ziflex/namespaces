@@ -29,7 +29,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#contains">contains</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#clear">clear</a></li><li data-type='method'><a href="Container.html#contains">contains</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li><li data-type='method'><a href="Container.html#size">size</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#clear">clear</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li><li data-type='method'><a href="Storage.html#size">size</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -65,10 +65,15 @@ const INVALID_MODULE_PATH = 'Invalid module path';
 const NAMESPACE_NOT_FOUND = 'Namespace was not found';
 const MODULE_NOT_FOUND = 'Module with path was not found';
 
+const REGISTRY_FIELDS = {
+    size: Symbol('size')
+};
+
 const FIELDS = {
     separator: Symbol('separator'),
     panic: Symbol('panic'),
-    namespaces: Symbol('namespaces')
+    namespaces: Symbol('namespaces'),
+    size: Symbol('size')
 };
 
 /**
@@ -85,12 +90,40 @@ class Storage {
         this[FIELDS.separator] = separator;
         this[FIELDS.panic] = panic;
         this[FIELDS.namespaces] = {};
+        this[FIELDS.size] = 0;
+    }
+
+    /**
+     * Returns size of a storage or namespace.
+     * If namespace was given, count of items inside this namespace will be returned.
+     * @param {string} [namespace=undefine] Namespace name
+     * @returns {number} Size of a storage/namespace.
+     */
+    size(namespace) {
+        let result = 0;
+
+        const count = () => {
+            result += 1;
+        };
+
+        if (isString(namespace)) {
+            const registry = this[FIELDS.namespaces][namespace];
+
+            forEach(registry, count);
+        } else {
+            forEach(this[FIELDS.namespaces], (registry) => {
+                forEach(registry, count);
+            });
+        }
+
+        return result;
     }
 
     /**
      * Adds a module to a storage.
      * @param {Module} module - Target module to add.
      * @throws {Error} If a module with a same path already exists.
+     * @returns {Storage} Returns current instance of Storage.
      */
     addItem(module) {
         if (!module) {
@@ -127,6 +160,7 @@ class Storage {
 
         if (!registry) {
             registry = {};
+            registry[REGISTRY_FIELDS.size] = 0;
             this[FIELDS.namespaces][namespace] = registry;
         }
 
@@ -135,6 +169,10 @@ class Storage {
         }
 
         registry[name] = module;
+        registry[REGISTRY_FIELDS.size] += 1;
+        this[FIELDS.size] += 1;
+
+        return this;
     }
 
     /**
@@ -174,6 +212,30 @@ class Storage {
     }
 
     /**
+     * Clears a storage.
+     * If namespace name is passed - clears a namespace by a given name.
+     * @param {string} [namespace=null] - Namespace name to clear.
+     * @returns {Storage} Returns current instance of Storage.
+     */
+    clear(namespace) {
+        if (!isString(namespace)) {
+            this[FIELDS.namespaces] = {};
+            this[FIELDS.size] = 0;
+
+            return this;
+        }
+
+        const registry = this[FIELDS.namespaces][namespace];
+
+        if (!isNil(registry)) {
+            this[FIELDS.size] -= registry[REGISTRY_FIELDS.size];
+            this[FIELDS.namespaces][namespace] = {};
+        }
+
+        return this;
+    }
+
+    /**
      * Determines whether a module exists by a given path.
      * @param {string} path - Module full path.
      * @return {boolean} Value that determines whether a module exists by a given path.
@@ -202,7 +264,7 @@ class Storage {
     /**
      * Iterates over modules in a given namespace.
      * @param {string} namespace - Namespace name.
-     * @returns {Namespace} Returns current instance on Storage.
+     * @returns {Storage} Returns current instance on Storage.
      * @throws {Error} If panic="true" and namespace not found.
      */
     forEachIn(namespace, callback) {
@@ -251,7 +313,7 @@ export default Storage;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Nov 17 2016 23:14:19 GMT-0500 (EST) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Nov 18 2016 12:14:42 GMT-0500 (EST) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

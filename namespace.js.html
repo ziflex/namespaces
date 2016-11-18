@@ -29,7 +29,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav class="nav">
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#contains">contains</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Container.html">Container</a><ul class='methods'><li data-type='method'><a href="Container.html#.map">map</a></li><li data-type='method'><a href="Container.html#clear">clear</a></li><li data-type='method'><a href="Container.html#contains">contains</a></li><li data-type='method'><a href="Container.html#resolve">resolve</a></li><li data-type='method'><a href="Container.html#resolveAll">resolveAll</a></li><li data-type='method'><a href="Container.html#size">size</a></li></ul></li><li><a href="Module.html">Module</a><ul class='methods'><li data-type='method'><a href="Module.html#getDependencies">getDependencies</a></li><li data-type='method'><a href="Module.html#getName">getName</a></li><li data-type='method'><a href="Module.html#getNamespace">getNamespace</a></li><li data-type='method'><a href="Module.html#getValue">getValue</a></li><li data-type='method'><a href="Module.html#initialize">initialize</a></li><li data-type='method'><a href="Module.html#isInitialized">isInitialized</a></li></ul></li><li><a href="Namespace.html">Namespace</a><ul class='methods'><li data-type='method'><a href="Namespace.html#const">const</a></li><li data-type='method'><a href="Namespace.html#factory">factory</a></li><li data-type='method'><a href="Namespace.html#getName">getName</a></li><li data-type='method'><a href="Namespace.html#namespace">namespace</a></li><li data-type='method'><a href="Namespace.html#service">service</a></li><li data-type='method'><a href="Namespace.html#value">value</a></li></ul></li><li><a href="Resolver.html">Resolver</a><ul class='methods'><li data-type='method'><a href="Resolver.html#resolve">resolve</a></li><li data-type='method'><a href="Resolver.html#resolveAll">resolveAll</a></li></ul></li><li><a href="Storage.html">Storage</a><ul class='methods'><li data-type='method'><a href="Storage.html#addItem">addItem</a></li><li data-type='method'><a href="Storage.html#clear">clear</a></li><li data-type='method'><a href="Storage.html#contains">contains</a></li><li data-type='method'><a href="Storage.html#forEachIn">forEachIn</a></li><li data-type='method'><a href="Storage.html#getItem">getItem</a></li><li data-type='method'><a href="Storage.html#size">size</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -88,15 +88,6 @@ class Namespace {
     }
 
     /**
-     * Determines whether a module exists by a given path.
-     * @param {string} fullPath - Module full path.
-     * @return {boolean} Value that determines whether a module exists by a given path.
-     */
-    contains(fullPath) {
-        return this[FIELDS.storage].contains(fullPath);
-    }
-
-    /**
      * Returns a sub namespace.
      * @param {string} name - Name of a sub namespace.
      * @returns {Namespace} Sub namespace.
@@ -113,7 +104,7 @@ class Namespace {
      * Register a value, such as a string, a number, an array, an object or a function.
      * @param {string} name - Module name.
      * @param {(string|number|object|array|function)} definition - Module value.
-     * @returns {Namespace} Returns current instance on Namespace.
+     * @returns {Namespace} Returns current instance of Namespace.
      */
     const(name, definition) {
         const args = parseArgs(name, definition);
@@ -139,7 +130,7 @@ class Namespace {
      * @param {string} name - Module name.
      * @param {array} [dependencies = []] - Module dependencies.
      * @param {(string|number|object|array|function)} definition - Module value.
-     * @returns {Namespace} Returns current instance on Namespace.
+     * @returns {Namespace} Returns current instance of Namespace.
      */
     value(name, dependencies, definition) {
         const args = parseArgs(name, dependencies, definition);
@@ -171,7 +162,7 @@ class Namespace {
      * @param {string} name - Module name.
      * @param {array} [dependencies=[]] - Module dependencies.
      * @param {function} definition - Module constructor that will be instantiated.
-     * @returns {Namespace} Returns current instance on Namespace.
+     * @returns {Namespace} Returns current instance of Namespace.
      */
     service(name, dependencies, definition) {
         const args = parseArgs(name, dependencies, definition);
@@ -202,7 +193,7 @@ class Namespace {
      * @param {string} name - Module name.
      * @param {array} [dependencies=[]] - Module dependencies.
      * @param {function} definition - Module factory.
-     * @returns {Namespace} Returns current instance on Namespace.
+     * @returns {Namespace} Returns current instance of Namespace.
      */
     factory(name, dependencies, definition) {
         const args = parseArgs(name, dependencies, definition);
@@ -224,6 +215,8 @@ class Namespace {
                 };
             }
         ));
+
+        return this;
     }
 }
 
@@ -241,7 +234,7 @@ export default Namespace;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Nov 17 2016 23:14:19 GMT-0500 (EST) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Fri Nov 18 2016 12:14:42 GMT-0500 (EST) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>
