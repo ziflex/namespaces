@@ -155,15 +155,12 @@ class Storage {
             return this;
         }
 
-        let registry = this[FIELDS.namespaces][namespace];
+        const registry = this[FIELDS.namespaces][namespace];
 
         if (!isNil(registry)) {
             this[FIELDS.size] -= registry[REGISTRY_FIELDS.size];
 
-            registry = {};
-            registry[REGISTRY_FIELDS.size] = 0;
-
-            this[FIELDS.namespaces][namespace] = registry;
+            this[FIELDS.namespaces][namespace] = null;
         }
 
         return this;
