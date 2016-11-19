@@ -23,7 +23,7 @@
     "clean": "rimraf lib",
     "build": "npm run test && npm run clean && babel src --out-dir lib && npm run doc",
     "prepublish": "npm run build",
-    "benchmark": "node --expose-gc ./benchmarks/index.js"
+    "benchmark": "babel-register ./benchmarks/index.js"
   },
   "license": "MIT",
   "keywords": [
@@ -58,8 +58,10 @@
     "eslint-plugin-import": "^1.8.1",
     "eslint-plugin-jsx-a11y": "^1.4.2",
     "eslint-plugin-mocha": "^3.0.0",
+    "glob": "^7.1.1",
     "istanbul": "^1.0.0-alpha",
     "jsdoc": "^3.4.3",
+    "lodash": "^4.17.2",
     "loke-jsdoc-theme": "^2.1.0",
     "mocha": "^3.1.2",
     "rimraf": "^2.5.4",

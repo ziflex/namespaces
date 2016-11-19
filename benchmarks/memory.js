@@ -1,27 +1,41 @@
-import times from './utils/times';
-import format from './utils/format-memory';
-import Container from '../src/index';
+import glob from 'glob';
+import path from 'path';
+import { spawn } from 'child_process';
 
-const cycles = 100;
-const objects = 100000;
-const container = new Container();
-const initialMemory = process.memoryUsage().heapUsed;
+export default function run(done) {
+    glob(path.join(__dirname, 'benchs/memory-*'), (err, files) => {
+        if (err) {
+            return done(err);
+        }
 
-console.log('Initial memory usage', format(initialMemory));
-console.log('Allocating', objects, 'objects in', cycles, 'cycles');
+        console.log('Found files', files.length);
 
-times(cycles, () => {
-    times(objects, (idx) => {
-        container.const(idx.toString(), idx);
+        const next = () => {
+            if (!files.length) {
+                return done();
+            }
+
+            const file = files.shift();
+            const proc = spawn('node', [
+                '--expose-gc',
+                '-e',
+                `require("babel-register"); require("${file}");`
+            ]);
+
+            proc.on('error', done);
+            proc.on('exit', next);
+
+            proc.stderr.on('data', (data) => {
+                done(data.toString());
+            });
+
+            proc.stdout.on('data', (data) => {
+                console.log(data.toString());
+            });
+
+            return null;
+        };
+
+        return next();
     });
-
-    container.clear();
-    global.gc();
-});
-
-console.log('Finished. Pause');
-setTimeout(() => {
-    const releasedMemory = process.memoryUsage().heapUsed;
-
-    console.log('Final released memory usage', format(releasedMemory));
-}, 1000);
+}
