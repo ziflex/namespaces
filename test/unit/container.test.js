@@ -272,6 +272,138 @@ describe('Container', () => {
 
                 expect(container.size()).to.eql(0);
             });
+
+            context('When Namespace instance is passed', () => {
+                it('should clear a given namespace', () => {
+                    container.const('val1', 'foobar');
+
+                    const namespace = container.namespace('my-namespace');
+
+                    namespace.const('val1', 'foo');
+                    namespace.const('val2', 'bar');
+
+                    expect(container.size()).to.eql(3);
+
+                    container.clear(namespace);
+
+                    expect(container.size()).to.eql(1);
+                });
+            });
+
+            context('When invalid type is passed', () => {
+                it('should throw an error', () => {
+                    container.const('val1', 'foobar');
+
+                    const namespace = container.namespace('my-namespace');
+
+                    namespace.const('val1', 'foo');
+                    namespace.const('val2', 'bar');
+
+                    expect(() => {
+                        container.clear(1);
+                    }).to.throw(Error);
+                });
+            });
+        });
+
+        describe('.size', () => {
+            it('should return size of container', () => {
+                expect(container.size()).to.eql(0);
+
+                container.const('val1', 'foobar');
+                container.namespace('my-namespace').const('val1', 'foo');
+                container.namespace('my-namespace').const('val2', 'bar');
+
+                expect(container.size()).to.eql(3);
+            });
+
+            context('When namespace name is passed', () => {
+                it('should return size of a given namespace', () => {
+                    container.const('val1', 'foobar');
+
+                    const namespace = container.namespace('my-namespace');
+
+                    namespace.const('val1', 'foo');
+                    namespace.const('val2', 'bar');
+
+                    expect(container.size('my-namespace')).to.eql(2);
+                });
+            });
+
+            context('When Namespace instance is passed', () => {
+                it('should return size of a given namespace', () => {
+                    container.const('val1', 'foobar');
+
+                    const namespace = container.namespace('my-namespace');
+
+                    namespace.const('val1', 'foo');
+                    namespace.const('val2', 'bar');
+
+                    expect(container.size(namespace)).to.eql(2);
+                });
+            });
+
+            context('When invalid type is passed', () => {
+                it('should throw an error', () => {
+                    container.const('val1', 'foobar');
+
+                    const namespace = container.namespace('my-namespace');
+
+                    namespace.const('val1', 'foo');
+                    namespace.const('val2', 'bar');
+
+                    expect(() => {
+                        container.size(1);
+                    }).to.throw(Error);
+                });
+            });
+        });
+
+        describe('.resolveAll', () => {
+            context('When Namespace instance is passed', () => {
+                it('should return all values form a given namespace', () => {
+                    const namespace = container.namespace('my-namespace');
+
+                    namespace.const('val1', 'foo');
+                    namespace.const('val2', 'bar');
+
+                    const resolved = container.resolveAll(namespace);
+
+                    expect(resolved).to.exist;
+                    expect(resolved.val1).to.exist;
+                    expect(resolved.val2).to.exist;
+                });
+            });
+
+            context('When string is passed', () => {
+                it('should return all values form a given namespace', () => {
+                    const namespace = container.namespace('my-namespace');
+
+                    namespace.const('val1', 'foo');
+                    namespace.const('val2', 'bar');
+
+                    const resolved = container.resolveAll('my-namespace');
+
+                    expect(resolved).to.exist;
+                    expect(resolved.val1).to.exist;
+                    expect(resolved.val2).to.exist;
+                });
+            });
+
+            context('When invalid type is passed', () => {
+                it('should throw an error', () => {
+                    container.const('val1', 'foobar');
+
+                    const namespace = container.namespace('my-namespace');
+
+                    namespace.const('val1', 'foo');
+                    namespace.const('val2', 'bar');
+
+                    expect(() => {
+                        container.rsolveAll(1);
+                    }).to.throw(Error);
+                });
+            });
         });
 
         describe('#map', () => {

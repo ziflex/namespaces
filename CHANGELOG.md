@@ -4,6 +4,7 @@
 
 ### Added
 * Better type check for all input args.
+* ``size``, ``clear`` and ``resolveAll`` can receive a Namespace instance now.
 
 ### Fixed
 * Stoarge size calculation (now it tracks changes)

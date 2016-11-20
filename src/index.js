@@ -1,15 +1,37 @@
 import Symbol from 'es6-symbol';
+import isString from 'is-string';
 import Namespace from './namespace';
 import Storage from './storage';
 import Resolver from './resolver';
 import parseSettings from './utils/settings';
 import path from './utils/path';
-import { requires } from './utils/assertions';
+import { requires, assert } from './utils/assertions';
+
+const INVALID_MODULE_PATH = 'Invalid module path';
+const INVALID_INPUT_TYPE = 'Invalid input type';
 
 const FIELDS = {
     resolver: Symbol('resolver'),
     storage: Symbol('storage')
 };
+
+function getNamespace(input) {
+    if (!input) {
+        return null;
+    }
+
+    let result = null;
+
+    if (isString(input)) {
+        result = input;
+    } else if (input instanceof Namespace) {
+        result = input.getName();
+    } else {
+        throw new Error(INVALID_INPUT_TYPE);
+    }
+
+    return result;
+}
 
 /**
  * Represents a container for registered modules.
@@ -50,6 +72,7 @@ class Container extends Namespace {
      */
     contains(fullPath) {
         requires('full path', fullPath);
+        assert(isString(fullPath), INVALID_MODULE_PATH);
 
         return this[FIELDS.storage].contains(fullPath);
     }
@@ -57,21 +80,21 @@ class Container extends Namespace {
     /**
      * Returns size of whole container or a namespace.
      * If namespace was given, count of items inside this namespace will be returned.
-     * @param {string} [namespace=undefine] Namespace name
+     * @param {(Namespace|string)} [namespace=undefine] Namespace or namespace name
      * @returns {number} Size of a container/namespace.
      */
     size(namespace) {
-        return this[FIELDS.storage].size(namespace);
+        return this[FIELDS.storage].size(getNamespace(namespace));
     }
 
     /**
      * Clears a container or a given namespace.
      * If namespace name is passed - removes all modules in the namespace.
-     * @param {string} [namespace=null] - Namespace name to clear.
+     * @param {(Namespace|string)} [namespace=undefine] Namespace or namespace name
      * @returns {Container} Returns current instance of Container.
      */
     clear(namespace) {
-        this[FIELDS.storage].clear(namespace);
+        this[FIELDS.storage].clear(getNamespace(namespace));
 
         return this;
     }
@@ -83,19 +106,20 @@ class Container extends Namespace {
      */
     resolve(fullPath) {
         requires('full path', fullPath);
+        assert(isString(fullPath), INVALID_MODULE_PATH);
 
         return this[FIELDS.resolver].resolve(fullPath);
     }
 
     /**
      * Resolves all modules from a given namespace.
-     * @param {string} namespace - Target namespace.
+     * @param {(Namespace|string)} namespace - Namespace or namespace name
      * @returns {Map<string, any>} Map of module values, where key is module name.
      */
     resolveAll(namespace) {
         requires('namespace', namespace);
 
-        return this[FIELDS.resolver].resolveAll(namespace);
+        return this[FIELDS.resolver].resolveAll(getNamespace(namespace));
     }
 }
 
