@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>resolver.js - Documentation</title>
+    <title>utils/assertions.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -34,7 +34,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">resolver.js</h1>
+    <h1 class="page-title">utils/assertions.js</h1>
     
 
     <!--container.tmpl-->
@@ -46,124 +46,31 @@
 
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>import Symbol from 'es6-symbol';
-import isNil from 'is-nil';
-import isString from 'is-string';
-import isFunction from 'is-function';
-import isArray from 'is-array';
-import forEach from 'for-each';
-import toposort from 'toposort';
-import { requires, assert } from './utils/assertions';
-
-const DEFAULT_DEPENDENCIES = [];
-const CIRC_REF = 'Circular dependency is detected';
-const INVALID_NAMESPACE_TYPE = 'Invalid namespace name type, expected "string", but got';
-const INVALID_PATH_TYPE = 'Invalid path type, expected "string", but got';
-
-const FIELDS = {
-    storage: Symbol('storage')
-};
+            <pre class="prettyprint source linenums"><code>import isNil from 'is-nil';
 
 /**
- * Represents a dependency resolver.
+ * Checks for a condition; if the condition is false,
+ * follows the escalation policy set for the analyzer.
+ * @param {boolean} condition - The condition to check.
+ * @param {string} message - A message to display if the condition is not met..
+ * @throws {Error} If condition is false.
  */
-class Resolver {
-
-    /**
-     * Creates a new instance of Namespace.
-     * @param storage - Module's storage.
-     */
-    constructor(storage) {
-        requires(storage, 'storage');
-
-        this[FIELDS.storage] = storage;
-    }
-
-    /**
-     * Resolves a module by given full path.
-     * @param {string} fullPath - Full path of a module.
-     * @returns {any} Value of resolved module.
-     */
-    resolve(fullPath) {
-        requires(fullPath, 'path');
-        assert(isString(fullPath), `${INVALID_PATH_TYPE} "${typeof fullPath}"`);
-
-        const graph = [];
-        const chain = [];
-        const checkCircularDependency = (targetPath, dependencies) => {
-            forEach(dependencies, i => graph.push([targetPath, i]));
-            chain.push(...dependencies);
-
-            try {
-                toposort(graph);
-            } catch (e) {
-                throw new ReferenceError(`${CIRC_REF}: ${fullPath} -> ${chain.join(' -> ')}`);
-            }
-        };
-        const resolveModule = (targetPath) => {
-            const module = this[FIELDS.storage].getItem(targetPath);
-
-            if (isNil(module)) {
-                return null;
-            }
-
-            if (module.isInitialized()) {
-                return module.getValue();
-            }
-
-            const resolveDependencies = (dependencies) => {
-                if (isArray(dependencies)) {
-                    checkCircularDependency(targetPath, dependencies);
-                    return dependencies.map((currentPath) => {
-                        if (isString(currentPath)) {
-                            return resolveModule(currentPath);
-                        } else if (isFunction(currentPath)) {
-                            return currentPath();
-                        }
-
-                        return undefined;
-                    });
-                }
-
-                if (isFunction(dependencies)) {
-                    const result = dependencies();
-
-                    if (!isArray(result)) {
-                        return [result];
-                    }
-
-                    return result;
-                }
-
-                return DEFAULT_DEPENDENCIES;
-            };
-
-            module.initialize(resolveDependencies(module.getDependencies()));
-            return module.getValue();
-        };
-
-        return resolveModule(fullPath);
-    }
-
-    /**
-     * Resolves all modules by a given namespace name.
-     * @param {string} namespace - Target namespace name.
-     * @returns {Map&lt;string, any>} Map of module values, where key is a module name.
-     */
-    resolveAll(namespace) {
-        assert(isString(namespace), `${INVALID_NAMESPACE_TYPE} "${typeof namespace}"`);
-
-        const result = {};
-
-        this[FIELDS.storage].forEachIn(namespace, (module, path) => {
-            result[module.getName()] = this.resolve(path);
-        });
-
-        return result;
+export function assert(condition, message) {
+    if (!condition) {
+        throw new Error(message);
     }
 }
 
-export default Resolver;
+/**
+ * Specifies a precondition contract for the enclosing method or property,
+ * and displays a message if the condition for the contract fails.
+ * @param {any} value - The conditional expression to test.
+ * @param {string} name - The method / property name to display if the condition is false.
+ * @throws {Error} If value is nil.
+ */
+export function requires(value, name = 'argument') {
+    assert(!isNil(value), `${name} is required!`);
+}
 </code></pre>
         </article>
     </section>
