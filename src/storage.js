@@ -3,6 +3,7 @@ import isNil from 'is-nil';
 import isString from 'is-string';
 import isFunction from 'is-function';
 import forEach from 'for-each';
+import startsWith from 'starts-with';
 import Module from './module';
 import path from './utils/path';
 import { requires, assert } from './utils/assertions';
@@ -61,6 +62,27 @@ class Storage {
         }
 
         return this[FIELDS.size];
+    }
+
+    /**
+     * Returns an array of registered namespaces.
+     * @param {string} parent - Parent namespace.
+     * @returns {Array} An array of registered namespaces.
+     */
+    namespaces(parent) {
+        const namespaces = [];
+
+        forEach(this[FIELDS.namespaces], (_, key) => {
+            if (parent) {
+                if (key !== parent && startsWith(key, parent)) {
+                    namespaces.push(key);
+                }
+            } else {
+                namespaces.push(key);
+            }
+        });
+
+        return namespaces;
     }
 
     /**

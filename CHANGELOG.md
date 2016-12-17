@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.2.0
+
+### Added
+* ``resolveAll`` now can resolve values from nested namespaces. Optional.
+
+```javascript
+const modules = container.resolveAll('my-root-namespace', true);
+
+for (const prop in modules) {
+    if (modules.hasOwnProperty(prop)) {
+        const values = modules[prop];
+
+        values.forEach((currentValue) => {
+            console.log(currentValue);
+        });
+    }
+}
+```
+
 ## 1.1.0
 
 ### Added

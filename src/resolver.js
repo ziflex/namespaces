@@ -100,15 +100,34 @@ class Resolver {
     /**
      * Resolves all modules by a given namespace name.
      * @param {string} namespace - Target namespace name.
-     * @returns {Map<string, any>} Map of module values, where key is a module name.
+     * @param {boolean} nested - Value that detects whether it needs to resolve nested namespaces.
+     * If 'true', all resolved values will be put into an array.
+     * @returns {Map<string, (any|Array<any>)>} Map of module values, where key is a module name.
      */
-    resolveAll(namespace) {
+    resolveAll(namespace, nested = false) {
         assert(isString(namespace), `${INVALID_NAMESPACE_TYPE} "${typeof namespace}"`);
 
         const result = {};
+        let namespaces = [namespace];
 
-        this[FIELDS.storage].forEachIn(namespace, (module, path) => {
-            result[module.getName()] = this.resolve(path);
+        if (nested) {
+            namespaces = namespaces.concat(this[FIELDS.storage].namespaces(namespace));
+        }
+
+        forEach(namespaces, (currentNamespace) => {
+            this[FIELDS.storage].forEachIn(currentNamespace, (module, path) => {
+                const name = module.getName();
+
+                if (!nested) {
+                    result[name] = this.resolve(path);
+                } else {
+                    if (!result[name]) {
+                        result[name] = [];
+                    }
+
+                    result[name].push(this.resolve(path));
+                }
+            });
         });
 
         return result;

@@ -520,6 +520,63 @@ describe('Resolver', () => {
                 expect(arr.length).to.equal(2);
             });
         });
+
+        context('When "nested=true"', () => {
+            it('should resolve values from nested namespaces', () => {
+                const foo = container.namespace('foo');
+                foo.service('A', function() { this.name = 'A'; });
+                foo.service('B', ['foo/A'], function() { this.name = 'B'; });
+                foo.service('C', ['foo/B'], function() { this.name = 'C'; });
+                foo.service('D', ['foo/B', 'foo/C'], function() { this.name = 'D'; });
+
+                const bar = foo.namespace('bar');
+                bar.service('E', ['foo/A'], function() { this.name = 'E'; });
+                bar.service('F', ['foo/bar/E', 'foo/C'], function() { this.name = 'F'; });
+
+                const resolved = container.resolveAll('foo', true);
+                const arr = [];
+
+                for (const name in resolved) {
+                    if (resolved.hasOwnProperty(name)) {
+                        arr.push({
+                            name,
+                            value: resolved[name][0]
+                        });
+                    }
+                }
+
+                expect(arr.length).to.equal(6);
+            });
+
+            it('should resolve values from nested namespaces and avoid collisions', () => {
+                const foo = container.namespace('foo');
+                foo.service('A', function() { this.name = 'A'; });
+                foo.service('B', ['foo/A'], function() { this.name = 'B'; });
+                foo.service('C', ['foo/B'], function() { this.name = 'C'; });
+                foo.service('D', ['foo/B', 'foo/C'], function() { this.name = 'D'; });
+
+                const bar = foo.namespace('bar');
+                bar.service('E', ['foo/A'], function() { this.name = 'E'; });
+                bar.service('F', ['foo/bar/E', 'foo/C'], function() { this.name = 'F'; });
+
+                const qaz = bar.namespace('qaz');
+                qaz.service('G', ['foo/A'], function() { this.name = 'E'; });
+                qaz.service('F', ['foo/bar/E', 'foo/C'], function() { this.name = 'F'; });
+
+                const resolved = container.resolveAll('foo', true);
+                const arr = [];
+
+                for (const name in resolved) {
+                    if (resolved.hasOwnProperty(name)) {
+                        resolved[name].forEach((i) => {
+                            arr.push(i)
+                        });
+                    }
+                }
+
+                expect(arr.length).to.equal(8);
+            });
+        });
     });
 });
 

@@ -320,6 +320,42 @@ describe('Storage', function () {
         });
     });
 
+    describe('.namespaces', () => {
+        it('should return an array of containing namespaces', () => {
+            storage = new Storage('/', false);
+
+            expect(storage.namespaces()).to.be.empty;
+
+            storage.addItem(new Module('foo', 'qaz', [], function init() {}));
+            storage.addItem(new Module('foo/qaz', 'bar', [], function init() {}));
+            storage.addItem(new Module('foo/qaz/wsx', 'bar', [], function init() {}));
+
+
+            const namespaces = storage.namespaces();
+            expect(namespaces.length).to.eql(3);
+
+            expect(namespaces[0]).to.eql('foo');
+            expect(namespaces[1]).to.eql('foo/qaz');
+            expect(namespaces[2]).to.eql('foo/qaz/wsx');
+        });
+
+        it('should return an array of containing nested namespaces', () => {
+            storage = new Storage('/', false);
+
+            expect(storage.namespaces()).to.be.empty;
+
+            storage.addItem(new Module('foo', 'qaz', [], function init() {}));
+            storage.addItem(new Module('foo/qaz', 'bar', [], function init() {}));
+            storage.addItem(new Module('foo/qaz/wsx', 'bar', [], function init() {}));
+
+
+            const namespaces = storage.namespaces('foo/qaz');
+            expect(namespaces.length).to.eql(1);
+
+            expect(namespaces[0]).to.eql('foo/qaz/wsx');
+        });
+    });
+
     describe('.forEachIn', () => {
         context('When namespace not passed or not a string', () => {
             it('should throw an error', () => {
