@@ -114,11 +114,11 @@ class Container extends Namespace {
     /**
      * Resolves all modules from a given namespace.
      * @param {(Namespace|string)} namespace - Namespace or namespace name
-     * @param {boolean} nested - Value that detects whether it needs to resolve nested namespaces.
+     * @param {boolean} [nested=false] - Value that detects whether it needs to resolve modules from nested namespaces.
      * If 'true', all resolved values will be put into an array.
      * @returns {Map<string, (any|Array<any>)>} Map of module values, where key is a module name.
      */
-    resolveAll(namespace, nested) {
+    resolveAll(namespace, nested = false) {
         requires('namespace', namespace);
 
         return this[FIELDS.resolver].resolveAll(getNamespace(namespace), nested);

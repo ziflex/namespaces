@@ -100,7 +100,7 @@ class Resolver {
     /**
      * Resolves all modules by a given namespace name.
      * @param {string} namespace - Target namespace name.
-     * @param {boolean} nested - Value that detects whether it needs to resolve nested namespaces.
+     * @param {boolean} [nested=false] - Value that detects whether it needs to resolve modules from nested namespaces.
      * If 'true', all resolved values will be put into an array.
      * @returns {Map<string, (any|Array<any>)>} Map of module values, where key is a module name.
      */

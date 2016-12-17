@@ -47,7 +47,7 @@ class Storage {
     /**
      * Returns size of a storage or namespace.
      * If namespace was given, count of items inside this namespace will be returned.
-     * @param {string} [namespace=undefine] Namespace name
+     * @param {string} [namespace=undefined] Namespace name
      * @returns {number} Size of a storage/namespace.
      */
     size(namespace) {
@@ -66,7 +66,7 @@ class Storage {
 
     /**
      * Returns an array of registered namespaces.
-     * @param {string} parent - Parent namespace.
+     * @param {string} [parent=undefined] - Parent namespace.
      * @returns {Array} An array of registered namespaces.
      */
     namespaces(parent) {
