@@ -425,7 +425,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n * Represents a container for registered modules.\n */","meta":{"range":[870,4188],"filename":"index.js","lineno":39,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000097","name":"Container","type":"ClassDeclaration","paramnames":["params"]},"shortpath":"index.js"},"classdesc":"Represents a container for registered modules.","name":"Container","longname":"Container","kind":"class","scope":"global","description":"Creates a new instance of Container.","params":[{"type":{"names":["string"]},"optional":true,"defaultvalue":"\"/\"","description":"Namespace separator.","name":"params"},{"type":{"names":["object"]},"optional":true,"defaultvalue":null,"description":"Container settings.","name":"params","subparams":[{"type":{"names":["string"]},"optional":true,"defaultvalue":"\"/\"","description":"Namespace separator.","name":"separator"},{"type":{"names":["boolean"]},"optional":true,"defaultvalue":false,"description":"Indicates whether it needs to throw an error when module not found.","name":"panic"}]},null,null],"___id":"T000003R000002","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Container","signature":"<span class=\"signature\">(params<span class=\"signature-attributes\">opt</span>, params<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"></span>","ancestors":[]}
+{"comment":"/**\n * Represents a container for registered modules.\n */","meta":{"range":[870,4217],"filename":"index.js","lineno":39,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000097","name":"Container","type":"ClassDeclaration","paramnames":["params"]},"shortpath":"index.js"},"classdesc":"Represents a container for registered modules.","name":"Container","longname":"Container","kind":"class","scope":"global","description":"Creates a new instance of Container.","params":[{"type":{"names":["string"]},"optional":true,"defaultvalue":"\"/\"","description":"Namespace separator.","name":"params"},{"type":{"names":["object"]},"optional":true,"defaultvalue":null,"description":"Container settings.","name":"params","subparams":[{"type":{"names":["string"]},"optional":true,"defaultvalue":"\"/\"","description":"Namespace separator.","name":"separator"},{"type":{"names":["boolean"]},"optional":true,"defaultvalue":false,"description":"Indicates whether it needs to throw an error when module not found.","name":"panic"}]},null,null],"___id":"T000003R000002","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Container","signature":"<span class=\"signature\">(params<span class=\"signature-attributes\">opt</span>, params<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"></span>","ancestors":[]}
 </pre>
 -->
 </div>
@@ -1378,7 +1378,7 @@ If namespace name is passed - removes all modules in the namespace.
     
 
     <h4 class="name" id="resolveAll">
-      <a href="#params-resolveAll"><span class="type-signature"></span>resolveAll</a><span class="signature">(namespace, nested)</span><span class="type-signature"> &rarr; {Map.&lt;string, (any|Array.&lt;any>)>}</span>
+      <a href="#params-resolveAll"><span class="type-signature"></span>resolveAll</a><span class="signature">(namespace, nested<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Map.&lt;string, (any|Array.&lt;any>)>}</span>
 
     </h4>
 
@@ -1471,7 +1471,11 @@ If namespace name is passed - removes all modules in the namespace.
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -1499,7 +1503,19 @@ If namespace name is passed - removes all modules in the namespace.
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Namespace or namespace name</td>
@@ -1522,10 +1538,26 @@ If namespace name is passed - removes all modules in the namespace.
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last">Value that detects whether it needs to resolve nested namespaces.
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Value that detects whether it needs to resolve modules from nested namespaces.
 If 'true', all resolved values will be put into an array.</td>
         </tr>
 
@@ -1582,7 +1614,7 @@ If 'true', all resolved values will be put into an array.</td>
 
 <!--
 <pre>
-{"comment":"/**\n     * Resolves all modules from a given namespace.\n     * @param {(Namespace|string)} namespace - Namespace or namespace name\n     * @param {boolean} nested - Value that detects whether it needs to resolve nested namespaces.\n     * If 'true', all resolved values will be put into an array.\n     * @returns {Map<string, (any|Array<any>)>} Map of module values, where key is a module name.\n     */","meta":{"range":[4024,4186],"filename":"index.js","lineno":121,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000258","name":"Container#resolveAll","type":"MethodDefinition","paramnames":["namespace","nested"]},"vars":{"":null},"shortpath":"index.js"},"description":"Resolves all modules from a given namespace.","params":[{"type":{"names":["Namespace","string"]},"description":"Namespace or namespace name","name":"namespace"},{"type":{"names":["boolean"]},"description":"Value that detects whether it needs to resolve nested namespaces.\nIf 'true', all resolved values will be put into an array.","name":"nested"}],"returns":[{"type":{"names":["Map.<string, (any|Array.<any>)>"]},"description":"Map of module values, where key is a module name."}],"name":"resolveAll","longname":"Container#resolveAll","kind":"function","memberof":"Container","scope":"instance","___id":"T000002R000022","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resolveAll","signature":"<span class=\"signature\">(namespace, nested)</span><span class=\"type-signature\"> &rarr; {Map.&lt;string, (any|Array.&lt;any>)>}</span>","ancestors":["<a href=\"Container.html\">Container</a>#"]}
+{"comment":"/**\n     * Resolves all modules from a given namespace.\n     * @param {(Namespace|string)} namespace - Namespace or namespace name\n     * @param {boolean} [nested=false] - Value that detects whether it needs to resolve modules from nested namespaces.\n     * If 'true', all resolved values will be put into an array.\n     * @returns {Map<string, (any|Array<any>)>} Map of module values, where key is a module name.\n     */","meta":{"range":[4045,4215],"filename":"index.js","lineno":121,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100000258","name":"Container#resolveAll","type":"MethodDefinition","paramnames":["namespace","nested"]},"vars":{"":null},"shortpath":"index.js"},"description":"Resolves all modules from a given namespace.","params":[{"type":{"names":["Namespace","string"]},"description":"Namespace or namespace name","name":"namespace"},{"type":{"names":["boolean"]},"optional":true,"defaultvalue":false,"description":"Value that detects whether it needs to resolve modules from nested namespaces.\nIf 'true', all resolved values will be put into an array.","name":"nested"}],"returns":[{"type":{"names":["Map.<string, (any|Array.<any>)>"]},"description":"Map of module values, where key is a module name."}],"name":"resolveAll","longname":"Container#resolveAll","kind":"function","memberof":"Container","scope":"instance","___id":"T000002R000022","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resolveAll","signature":"<span class=\"signature\">(namespace, nested<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"> &rarr; {Map.&lt;string, (any|Array.&lt;any>)>}</span>","ancestors":["<a href=\"Container.html\">Container</a>#"]}
 </pre>
 -->
 </div>
@@ -1835,7 +1867,7 @@ If namespace was given, count of items inside this namespace will be returned.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Dec 17 2016 17:44:38 GMT-0500 (EST) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Dec 17 2016 17:47:57 GMT-0500 (EST) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>

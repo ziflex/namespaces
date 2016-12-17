@@ -244,7 +244,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n * Represents a dependency resolver.\n */","meta":{"range":[634,4224],"filename":"resolver.js","lineno":22,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001014","name":"Resolver","type":"ClassDeclaration","paramnames":["storage"]},"shortpath":"resolver.js"},"classdesc":"Represents a dependency resolver.","name":"Resolver","longname":"Resolver","kind":"class","scope":"global","description":"Creates a new instance of Namespace.","params":[{"description":"Module's storage.","name":"storage"}],"___id":"T000003R000005","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Resolver","signature":"<span class=\"signature\">(storage)</span><span class=\"type-signature\"></span>","ancestors":[]}
+{"comment":"/**\n * Represents a dependency resolver.\n */","meta":{"range":[634,4245],"filename":"resolver.js","lineno":22,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001016","name":"Resolver","type":"ClassDeclaration","paramnames":["storage"]},"shortpath":"resolver.js"},"classdesc":"Represents a dependency resolver.","name":"Resolver","longname":"Resolver","kind":"class","scope":"global","description":"Creates a new instance of Namespace.","params":[{"description":"Module's storage.","name":"storage"}],"___id":"T000003R000005","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"Resolver","signature":"<span class=\"signature\">(storage)</span><span class=\"type-signature\"></span>","ancestors":[]}
 </pre>
 -->
 </div>
@@ -468,7 +468,7 @@
 
 <!--
 <pre>
-{"comment":"/**\n     * Resolves a module by given full path.\n     * @param {string} fullPath - Full path of a module.\n     * @returns {any} Value of resolved module.\n     */","meta":{"range":[1037,2976],"filename":"resolver.js","lineno":39,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001035","name":"Resolver#resolve","type":"MethodDefinition","paramnames":["fullPath"]},"vars":{"":null},"shortpath":"resolver.js"},"description":"Resolves a module by given full path.","params":[{"type":{"names":["string"]},"description":"Full path of a module.","name":"fullPath"}],"returns":[{"type":{"names":["any"]},"description":"Value of resolved module."}],"name":"resolve","longname":"Resolver#resolve","kind":"function","memberof":"Resolver","scope":"instance","___id":"T000002R000083","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resolve","signature":"<span class=\"signature\">(fullPath)</span><span class=\"type-signature\"> &rarr; {any}</span>","ancestors":["<a href=\"Resolver.html\">Resolver</a>#"]}
+{"comment":"/**\n     * Resolves a module by given full path.\n     * @param {string} fullPath - Full path of a module.\n     * @returns {any} Value of resolved module.\n     */","meta":{"range":[1037,2976],"filename":"resolver.js","lineno":39,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001037","name":"Resolver#resolve","type":"MethodDefinition","paramnames":["fullPath"]},"vars":{"":null},"shortpath":"resolver.js"},"description":"Resolves a module by given full path.","params":[{"type":{"names":["string"]},"description":"Full path of a module.","name":"fullPath"}],"returns":[{"type":{"names":["any"]},"description":"Value of resolved module."}],"name":"resolve","longname":"Resolver#resolve","kind":"function","memberof":"Resolver","scope":"instance","___id":"T000002R000083","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resolve","signature":"<span class=\"signature\">(fullPath)</span><span class=\"type-signature\"> &rarr; {any}</span>","ancestors":["<a href=\"Resolver.html\">Resolver</a>#"]}
 </pre>
 -->
 </div>
@@ -497,7 +497,7 @@
     
 
     <h4 class="name" id="resolveAll">
-      <a href="#params-resolveAll"><span class="type-signature"></span>resolveAll</a><span class="signature">(namespace, nested)</span><span class="type-signature"> &rarr; {Map.&lt;string, (any|Array.&lt;any>)>}</span>
+      <a href="#params-resolveAll"><span class="type-signature"></span>resolveAll</a><span class="signature">(namespace, nested<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Map.&lt;string, (any|Array.&lt;any>)>}</span>
 
     </h4>
 
@@ -590,6 +590,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
         <th>Default</th>
@@ -616,6 +618,14 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -644,6 +654,16 @@
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
                 <td class="default">
@@ -653,7 +673,7 @@
                 </td>
             
 
-            <td class="description last">Value that detects whether it needs to resolve nested namespaces.
+            <td class="description last">Value that detects whether it needs to resolve modules from nested namespaces.
 If 'true', all resolved values will be put into an array.</td>
         </tr>
 
@@ -710,7 +730,7 @@ If 'true', all resolved values will be put into an array.</td>
 
 <!--
 <pre>
-{"comment":"/**\n     * Resolves all modules by a given namespace name.\n     * @param {string} namespace - Target namespace name.\n     * @param {boolean} nested - Value that detects whether it needs to resolve nested namespaces.\n     * If 'true', all resolved values will be put into an array.\n     * @returns {Map<string, (any|Array<any>)>} Map of module values, where key is a module name.\n     */","meta":{"range":[3373,4222],"filename":"resolver.js","lineno":107,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001237","name":"Resolver#resolveAll","type":"MethodDefinition","paramnames":["namespace","nested"]},"vars":{"":null},"shortpath":"resolver.js"},"description":"Resolves all modules by a given namespace name.","params":[{"type":{"names":["string"]},"description":"Target namespace name.","name":"namespace"},{"type":{"names":["boolean"]},"description":"Value that detects whether it needs to resolve nested namespaces.\nIf 'true', all resolved values will be put into an array.","name":"nested","defaultvalue":false}],"returns":[{"type":{"names":["Map.<string, (any|Array.<any>)>"]},"description":"Map of module values, where key is a module name."}],"name":"resolveAll","longname":"Resolver#resolveAll","kind":"function","memberof":"Resolver","scope":"instance","___id":"T000002R000091","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resolveAll","signature":"<span class=\"signature\">(namespace, nested)</span><span class=\"type-signature\"> &rarr; {Map.&lt;string, (any|Array.&lt;any>)>}</span>","ancestors":["<a href=\"Resolver.html\">Resolver</a>#"]}
+{"comment":"/**\n     * Resolves all modules by a given namespace name.\n     * @param {string} namespace - Target namespace name.\n     * @param {boolean} [nested=false] - Value that detects whether it needs to resolve modules from nested namespaces.\n     * If 'true', all resolved values will be put into an array.\n     * @returns {Map<string, (any|Array<any>)>} Map of module values, where key is a module name.\n     */","meta":{"range":[3394,4243],"filename":"resolver.js","lineno":107,"path":"/home/tvoronov/Work/src/github.com/ziflex/namespaces/src","code":{"id":"astnode100001239","name":"Resolver#resolveAll","type":"MethodDefinition","paramnames":["namespace","nested"]},"vars":{"":null},"shortpath":"resolver.js"},"description":"Resolves all modules by a given namespace name.","params":[{"type":{"names":["string"]},"description":"Target namespace name.","name":"namespace"},{"type":{"names":["boolean"]},"optional":true,"defaultvalue":false,"description":"Value that detects whether it needs to resolve modules from nested namespaces.\nIf 'true', all resolved values will be put into an array.","name":"nested"}],"returns":[{"type":{"names":["Map.<string, (any|Array.<any>)>"]},"description":"Map of module values, where key is a module name."}],"name":"resolveAll","longname":"Resolver#resolveAll","kind":"function","memberof":"Resolver","scope":"instance","___id":"T000002R000091","___s":true,"attribs":"<span class=\"type-signature\"></span>","id":"resolveAll","signature":"<span class=\"signature\">(namespace, nested<span class=\"signature-attributes\">opt</span>)</span><span class=\"type-signature\"> &rarr; {Map.&lt;string, (any|Array.&lt;any>)>}</span>","ancestors":["<a href=\"Resolver.html\">Resolver</a>#"]}
 </pre>
 -->
 </div>
@@ -733,7 +753,7 @@ If 'true', all resolved values will be put into an array.</td>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Dec 17 2016 17:44:38 GMT-0500 (EST) using the LOKE theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Dec 17 2016 17:47:57 GMT-0500 (EST) using the LOKE theme.
 </footer>
 
 <script>prettyPrint();</script>
